@@ -11,7 +11,9 @@ defmodule RiddlerAdmin.MixProject do
     {:ecto_sql, "~> 3.4"},
     {:jason, "~> 1.0"},
     {:phoenix_pubsub, "~> 2.0"},
-    {:postgrex, ">= 0.0.0"}
+    {:postgrex, ">= 0.0.0"},
+    # {:uxid, "~> 0.0"}
+    {:uxid, path: "../../../../../uxid/impl/ex"}
   ]
 
   def application do
