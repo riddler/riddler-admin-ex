@@ -1,0 +1,10 @@
+<ul>
+<%= if @current_identity do %>
+  <li><%= @current_identity.email %></li>
+  <li><%= link "Settings", to: Routes.identity_settings_path(@conn, :edit) %></li>
+  <li><%= link "Log out", to: Routes.identity_session_path(@conn, :delete), method: :delete %></li>
+<% else %>
+  <li><%= link "Register", to: Routes.identity_registration_path(@conn, :new) %></li>
+  <li><%= link "Log in", to: Routes.identity_session_path(@conn, :new) %></li>
+<% end %>
+</ul>
