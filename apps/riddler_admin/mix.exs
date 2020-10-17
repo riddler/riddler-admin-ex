@@ -1,25 +1,19 @@
 defmodule RiddlerAdmin.MixProject do
   use Mix.Project
 
-  def project do
-    [
-      app: :riddler_admin,
-      version: "0.1.0",
-      build_path: "../../_build",
-      config_path: "../../config/config.exs",
-      deps_path: "../../deps",
-      lockfile: "../../mix.lock",
-      elixir: "~> 1.7",
-      elixirc_paths: elixirc_paths(Mix.env()),
-      start_permanent: Mix.env() == :prod,
-      aliases: aliases(),
-      deps: deps()
-    ]
-  end
+  @name "RiddlerAdmin"
+  @app :riddler_admin
+  @description "Admin application for managing Riddler"
+  @version "0.1.0"
 
-  # Configuration for the OTP application.
-  #
-  # Type `mix help compile.app` for more information.
+  @deps [
+    # Required
+    {:ecto_sql, "~> 3.4"},
+    {:jason, "~> 1.0"},
+    {:phoenix_pubsub, "~> 2.0"},
+    {:postgrex, ">= 0.0.0"}
+  ]
+
   def application do
     [
       mod: {RiddlerAdmin.Application, []},
@@ -27,25 +21,27 @@ defmodule RiddlerAdmin.MixProject do
     ]
   end
 
-  # Specifies which paths to compile per environment.
-  defp elixirc_paths(:test), do: ["lib", "test/support"]
-  defp elixirc_paths(_), do: ["lib"]
-
-  # Specifies your project dependencies.
-  #
-  # Type `mix help deps` for examples and options.
-  defp deps do
+  def project() do
     [
-      {:phoenix_pubsub, "~> 2.0"},
-      {:ecto_sql, "~> 3.4"},
-      {:postgrex, ">= 0.0.0"},
-      {:jason, "~> 1.0"}
+      app: @app,
+      name: @name,
+      description: @description,
+      version: @version,
+      deps: @deps,
+      build_path: "../../_build",
+      config_path: "../../config/config.exs",
+      deps_path: "../../deps",
+      lockfile: "../../mix.lock",
+      elixir: "~> 1.7",
+      aliases: aliases(),
+      start_permanent: Mix.env() == :prod,
+      elixirc_paths: elixirc_paths(Mix.env())
     ]
   end
 
-  # Aliases are shortcuts or tasks specific to the current project.
-  #
-  # See the documentation for `Mix` for more info on aliases.
+  # ---------------------------------------------------------------------------
+  # Private
+
   defp aliases do
     [
       setup: ["deps.get", "ecto.setup"],
@@ -54,4 +50,7 @@ defmodule RiddlerAdmin.MixProject do
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"]
     ]
   end
+
+  defp elixirc_paths(:test), do: ["test/support", "lib"]
+  defp elixirc_paths(_), do: ["lib"]
 end
