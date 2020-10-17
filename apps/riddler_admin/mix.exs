@@ -8,6 +8,7 @@ defmodule RiddlerAdmin.MixProject do
 
   @deps [
     # Required
+    {:argon2_elixir, "~> 2.0"},
     {:ecto_sql, "~> 3.4"},
     {:jason, "~> 1.0"},
     {:phoenix_pubsub, "~> 2.0"},
