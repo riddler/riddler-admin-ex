@@ -40,7 +40,10 @@ defmodule RiddlerAdminWeb.Router do
 
     scope "/" do
       pipe_through :browser
-      live_dashboard "/dashboard", metrics: RiddlerAdminWeb.Telemetry
+
+      live_dashboard "/dashboard",
+        metrics: RiddlerAdminWeb.Telemetry,
+        ecto_repos: [RiddlerAdmin.Repo]
     end
   end
 

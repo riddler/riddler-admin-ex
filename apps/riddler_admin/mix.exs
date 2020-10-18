@@ -9,6 +9,7 @@ defmodule RiddlerAdmin.MixProject do
   @deps [
     # Required
     {:argon2_elixir, "~> 2.0"},
+    {:ecto_psql_extras, "~> 0.2"},
     {:ecto_sql, "~> 3.4"},
     {:jason, "~> 1.0"},
     {:phoenix_pubsub, "~> 2.0"},
@@ -23,7 +24,9 @@ defmodule RiddlerAdmin.MixProject do
   def application do
     [
       mod: {RiddlerAdmin.Application, []},
-      extra_applications: [:logger, :runtime_tools, :crypto]
+      # crypto is needed for UXID
+      # os_mon is needed for LiveDashboard
+      extra_applications: [:logger, :runtime_tools, :crypto, :os_mon]
     ]
   end
 
