@@ -6,7 +6,7 @@ defmodule RiddlerAdmin.Repo do
   def init(_type, config) do
     config =
       config
-      |> Keyword.put_new(:migration_primary_key, name: :id, type: :text)
+      |> Keyword.put_new(:migration_primary_key, false)
       |> Keyword.put_new(:migration_foreign_key, column: :id, type: :text)
 
     {:ok, config}

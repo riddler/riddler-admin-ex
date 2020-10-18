@@ -13,10 +13,9 @@ defmodule RiddlerAdmin.Schema do
       use Ecto.Schema
 
       import Ecto.Changeset
-      import EctoEnum
 
-      @primary_key {:id, :binary_id, autogenerate: false}
-      @foreign_key_type :binary_id
+      @primary_key false
+      @foreign_key_type Ecto.UXID
 
       @timestamps_opts [type: :utc_datetime_usec]
     end

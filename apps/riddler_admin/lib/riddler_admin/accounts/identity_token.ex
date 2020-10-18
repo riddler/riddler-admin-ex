@@ -1,5 +1,5 @@
 defmodule RiddlerAdmin.Accounts.IdentityToken do
-  use Ecto.Schema
+  use RiddlerAdmin.Schema
   import Ecto.Query
 
   @hash_algorithm :sha256
@@ -13,6 +13,7 @@ defmodule RiddlerAdmin.Accounts.IdentityToken do
   @session_validity_in_days 60
 
   schema "identities_tokens" do
+    field :id, Ecto.UXID, primary_key: true, autogenerate: true, prefix: "idt", rand_size: 5
     field :token, :binary
     field :context, :string
     field :sent_to, :string
@@ -28,7 +29,13 @@ defmodule RiddlerAdmin.Accounts.IdentityToken do
   """
   def build_session_token(identity) do
     token = :crypto.strong_rand_bytes(@rand_size)
-    {token, %RiddlerAdmin.Accounts.IdentityToken{token: token, context: "session", identity_id: identity.id}}
+
+    {token,
+     %RiddlerAdmin.Accounts.IdentityToken{
+       token: token,
+       context: "session",
+       identity_id: identity.id
+     }}
   end
 
   @doc """
@@ -134,6 +141,7 @@ defmodule RiddlerAdmin.Accounts.IdentityToken do
   end
 
   def identity_and_contexts_query(identity, [_ | _] = contexts) do
-    from t in RiddlerAdmin.Accounts.IdentityToken, where: t.identity_id == ^identity.id and t.context in ^contexts
+    from t in RiddlerAdmin.Accounts.IdentityToken,
+      where: t.identity_id == ^identity.id and t.context in ^contexts
   end
 end

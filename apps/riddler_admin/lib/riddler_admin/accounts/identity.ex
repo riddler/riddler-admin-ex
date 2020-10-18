@@ -1,9 +1,9 @@
 defmodule RiddlerAdmin.Accounts.Identity do
-  use Ecto.Schema
-  import Ecto.Changeset
+  use RiddlerAdmin.Schema
 
   @derive {Inspect, except: [:password]}
   schema "identities" do
+    field :id, Ecto.UXID, primary_key: true, autogenerate: true, prefix: "id", rand_size: 2
     field :email, :string
     field :password, :string, virtual: true
     field :hashed_password, :string

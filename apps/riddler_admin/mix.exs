@@ -13,8 +13,8 @@ defmodule RiddlerAdmin.MixProject do
     {:jason, "~> 1.0"},
     {:phoenix_pubsub, "~> 2.0"},
     {:postgrex, ">= 0.0.0"},
-    # {:uxid, "~> 0.0"}
-    {:uxid, path: "../../../../../uxid/impl/ex"},
+    {:uxid, "~> 0.0"},
+    # {:uxid, path: "../../../../../../uxid/impl/ex"},
 
     # Development
     {:phx_gen_auth, "~> 0.5", only: [:dev], runtime: false}
@@ -23,7 +23,7 @@ defmodule RiddlerAdmin.MixProject do
   def application do
     [
       mod: {RiddlerAdmin.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :crypto]
     ]
   end
 
