@@ -1,51 +1,56 @@
 defmodule RiddlerAdmin.MixProject do
   use Mix.Project
 
-  def project do
+  @name "RiddlerAdmin"
+  @app :riddler_admin
+  @description "Admin application for managing Riddler"
+  @version "0.1.0"
+
+  @deps [
+    # Required
+    {:argon2_elixir, "~> 2.0"},
+    {:ecto_psql_extras, "~> 0.2"},
+    {:ecto_sql, "~> 3.4"},
+    {:jason, "~> 1.0"},
+    {:phoenix_pubsub, "~> 2.0"},
+    {:postgrex, ">= 0.0.0"},
+    {:uxid, "~> 0.0"},
+    # {:uxid, path: "../../../../../../uxid/impl/ex"},
+
+    # Development
+    {:phx_gen_auth, "~> 0.5", only: [:dev], runtime: false}
+  ]
+
+  def application do
     [
-      app: :riddler_admin,
-      version: "0.1.0",
+      mod: {RiddlerAdmin.Application, []},
+      # crypto is needed for UXID
+      # os_mon is needed for LiveDashboard
+      extra_applications: [:logger, :runtime_tools, :crypto, :os_mon]
+    ]
+  end
+
+  def project() do
+    [
+      app: @app,
+      name: @name,
+      description: @description,
+      version: @version,
+      deps: @deps,
       build_path: "../../_build",
       config_path: "../../config/config.exs",
       deps_path: "../../deps",
       lockfile: "../../mix.lock",
       elixir: "~> 1.7",
-      elixirc_paths: elixirc_paths(Mix.env()),
-      start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      start_permanent: Mix.env() == :prod,
+      elixirc_paths: elixirc_paths(Mix.env())
     ]
   end
 
-  # Configuration for the OTP application.
-  #
-  # Type `mix help compile.app` for more information.
-  def application do
-    [
-      mod: {RiddlerAdmin.Application, []},
-      extra_applications: [:logger, :runtime_tools]
-    ]
-  end
+  # ---------------------------------------------------------------------------
+  # Private
 
-  # Specifies which paths to compile per environment.
-  defp elixirc_paths(:test), do: ["lib", "test/support"]
-  defp elixirc_paths(_), do: ["lib"]
-
-  # Specifies your project dependencies.
-  #
-  # Type `mix help deps` for examples and options.
-  defp deps do
-    [
-      {:phoenix_pubsub, "~> 2.0"},
-      {:ecto_sql, "~> 3.4"},
-      {:postgrex, ">= 0.0.0"},
-      {:jason, "~> 1.0"}
-    ]
-  end
-
-  # Aliases are shortcuts or tasks specific to the current project.
-  #
-  # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
       setup: ["deps.get", "ecto.setup"],
@@ -54,4 +59,7 @@ defmodule RiddlerAdmin.MixProject do
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"]
     ]
   end
+
+  defp elixirc_paths(:test), do: ["test/support", "lib"]
+  defp elixirc_paths(_), do: ["lib"]
 end
