@@ -30,14 +30,17 @@ defmodule RiddlerAdmin.AccountsTest do
       %{id: id} = identity = identity_fixture()
 
       assert %Identity{id: ^id} =
-               Accounts.get_identity_by_email_and_password(identity.email, valid_identity_password())
+               Accounts.get_identity_by_email_and_password(
+                 identity.email,
+                 valid_identity_password()
+               )
     end
   end
 
   describe "get_identity!/1" do
     test "raises if id is invalid" do
       assert_raise Ecto.NoResultsError, fn ->
-        Accounts.get_identity!(-1)
+        Accounts.get_identity!("NOT A VALID UXID")
       end
     end
 
@@ -58,7 +61,8 @@ defmodule RiddlerAdmin.AccountsTest do
     end
 
     test "validates email and password when given" do
-      {:error, changeset} = Accounts.register_identity(%{email: "not valid", password: "not valid"})
+      {:error, changeset} =
+        Accounts.register_identity(%{email: "not valid", password: "not valid"})
 
       assert %{
                email: ["must have the @ sign and no spaces"],
@@ -85,7 +89,10 @@ defmodule RiddlerAdmin.AccountsTest do
 
     test "registers identities with a hashed password" do
       email = unique_identity_email()
-      {:ok, identity} = Accounts.register_identity(%{email: email, password: valid_identity_password()})
+
+      {:ok, identity} =
+        Accounts.register_identity(%{email: email, password: valid_identity_password()})
+
       assert identity.email == email
       assert is_binary(identity.hashed_password)
       assert is_nil(identity.confirmed_at)
@@ -113,7 +120,9 @@ defmodule RiddlerAdmin.AccountsTest do
     end
 
     test "requires email to change", %{identity: identity} do
-      {:error, changeset} = Accounts.apply_identity_email(identity, valid_identity_password(), %{})
+      {:error, changeset} =
+        Accounts.apply_identity_email(identity, valid_identity_password(), %{})
+
       assert %{email: ["did not change"]} = errors_on(changeset)
     end
 
@@ -151,7 +160,10 @@ defmodule RiddlerAdmin.AccountsTest do
 
     test "applies the email without persisting it", %{identity: identity} do
       email = unique_identity_email()
-      {:ok, identity} = Accounts.apply_identity_email(identity, valid_identity_password(), %{email: email})
+
+      {:ok, identity} =
+        Accounts.apply_identity_email(identity, valid_identity_password(), %{email: email})
+
       assert identity.email == email
       assert Accounts.get_identity!(identity.id).email != email
     end
@@ -183,7 +195,11 @@ defmodule RiddlerAdmin.AccountsTest do
 
       token =
         extract_identity_token(fn url ->
-          Accounts.deliver_update_email_instructions(%{identity | email: email}, identity.email, url)
+          Accounts.deliver_update_email_instructions(
+            %{identity | email: email},
+            identity.email,
+            url
+          )
         end)
 
       %{identity: identity, token: token, email: email}
@@ -206,7 +222,9 @@ defmodule RiddlerAdmin.AccountsTest do
     end
 
     test "does not update email if identity email changed", %{identity: identity, token: token} do
-      assert Accounts.update_identity_email(%{identity | email: "current@example.com"}, token) == :error
+      assert Accounts.update_identity_email(%{identity | email: "current@example.com"}, token) ==
+               :error
+
       assert Repo.get!(Identity, identity.id).email == identity.email
       assert Repo.get_by(IdentityToken, identity_id: identity.id)
     end
@@ -248,14 +266,18 @@ defmodule RiddlerAdmin.AccountsTest do
       too_long = String.duplicate("db", 100)
 
       {:error, changeset} =
-        Accounts.update_identity_password(identity, valid_identity_password(), %{password: too_long})
+        Accounts.update_identity_password(identity, valid_identity_password(), %{
+          password: too_long
+        })
 
       assert "should be at most 80 character(s)" in errors_on(changeset).password
     end
 
     test "validates current password", %{identity: identity} do
       {:error, changeset} =
-        Accounts.update_identity_password(identity, "invalid", %{password: valid_identity_password()})
+        Accounts.update_identity_password(identity, "invalid", %{
+          password: valid_identity_password()
+        })
 
       assert %{current_password: ["is not valid"]} = errors_on(changeset)
     end
@@ -460,7 +482,9 @@ defmodule RiddlerAdmin.AccountsTest do
     end
 
     test "updates the password", %{identity: identity} do
-      {:ok, updated_identity} = Accounts.reset_identity_password(identity, %{password: "new valid password"})
+      {:ok, updated_identity} =
+        Accounts.reset_identity_password(identity, %{password: "new valid password"})
+
       assert is_nil(updated_identity.password)
       assert Accounts.get_identity_by_email_and_password(identity.email, "new valid password")
     end
