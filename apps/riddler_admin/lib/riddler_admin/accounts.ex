@@ -27,7 +27,7 @@ defmodule RiddlerAdmin.Accounts do
   """
   def list_owned_accounts(%Identity{id: owner_id}) when is_binary(owner_id) do
     Account
-    |> where(owner_id: ^owner_id)
+    |> where(owner_identity_id: ^owner_id)
     |> Repo.all()
   end
 

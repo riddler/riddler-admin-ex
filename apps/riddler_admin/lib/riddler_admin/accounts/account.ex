@@ -4,7 +4,7 @@ defmodule RiddlerAdmin.Accounts.Account do
   schema "accounts" do
     field :id, Ecto.UXID, primary_key: true, autogenerate: true, prefix: "acc", rand_size: 2
     field :name, :string
-    field :owner_id, Ecto.UXID
+    field :owner_identity_id, Ecto.UXID
 
     timestamps()
   end
@@ -20,7 +20,7 @@ defmodule RiddlerAdmin.Accounts.Account do
   def with_owner_changeset(account, attrs, owner_id) do
     account
     |> changeset(attrs)
-    |> put_change(:owner_id, owner_id)
-    |> validate_required([:owner_id])
+    |> put_change(:owner_identity_id, owner_id)
+    |> validate_required([:owner_identity_id])
   end
 end
