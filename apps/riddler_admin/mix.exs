@@ -14,6 +14,7 @@ defmodule RiddlerAdmin.MixProject do
     {:jason, "~> 1.0"},
     {:phoenix_pubsub, "~> 2.0"},
     {:postgrex, ">= 0.0.0"},
+    {:predicator, "~> 0.9"},
     {:uxid, "~> 0.0"},
 
     # Development
