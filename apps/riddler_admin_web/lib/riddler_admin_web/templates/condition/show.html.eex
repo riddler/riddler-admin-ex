@@ -1,0 +1,18 @@
+<h1>Show Condition</h1>
+
+<ul>
+
+  <li>
+    <strong>Key:</strong>
+    <%= @condition.key %>
+  </li>
+
+  <li>
+    <strong>Source:</strong>
+    <%= @condition.source %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.condition_path(@conn, :edit, @condition) %></span>
+<span><%= link "Back", to: Routes.condition_path(@conn, :index) %></span>

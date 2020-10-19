@@ -15,7 +15,7 @@ alias RiddlerAdmin.{Repo, Identities, Accounts, Workspaces}
 
 account = Repo.insert!(%Accounts.Account{name: "Default", owner_identity_id: identity.id})
 
-workspace =
+_workspace =
   Repo.insert!(%Workspaces.Workspace{
     name: "Default",
     owner_identity_id: identity.id,

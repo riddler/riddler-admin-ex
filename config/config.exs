@@ -17,6 +17,12 @@ config :riddler_admin_web,
   ecto_repos: [RiddlerAdmin.Repo],
   generators: [context_app: :riddler_admin]
 
+# Configure the DB Repo
+config :riddler_admin, RiddlerAdmin.Repo,
+  migration_primary_key: false,
+  migration_foreign_key: [column: :id, type: :text],
+  migration_timestamps: [type: :utc_datetime_usec]
+
 # Configures the endpoint
 config :riddler_admin_web, RiddlerAdminWeb.Endpoint,
   url: [host: "localhost"],
