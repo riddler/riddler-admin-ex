@@ -1,0 +1,5 @@
+<h1>Edit Workspace</h1>
+
+<%= render "form.html", Map.put(assigns, :action, Routes.workspace_path(@conn, :update, @workspace)) %>
+
+<span><%= link "Back", to: Routes.workspace_path(@conn, :index) %></span>

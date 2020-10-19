@@ -73,6 +73,8 @@ defmodule RiddlerAdminWeb.Router do
     resources "/accounts", AccountController do
       get "/switch", AccountSwitchController, :switch
     end
+
+    resources "/workspaces", WorkspaceController
   end
 
   scope "/", RiddlerAdminWeb do

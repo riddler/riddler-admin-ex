@@ -48,16 +48,7 @@ defmodule RiddlerAdmin.Accounts do
   def get_account!(id), do: Repo.get!(Account, id)
 
   @doc """
-  Creates a account.
-
-  ## Examples
-
-      iex> create_account(%{field: value})
-      {:ok, %Account{}}
-
-      iex> create_account(%{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
+  Creates a account with a required owner.
   """
   def create_account_with_owner(attrs, owner_id) when is_binary(owner_id) do
     %Account{}
