@@ -15,7 +15,6 @@ defmodule RiddlerAdmin.MixProject do
     {:phoenix_pubsub, "~> 2.0"},
     {:postgrex, ">= 0.0.0"},
     {:uxid, "~> 0.0"},
-    # {:uxid, path: "../../../../../../uxid/impl/ex"},
 
     # Development
     {:phx_gen_auth, "~> 0.5", only: [:dev], runtime: false}
@@ -24,9 +23,8 @@ defmodule RiddlerAdmin.MixProject do
   def application do
     [
       mod: {RiddlerAdmin.Application, []},
-      # crypto is needed for UXID
       # os_mon is needed for LiveDashboard
-      extra_applications: [:logger, :runtime_tools, :crypto, :os_mon]
+      extra_applications: [:logger, :runtime_tools, :os_mon]
     ]
   end
 

@@ -1,7 +1,7 @@
 defmodule RiddlerAdminWeb.IdentitySessionController do
   use RiddlerAdminWeb, :controller
 
-  alias RiddlerAdmin.Accounts
+  alias RiddlerAdmin.Identities
   alias RiddlerAdminWeb.IdentityAuth
 
   def new(conn, _params) do
@@ -11,7 +11,7 @@ defmodule RiddlerAdminWeb.IdentitySessionController do
   def create(conn, %{"identity" => identity_params}) do
     %{"email" => email, "password" => password} = identity_params
 
-    if identity = Accounts.get_identity_by_email_and_password(email, password) do
+    if identity = Identities.get_identity_by_email_and_password(email, password) do
       IdentityAuth.log_in_identity(conn, identity, identity_params)
     else
       render(conn, "new.html", error_message: "Invalid email or password")

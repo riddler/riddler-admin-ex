@@ -1,15 +1,15 @@
 defmodule RiddlerAdminWeb.IdentityConfirmationController do
   use RiddlerAdminWeb, :controller
 
-  alias RiddlerAdmin.Accounts
+  alias RiddlerAdmin.Identities
 
   def new(conn, _params) do
     render(conn, "new.html")
   end
 
   def create(conn, %{"identity" => %{"email" => email}}) do
-    if identity = Accounts.get_identity_by_email(email) do
-      Accounts.deliver_identity_confirmation_instructions(
+    if identity = Identities.get_identity_by_email(email) do
+      Identities.deliver_identity_confirmation_instructions(
         identity,
         &Routes.identity_confirmation_url(conn, :confirm, &1)
       )
@@ -28,7 +28,7 @@ defmodule RiddlerAdminWeb.IdentityConfirmationController do
   # Do not log in the identity after confirmation to avoid a
   # leaked token giving the identity access to the account.
   def confirm(conn, %{"token" => token}) do
-    case Accounts.confirm_identity(token) do
+    case Identities.confirm_identity(token) do
       {:ok, _} ->
         conn
         |> put_flash(:info, "Account confirmed successfully.")
