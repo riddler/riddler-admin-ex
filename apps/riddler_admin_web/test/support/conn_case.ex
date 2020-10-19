@@ -17,6 +17,10 @@ defmodule RiddlerAdminWeb.ConnCase do
 
   use ExUnit.CaseTemplate
 
+  import Phoenix.ConnTest
+
+  alias RiddlerAdminWeb.Router.Helpers, as: Routes
+
   using do
     quote do
       # Import conveniences for testing with connections
@@ -65,5 +69,12 @@ defmodule RiddlerAdminWeb.ConnCase do
     conn
     |> Phoenix.ConnTest.init_test_session(%{})
     |> Plug.Conn.put_session(:identity_token, token)
+  end
+
+  @doc """
+  Asserts the the `conn` is redirected to the login page.
+  """
+  def assert_login_redirect(conn) do
+    assert Routes.identity_session_path(conn, :new) == redirected_to(conn)
   end
 end

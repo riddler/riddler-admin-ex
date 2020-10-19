@@ -6,7 +6,8 @@ defmodule RiddlerAdminWeb.AccountController do
 
   def index(%{assigns: %{current_identity: current_identity}} = conn, _params) do
     accounts = Accounts.list_owned_accounts(current_identity)
-    render(conn, "index.html", accounts: accounts)
+    current_account_id = conn |> get_session(:current_account_id)
+    render(conn, "index.html", accounts: accounts, current_account_id: current_account_id)
   end
 
   def new(conn, _params) do
