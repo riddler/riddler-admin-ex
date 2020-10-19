@@ -1,0 +1,13 @@
+<h1>Show Workspace</h1>
+
+<ul>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @workspace.name %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.workspace_path(@conn, :edit, @workspace) %></span>
+<span><%= link "Back", to: Routes.workspace_path(@conn, :index) %></span>
