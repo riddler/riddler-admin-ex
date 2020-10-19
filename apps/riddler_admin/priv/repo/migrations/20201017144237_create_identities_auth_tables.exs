@@ -6,21 +6,23 @@ defmodule RiddlerAdmin.Repo.Migrations.CreateIdentitiesAuthTables do
 
     create table(:identities) do
       add :id, :text, primary_key: true
+      timestamps()
+      add :confirmed_at, :utc_datetime_usec
+
       add :email, :citext, null: false
       add :hashed_password, :text, null: false
-      add :confirmed_at, :naive_datetime
-      timestamps()
     end
 
     create unique_index(:identities, [:email])
 
     create table(:identities_tokens) do
-      add :id, :text, primary_key: true, autogenerate: true
+      add :id, :text, primary_key: true
+      timestamps(updated_at: false)
       add :identity_id, references(:identities, on_delete: :delete_all), null: false
+
       add :token, :binary, null: false
       add :context, :text, null: false
       add :sent_to, :text
-      timestamps(updated_at: false)
     end
 
     create index(:identities_tokens, [:identity_id])
