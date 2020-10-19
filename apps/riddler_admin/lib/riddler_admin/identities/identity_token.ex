@@ -1,4 +1,4 @@
-defmodule RiddlerAdmin.Accounts.IdentityToken do
+defmodule RiddlerAdmin.Identities.IdentityToken do
   use RiddlerAdmin.Schema
   import Ecto.Query
 
@@ -17,7 +17,7 @@ defmodule RiddlerAdmin.Accounts.IdentityToken do
     field :token, :binary
     field :context, :string
     field :sent_to, :string
-    belongs_to :identity, RiddlerAdmin.Accounts.Identity
+    belongs_to :identity, RiddlerAdmin.Identities.Identity
 
     timestamps(updated_at: false)
   end
@@ -31,7 +31,7 @@ defmodule RiddlerAdmin.Accounts.IdentityToken do
     token = :crypto.strong_rand_bytes(@rand_size)
 
     {token,
-     %RiddlerAdmin.Accounts.IdentityToken{
+     %RiddlerAdmin.Identities.IdentityToken{
        token: token,
        context: "session",
        identity_id: identity.id
@@ -70,7 +70,7 @@ defmodule RiddlerAdmin.Accounts.IdentityToken do
     hashed_token = :crypto.hash(@hash_algorithm, token)
 
     {Base.url_encode64(token, padding: false),
-     %RiddlerAdmin.Accounts.IdentityToken{
+     %RiddlerAdmin.Identities.IdentityToken{
        token: hashed_token,
        context: context,
        sent_to: sent_to,
@@ -130,18 +130,18 @@ defmodule RiddlerAdmin.Accounts.IdentityToken do
   Returns the given token with the given context.
   """
   def token_and_context_query(token, context) do
-    from RiddlerAdmin.Accounts.IdentityToken, where: [token: ^token, context: ^context]
+    from RiddlerAdmin.Identities.IdentityToken, where: [token: ^token, context: ^context]
   end
 
   @doc """
   Gets all tokens for the given identity for the given contexts.
   """
   def identity_and_contexts_query(identity, :all) do
-    from t in RiddlerAdmin.Accounts.IdentityToken, where: t.identity_id == ^identity.id
+    from t in RiddlerAdmin.Identities.IdentityToken, where: t.identity_id == ^identity.id
   end
 
   def identity_and_contexts_query(identity, [_ | _] = contexts) do
-    from t in RiddlerAdmin.Accounts.IdentityToken,
+    from t in RiddlerAdmin.Identities.IdentityToken,
       where: t.identity_id == ^identity.id and t.context in ^contexts
   end
 end

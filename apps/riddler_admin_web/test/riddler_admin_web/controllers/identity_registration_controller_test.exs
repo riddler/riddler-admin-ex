@@ -1,7 +1,7 @@
 defmodule RiddlerAdminWeb.IdentityRegistrationControllerTest do
   use RiddlerAdminWeb.ConnCase, async: true
 
-  import RiddlerAdmin.AccountsFixtures
+  import RiddlerAdmin.IdentitiesFixtures
 
   describe "GET /identities/register" do
     test "renders registration page", %{conn: conn} do

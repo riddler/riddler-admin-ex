@@ -1,9 +1,9 @@
 defmodule RiddlerAdminWeb.IdentityResetPasswordControllerTest do
   use RiddlerAdminWeb.ConnCase, async: true
 
-  alias RiddlerAdmin.Accounts
+  alias RiddlerAdmin.Identities
   alias RiddlerAdmin.Repo
-  import RiddlerAdmin.AccountsFixtures
+  import RiddlerAdmin.IdentitiesFixtures
 
   setup do
     %{identity: identity_fixture()}
@@ -28,7 +28,7 @@ defmodule RiddlerAdminWeb.IdentityResetPasswordControllerTest do
       assert redirected_to(conn) == "/"
       assert get_flash(conn, :info) =~ "If your email is in our system"
 
-      assert Repo.get_by!(Accounts.IdentityToken, identity_id: identity.id).context ==
+      assert Repo.get_by!(Identities.IdentityToken, identity_id: identity.id).context ==
                "reset_password"
     end
 
@@ -40,7 +40,7 @@ defmodule RiddlerAdminWeb.IdentityResetPasswordControllerTest do
 
       assert redirected_to(conn) == "/"
       assert get_flash(conn, :info) =~ "If your email is in our system"
-      assert Repo.all(Accounts.IdentityToken) == []
+      assert Repo.all(Identities.IdentityToken) == []
     end
   end
 
@@ -48,7 +48,7 @@ defmodule RiddlerAdminWeb.IdentityResetPasswordControllerTest do
     setup %{identity: identity} do
       token =
         extract_identity_token(fn url ->
-          Accounts.deliver_identity_reset_password_instructions(identity, url)
+          Identities.deliver_identity_reset_password_instructions(identity, url)
         end)
 
       %{token: token}
@@ -70,7 +70,7 @@ defmodule RiddlerAdminWeb.IdentityResetPasswordControllerTest do
     setup %{identity: identity} do
       token =
         extract_identity_token(fn url ->
-          Accounts.deliver_identity_reset_password_instructions(identity, url)
+          Identities.deliver_identity_reset_password_instructions(identity, url)
         end)
 
       %{token: token}
@@ -88,7 +88,7 @@ defmodule RiddlerAdminWeb.IdentityResetPasswordControllerTest do
       assert redirected_to(conn) == Routes.identity_session_path(conn, :new)
       refute get_session(conn, :identity_token)
       assert get_flash(conn, :info) =~ "Password reset successfully"
-      assert Accounts.get_identity_by_email_and_password(identity.email, "new valid password")
+      assert Identities.get_identity_by_email_and_password(identity.email, "new valid password")
     end
 
     test "does not reset password on invalid data", %{conn: conn, token: token} do
