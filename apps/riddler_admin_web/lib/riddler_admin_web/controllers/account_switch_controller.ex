@@ -4,18 +4,12 @@ defmodule RiddlerAdminWeb.AccountSwitchController do
   alias RiddlerAdmin.Accounts
   alias RiddlerAdminWeb.AccountSwitch
 
+  # Swtich the current_account
   def switch(conn, %{"account_id" => account_id} = params) do
     account = Accounts.get_account!(account_id)
-    AccountSwitch.switch_current_account(conn, account, params)
+
+    conn
+    |> AccountSwitch.switch_current_account(account, params)
+    |> redirect(to: "/workspaces")
   end
-
-  # # Swtich the current_account
-  # def switch(conn, %{"id" => id} = params) do
-  #   IO.inspect(conn)
-  #   IO.inspect(params)
-
-  #   account = Accounts.get_account!(id)
-  #   changeset = Accounts.change_account(account)
-  #   render(conn, "edit.html", account: account, changeset: changeset)
-  # end
 end
