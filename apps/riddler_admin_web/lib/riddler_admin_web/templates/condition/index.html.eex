@@ -1,0 +1,28 @@
+<h1>Listing Conditions</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Key</th>
+      <th>Source</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for condition <- @conditions do %>
+    <tr>
+      <td><%= condition.key %></td>
+      <td><%= condition.source %></td>
+
+      <td>
+        <span><%= link "Show", to: Routes.condition_path(@conn, :show, condition) %></span>
+        <span><%= link "Edit", to: Routes.condition_path(@conn, :edit, condition) %></span>
+        <span><%= link "Delete", to: Routes.condition_path(@conn, :delete, condition), method: :delete, data: [confirm: "Are you sure?"] %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Condition", to: Routes.condition_path(@conn, :new) %></span>
