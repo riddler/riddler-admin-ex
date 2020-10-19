@@ -2,7 +2,7 @@ defmodule RiddlerAdminWeb.IdentityAuth do
   import Plug.Conn
   import Phoenix.Controller
 
-  alias RiddlerAdmin.Accounts
+  alias RiddlerAdmin.Identities
   alias RiddlerAdminWeb.Router.Helpers, as: Routes
 
   # Make the remember me cookie valid for 60 days.
@@ -25,7 +25,7 @@ defmodule RiddlerAdminWeb.IdentityAuth do
   if you are not using LiveView.
   """
   def log_in_identity(conn, identity, params \\ %{}) do
-    token = Accounts.generate_identity_session_token(identity)
+    token = Identities.generate_identity_session_token(identity)
     identity_return_to = get_session(conn, :identity_return_to)
 
     conn
@@ -72,7 +72,7 @@ defmodule RiddlerAdminWeb.IdentityAuth do
   """
   def log_out_identity(conn) do
     identity_token = get_session(conn, :identity_token)
-    identity_token && Accounts.delete_session_token(identity_token)
+    identity_token && Identities.delete_session_token(identity_token)
 
     if live_socket_id = get_session(conn, :live_socket_id) do
       RiddlerAdminWeb.Endpoint.broadcast(live_socket_id, "disconnect", %{})
@@ -90,7 +90,7 @@ defmodule RiddlerAdminWeb.IdentityAuth do
   """
   def fetch_current_identity(conn, _opts) do
     {identity_token, conn} = ensure_identity_token(conn)
-    identity = identity_token && Accounts.get_identity_by_session_token(identity_token)
+    identity = identity_token && Identities.get_identity_by_session_token(identity_token)
     assign(conn, :current_identity, identity)
   end
 

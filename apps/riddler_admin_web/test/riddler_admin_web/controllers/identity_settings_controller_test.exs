@@ -1,8 +1,8 @@
 defmodule RiddlerAdminWeb.IdentitySettingsControllerTest do
   use RiddlerAdminWeb.ConnCase, async: true
 
-  alias RiddlerAdmin.Accounts
-  import RiddlerAdmin.AccountsFixtures
+  alias RiddlerAdmin.Identities
+  import RiddlerAdmin.IdentitiesFixtures
 
   setup :register_and_log_in_identity
 
@@ -34,7 +34,7 @@ defmodule RiddlerAdminWeb.IdentitySettingsControllerTest do
       assert redirected_to(new_password_conn) == Routes.identity_settings_path(conn, :edit)
       assert get_session(new_password_conn, :identity_token) != get_session(conn, :identity_token)
       assert get_flash(new_password_conn, :info) =~ "Password updated successfully"
-      assert Accounts.get_identity_by_email_and_password(identity.email, "new valid password")
+      assert Identities.get_identity_by_email_and_password(identity.email, "new valid password")
     end
 
     test "does not update password on invalid data", %{conn: conn} do
@@ -68,7 +68,7 @@ defmodule RiddlerAdminWeb.IdentitySettingsControllerTest do
 
       assert redirected_to(conn) == Routes.identity_settings_path(conn, :edit)
       assert get_flash(conn, :info) =~ "A link to confirm your email"
-      assert Accounts.get_identity_by_email(identity.email)
+      assert Identities.get_identity_by_email(identity.email)
     end
 
     test "does not update email on invalid data", %{conn: conn} do
@@ -91,7 +91,7 @@ defmodule RiddlerAdminWeb.IdentitySettingsControllerTest do
 
       token =
         extract_identity_token(fn url ->
-          Accounts.deliver_update_email_instructions(
+          Identities.deliver_update_email_instructions(
             %{identity | email: email},
             identity.email,
             url
@@ -110,8 +110,8 @@ defmodule RiddlerAdminWeb.IdentitySettingsControllerTest do
       conn = get(conn, Routes.identity_settings_path(conn, :confirm_email, token))
       assert redirected_to(conn) == Routes.identity_settings_path(conn, :edit)
       assert get_flash(conn, :info) =~ "Email changed successfully"
-      refute Accounts.get_identity_by_email(identity.email)
-      assert Accounts.get_identity_by_email(email)
+      refute Identities.get_identity_by_email(identity.email)
+      assert Identities.get_identity_by_email(email)
 
       conn = get(conn, Routes.identity_settings_path(conn, :confirm_email, token))
       assert redirected_to(conn) == Routes.identity_settings_path(conn, :edit)
@@ -122,7 +122,7 @@ defmodule RiddlerAdminWeb.IdentitySettingsControllerTest do
       conn = get(conn, Routes.identity_settings_path(conn, :confirm_email, "oops"))
       assert redirected_to(conn) == Routes.identity_settings_path(conn, :edit)
       assert get_flash(conn, :error) =~ "Email change link is invalid or it has expired"
-      assert Accounts.get_identity_by_email(identity.email)
+      assert Identities.get_identity_by_email(identity.email)
     end
 
     test "redirects if identity is not logged in", %{token: token} do

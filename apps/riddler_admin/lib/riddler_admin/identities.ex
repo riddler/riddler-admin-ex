@@ -1,11 +1,11 @@
-defmodule RiddlerAdmin.Accounts do
+defmodule RiddlerAdmin.Identities do
   @moduledoc """
-  The Accounts context.
+  The Identities context.
   """
 
   import Ecto.Query, warn: false
   alias RiddlerAdmin.Repo
-  alias RiddlerAdmin.Accounts.{Identity, IdentityToken, IdentityNotifier}
+  alias RiddlerAdmin.Identities.{Identity, IdentityToken, IdentityNotifier}
 
   ## Database getters
 
@@ -146,11 +146,15 @@ defmodule RiddlerAdmin.Accounts do
   end
 
   defp identity_email_multi(identity, email, context) do
-    changeset = identity |> Identity.email_changeset(%{email: email}) |> Identity.confirm_changeset()
+    changeset =
+      identity |> Identity.email_changeset(%{email: email}) |> Identity.confirm_changeset()
 
     Ecto.Multi.new()
     |> Ecto.Multi.update(:identity, changeset)
-    |> Ecto.Multi.delete_all(:tokens, IdentityToken.identity_and_contexts_query(identity, [context]))
+    |> Ecto.Multi.delete_all(
+      :tokens,
+      IdentityToken.identity_and_contexts_query(identity, [context])
+    )
   end
 
   @doc """
@@ -162,12 +166,21 @@ defmodule RiddlerAdmin.Accounts do
       {:ok, %{to: ..., body: ...}}
 
   """
-  def deliver_update_email_instructions(%Identity{} = identity, current_email, update_email_url_fun)
+  def deliver_update_email_instructions(
+        %Identity{} = identity,
+        current_email,
+        update_email_url_fun
+      )
       when is_function(update_email_url_fun, 1) do
-    {encoded_token, identity_token} = IdentityToken.build_email_token(identity, "change:#{current_email}")
+    {encoded_token, identity_token} =
+      IdentityToken.build_email_token(identity, "change:#{current_email}")
 
     Repo.insert!(identity_token)
-    IdentityNotifier.deliver_update_email_instructions(identity, update_email_url_fun.(encoded_token))
+
+    IdentityNotifier.deliver_update_email_instructions(
+      identity,
+      update_email_url_fun.(encoded_token)
+    )
   end
 
   @doc """
@@ -259,7 +272,11 @@ defmodule RiddlerAdmin.Accounts do
     else
       {encoded_token, identity_token} = IdentityToken.build_email_token(identity, "confirm")
       Repo.insert!(identity_token)
-      IdentityNotifier.deliver_confirmation_instructions(identity, confirmation_url_fun.(encoded_token))
+
+      IdentityNotifier.deliver_confirmation_instructions(
+        identity,
+        confirmation_url_fun.(encoded_token)
+      )
     end
   end
 
@@ -282,7 +299,10 @@ defmodule RiddlerAdmin.Accounts do
   defp confirm_identity_multi(identity) do
     Ecto.Multi.new()
     |> Ecto.Multi.update(:identity, Identity.confirm_changeset(identity))
-    |> Ecto.Multi.delete_all(:tokens, IdentityToken.identity_and_contexts_query(identity, ["confirm"]))
+    |> Ecto.Multi.delete_all(
+      :tokens,
+      IdentityToken.identity_and_contexts_query(identity, ["confirm"])
+    )
   end
 
   ## Reset password
@@ -300,7 +320,11 @@ defmodule RiddlerAdmin.Accounts do
       when is_function(reset_password_url_fun, 1) do
     {encoded_token, identity_token} = IdentityToken.build_email_token(identity, "reset_password")
     Repo.insert!(identity_token)
-    IdentityNotifier.deliver_reset_password_instructions(identity, reset_password_url_fun.(encoded_token))
+
+    IdentityNotifier.deliver_reset_password_instructions(
+      identity,
+      reset_password_url_fun.(encoded_token)
+    )
   end
 
   @doc """

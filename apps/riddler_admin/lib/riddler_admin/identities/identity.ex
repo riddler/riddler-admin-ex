@@ -1,4 +1,4 @@
-defmodule RiddlerAdmin.Accounts.Identity do
+defmodule RiddlerAdmin.Identities.Identity do
   use RiddlerAdmin.Schema
 
   @derive {Inspect, except: [:password]}
@@ -93,7 +93,10 @@ defmodule RiddlerAdmin.Accounts.Identity do
   If there is no identity or the identity doesn't have a password, we call
   `Argon2.no_user_verify/0` to avoid timing attacks.
   """
-  def valid_password?(%RiddlerAdmin.Accounts.Identity{hashed_password: hashed_password}, password)
+  def valid_password?(
+        %RiddlerAdmin.Identities.Identity{hashed_password: hashed_password},
+        password
+      )
       when is_binary(hashed_password) and byte_size(password) > 0 do
     Argon2.verify_pass(password, hashed_password)
   end

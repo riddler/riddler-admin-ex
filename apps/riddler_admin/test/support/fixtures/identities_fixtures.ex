@@ -1,7 +1,7 @@
-defmodule RiddlerAdmin.AccountsFixtures do
+defmodule RiddlerAdmin.IdentitiesFixtures do
   @moduledoc """
   This module defines test helpers for creating
-  entities via the `RiddlerAdmin.Accounts` context.
+  entities via the `RiddlerAdmin.Identities` context.
   """
 
   def unique_identity_email, do: "identity#{System.unique_integer()}@example.com"
@@ -14,7 +14,7 @@ defmodule RiddlerAdmin.AccountsFixtures do
         email: unique_identity_email(),
         password: valid_identity_password()
       })
-      |> RiddlerAdmin.Accounts.register_identity()
+      |> RiddlerAdmin.Identities.register_identity()
 
     identity
   end

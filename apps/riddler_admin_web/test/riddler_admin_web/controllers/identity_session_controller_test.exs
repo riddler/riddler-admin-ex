@@ -1,7 +1,7 @@
 defmodule RiddlerAdminWeb.IdentitySessionControllerTest do
   use RiddlerAdminWeb.ConnCase, async: true
 
-  import RiddlerAdmin.AccountsFixtures
+  import RiddlerAdmin.IdentitiesFixtures
 
   setup do
     %{identity: identity_fixture()}
