@@ -50,7 +50,7 @@ defmodule RiddlerAdminWeb.ConnCase do
   test context.
   """
   def register_and_log_in_identity(%{conn: conn}) do
-    identity = RiddlerAdmin.AccountsFixtures.identity_fixture()
+    identity = RiddlerAdmin.IdentitiesFixtures.identity_fixture()
     %{conn: log_in_identity(conn, identity), identity: identity}
   end
 
@@ -60,7 +60,7 @@ defmodule RiddlerAdminWeb.ConnCase do
   It returns an updated `conn`.
   """
   def log_in_identity(conn, identity) do
-    token = RiddlerAdmin.Accounts.generate_identity_session_token(identity)
+    token = RiddlerAdmin.Identities.generate_identity_session_token(identity)
 
     conn
     |> Phoenix.ConnTest.init_test_session(%{})

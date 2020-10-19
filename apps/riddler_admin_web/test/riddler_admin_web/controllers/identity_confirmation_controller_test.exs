@@ -1,9 +1,9 @@
 defmodule RiddlerAdminWeb.IdentityConfirmationControllerTest do
   use RiddlerAdminWeb.ConnCase, async: true
 
-  alias RiddlerAdmin.Accounts
+  alias RiddlerAdmin.Identities
   alias RiddlerAdmin.Repo
-  import RiddlerAdmin.AccountsFixtures
+  import RiddlerAdmin.IdentitiesFixtures
 
   setup do
     %{identity: identity_fixture()}
@@ -27,14 +27,14 @@ defmodule RiddlerAdminWeb.IdentityConfirmationControllerTest do
 
       assert redirected_to(conn) == "/"
       assert get_flash(conn, :info) =~ "If your email is in our system"
-      assert Repo.get_by!(Accounts.IdentityToken, identity_id: identity.id).context == "confirm"
+      assert Repo.get_by!(Identities.IdentityToken, identity_id: identity.id).context == "confirm"
     end
 
     test "does not send confirmation token if account is confirmed", %{
       conn: conn,
       identity: identity
     } do
-      Repo.update!(Accounts.Identity.confirm_changeset(identity))
+      Repo.update!(Identities.Identity.confirm_changeset(identity))
 
       conn =
         post(conn, Routes.identity_confirmation_path(conn, :create), %{
@@ -43,7 +43,7 @@ defmodule RiddlerAdminWeb.IdentityConfirmationControllerTest do
 
       assert redirected_to(conn) == "/"
       assert get_flash(conn, :info) =~ "If your email is in our system"
-      refute Repo.get_by(Accounts.IdentityToken, identity_id: identity.id)
+      refute Repo.get_by(Identities.IdentityToken, identity_id: identity.id)
     end
 
     test "does not send confirmation token if email is invalid", %{conn: conn} do
@@ -54,7 +54,7 @@ defmodule RiddlerAdminWeb.IdentityConfirmationControllerTest do
 
       assert redirected_to(conn) == "/"
       assert get_flash(conn, :info) =~ "If your email is in our system"
-      assert Repo.all(Accounts.IdentityToken) == []
+      assert Repo.all(Identities.IdentityToken) == []
     end
   end
 
@@ -62,15 +62,15 @@ defmodule RiddlerAdminWeb.IdentityConfirmationControllerTest do
     test "confirms the given token once", %{conn: conn, identity: identity} do
       token =
         extract_identity_token(fn url ->
-          Accounts.deliver_identity_confirmation_instructions(identity, url)
+          Identities.deliver_identity_confirmation_instructions(identity, url)
         end)
 
       conn = get(conn, Routes.identity_confirmation_path(conn, :confirm, token))
       assert redirected_to(conn) == "/"
       assert get_flash(conn, :info) =~ "Account confirmed successfully"
-      assert Accounts.get_identity!(identity.id).confirmed_at
+      assert Identities.get_identity!(identity.id).confirmed_at
       refute get_session(conn, :identity_token)
-      assert Repo.all(Accounts.IdentityToken) == []
+      assert Repo.all(Identities.IdentityToken) == []
 
       conn = get(conn, Routes.identity_confirmation_path(conn, :confirm, token))
       assert redirected_to(conn) == "/"
@@ -81,7 +81,7 @@ defmodule RiddlerAdminWeb.IdentityConfirmationControllerTest do
       conn = get(conn, Routes.identity_confirmation_path(conn, :confirm, "oops"))
       assert redirected_to(conn) == "/"
       assert get_flash(conn, :error) =~ "Confirmation link is invalid or it has expired"
-      refute Accounts.get_identity!(identity.id).confirmed_at
+      refute Identities.get_identity!(identity.id).confirmed_at
     end
   end
 end

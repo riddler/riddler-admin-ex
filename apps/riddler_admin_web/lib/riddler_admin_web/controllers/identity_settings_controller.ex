@@ -1,7 +1,7 @@
 defmodule RiddlerAdminWeb.IdentitySettingsController do
   use RiddlerAdminWeb, :controller
 
-  alias RiddlerAdmin.Accounts
+  alias RiddlerAdmin.Identities
   alias RiddlerAdminWeb.IdentityAuth
 
   plug :assign_email_and_password_changesets
@@ -13,9 +13,9 @@ defmodule RiddlerAdminWeb.IdentitySettingsController do
   def update_email(conn, %{"current_password" => password, "identity" => identity_params}) do
     identity = conn.assigns.current_identity
 
-    case Accounts.apply_identity_email(identity, password, identity_params) do
+    case Identities.apply_identity_email(identity, password, identity_params) do
       {:ok, applied_identity} ->
-        Accounts.deliver_update_email_instructions(
+        Identities.deliver_update_email_instructions(
           applied_identity,
           identity.email,
           &Routes.identity_settings_url(conn, :confirm_email, &1)
@@ -34,7 +34,7 @@ defmodule RiddlerAdminWeb.IdentitySettingsController do
   end
 
   def confirm_email(conn, %{"token" => token}) do
-    case Accounts.update_identity_email(conn.assigns.current_identity, token) do
+    case Identities.update_identity_email(conn.assigns.current_identity, token) do
       :ok ->
         conn
         |> put_flash(:info, "Email changed successfully.")
@@ -50,7 +50,7 @@ defmodule RiddlerAdminWeb.IdentitySettingsController do
   def update_password(conn, %{"current_password" => password, "identity" => identity_params}) do
     identity = conn.assigns.current_identity
 
-    case Accounts.update_identity_password(identity, password, identity_params) do
+    case Identities.update_identity_password(identity, password, identity_params) do
       {:ok, identity} ->
         conn
         |> put_flash(:info, "Password updated successfully.")
@@ -66,7 +66,7 @@ defmodule RiddlerAdminWeb.IdentitySettingsController do
     identity = conn.assigns.current_identity
 
     conn
-    |> assign(:email_changeset, Accounts.change_identity_email(identity))
-    |> assign(:password_changeset, Accounts.change_identity_password(identity))
+    |> assign(:email_changeset, Identities.change_identity_email(identity))
+    |> assign(:password_changeset, Identities.change_identity_password(identity))
   end
 end

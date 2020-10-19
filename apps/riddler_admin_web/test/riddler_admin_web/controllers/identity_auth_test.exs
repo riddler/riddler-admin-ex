@@ -1,9 +1,9 @@
 defmodule RiddlerAdminWeb.IdentityAuthTest do
   use RiddlerAdminWeb.ConnCase, async: true
 
-  alias RiddlerAdmin.Accounts
+  alias RiddlerAdmin.Identities
   alias RiddlerAdminWeb.IdentityAuth
-  import RiddlerAdmin.AccountsFixtures
+  import RiddlerAdmin.IdentitiesFixtures
 
   setup %{conn: conn} do
     conn =
@@ -23,7 +23,7 @@ defmodule RiddlerAdminWeb.IdentityAuthTest do
                "identities_sessions:#{Base.url_encode64(token)}"
 
       assert redirected_to(conn) == "/"
-      assert Accounts.get_identity_by_session_token(token)
+      assert Identities.get_identity_by_session_token(token)
     end
 
     test "clears everything previously stored in the session", %{conn: conn, identity: identity} do
@@ -58,7 +58,7 @@ defmodule RiddlerAdminWeb.IdentityAuthTest do
 
   describe "logout_identity/1" do
     test "erases session and cookies", %{conn: conn, identity: identity} do
-      identity_token = Accounts.generate_identity_session_token(identity)
+      identity_token = Identities.generate_identity_session_token(identity)
 
       conn =
         conn
@@ -71,7 +71,7 @@ defmodule RiddlerAdminWeb.IdentityAuthTest do
       refute conn.cookies["identity_remember_me"]
       assert %{max_age: 0} = conn.resp_cookies["identity_remember_me"]
       assert redirected_to(conn) == "/"
-      refute Accounts.get_identity_by_session_token(identity_token)
+      refute Identities.get_identity_by_session_token(identity_token)
     end
 
     test "broadcasts to the given live_socket_id", %{conn: conn} do
@@ -98,7 +98,7 @@ defmodule RiddlerAdminWeb.IdentityAuthTest do
 
   describe "fetch_current_identity/2" do
     test "authenticates identity from session", %{conn: conn, identity: identity} do
-      identity_token = Accounts.generate_identity_session_token(identity)
+      identity_token = Identities.generate_identity_session_token(identity)
 
       conn =
         conn
@@ -127,7 +127,7 @@ defmodule RiddlerAdminWeb.IdentityAuthTest do
     end
 
     test "does not authenticate if data is missing", %{conn: conn, identity: identity} do
-      _ = Accounts.generate_identity_session_token(identity)
+      _ = Identities.generate_identity_session_token(identity)
       conn = IdentityAuth.fetch_current_identity(conn, [])
       refute get_session(conn, :identity_token)
       refute conn.assigns.current_identity
