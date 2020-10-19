@@ -10,7 +10,7 @@ defmodule RiddlerAdmin.Application do
       # Start the Ecto repository
       RiddlerAdmin.Repo,
       # Start the PubSub system
-      {Phoenix.PubSub, name: RiddlerAdmin.PubSub}
+      {Phoenix.PubSub, adapter: Phoenix.PubSub.PG2, name: RiddlerAdmin.PubSub}
       # Start a worker by calling: RiddlerAdmin.Worker.start_link(arg)
       # {RiddlerAdmin.Worker, arg}
     ]
