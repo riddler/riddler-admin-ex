@@ -27,10 +27,6 @@ defmodule RiddlerAdminWeb.AccountControllerTest do
     account
   end
 
-  defp assert_login_redirect(conn) do
-    assert Routes.identity_session_path(conn, :new) == redirected_to(conn)
-  end
-
   describe "when not logged in" do
     test "index redirects", %{conn: conn} do
       conn
