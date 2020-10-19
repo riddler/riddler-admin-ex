@@ -70,7 +70,13 @@ defmodule RiddlerAdminWeb.Router do
     put "/identities/settings/update_email", IdentitySettingsController, :update_email
     get "/identities/settings/confirm_email/:token", IdentitySettingsController, :confirm_email
 
-    resources "/accounts", AccountController
+    resources "/accounts", AccountController do
+      get "/switch", AccountSwitchController, :switch
+    end
+
+    resources "/workspaces", WorkspaceController do
+      get "/switch", WorkspaceSwitchController, :switch
+    end
   end
 
   scope "/", RiddlerAdminWeb do
