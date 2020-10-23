@@ -1,8 +1,10 @@
 defmodule RiddlerAdmin.Conditions.Condition do
   use RiddlerAdmin.Schema
 
+  @id_opts [prefix: "cnd", rand_size: 8]
+
   schema "conditions" do
-    field :id, Ecto.UXID, primary_key: true, autogenerate: true, prefix: "cnd", rand_size: 8
+    field :id, Ecto.UXID, @id_opts ++ [primary_key: true, autogenerate: true]
     field :account_id, Ecto.UXID
 
     field :key, :string
@@ -11,6 +13,8 @@ defmodule RiddlerAdmin.Conditions.Condition do
 
     timestamps()
   end
+
+  def id_opts(), do: @id_opts
 
   @doc false
   def changeset(condition, attrs) do

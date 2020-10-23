@@ -119,4 +119,18 @@ defmodule RiddlerAdmin.Conditions do
   def change_condition(%Condition{} = condition, attrs \\ %{}) do
     Condition.changeset(condition, attrs)
   end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for creating a new Condition.
+
+  ## Examples
+
+      iex> new_condition(attrs)
+      %Ecto.Changeset{data: %Condition{}}
+
+  """
+  def new_condition(attrs \\ %{}) do
+    %Condition{}
+    |> Condition.changeset(attrs)
+  end
 end
