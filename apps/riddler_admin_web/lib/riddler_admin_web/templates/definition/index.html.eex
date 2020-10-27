@@ -1,0 +1,30 @@
+<h1>Listing Definitions</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Version</th>
+      <th>Schema version</th>
+      <th>Data</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for definition <- @definitions do %>
+    <tr>
+      <td><%= definition.version %></td>
+      <td><%= definition.schema_version %></td>
+      <td><%= definition.data %></td>
+
+      <td>
+        <span><%= link "Show", to: Routes.definition_path(@conn, :show, definition) %></span>
+        <span><%= link "Edit", to: Routes.definition_path(@conn, :edit, definition) %></span>
+        <span><%= link "Delete", to: Routes.definition_path(@conn, :delete, definition), method: :delete, data: [confirm: "Are you sure?"] %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Definition", to: Routes.definition_path(@conn, :new) %></span>
