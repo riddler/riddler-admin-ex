@@ -35,6 +35,7 @@ defmodule RiddlerAdminWeb.Router do
     resources "/workspaces", WorkspaceController do
       resources "/agents", AgentController
       resources "/conditions", ConditionController
+      resources "/definitions", DefinitionController
       resources "/publish_requests", PublishRequestController
     end
   end

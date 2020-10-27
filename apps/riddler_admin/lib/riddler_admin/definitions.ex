@@ -8,6 +8,19 @@ defmodule RiddlerAdmin.Definitions do
 
   alias RiddlerAdmin.Definitions.Definition
 
+  def next_version(workspace_id) do
+    Definition
+    |> where([def], def.workspace_id == ^workspace_id)
+    |> select([def], max(def.version))
+    |> Repo.one!()
+  end
+
+  def list_workspace_definitions(workspace_id) do
+    Definition
+    |> where(workspace_id: ^workspace_id)
+    |> Repo.all()
+  end
+
   @doc """
   Returns the list of definitions.
 
