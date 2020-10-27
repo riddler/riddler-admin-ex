@@ -9,14 +9,11 @@ defmodule RiddlerAdminWeb.WorkspaceController do
       conn
       |> get_session(:current_account_id)
 
-    current_workspace_id = conn |> get_session(:current_workspace_id)
-
     workspaces = Workspaces.list_account_workspaces(account_id)
 
     render(conn, "index.html",
       account_id: account_id,
-      workspaces: workspaces,
-      current_workspace_id: current_workspace_id
+      workspaces: workspaces
     )
   end
 

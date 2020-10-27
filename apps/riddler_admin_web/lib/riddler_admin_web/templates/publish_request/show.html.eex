@@ -17,6 +17,18 @@
     <%= @publish_request.message %>
   </li>
 
+  <%= if is_nil(@publish_request.approved_at) do %>
+    <li>
+      <%= link "Approve", to: Routes.workspace_publish_request_approval_path(@conn, :approve, @workspace_id, @publish_request.id) %></span>
+      <%= @publish_request.message %>
+    </li>
+  <% else %>
+    <li>
+      <strong>Approved by:</strong>
+      <%= @publish_request.approved_by_id %>
+    </li>
+  <% end %>
+
 </ul>
 
 <pre><%= @definition %></pre>

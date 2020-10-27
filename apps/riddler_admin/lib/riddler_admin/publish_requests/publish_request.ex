@@ -28,7 +28,6 @@ defmodule RiddlerAdmin.PublishRequests.PublishRequest do
 
   def id_opts(), do: @id_opts
 
-  @doc false
   def create_changeset(publish_request, attrs, workspace_id, author_id) do
     workspace_definition = Workspaces.generate_definition!(workspace_id)
 
@@ -46,5 +45,13 @@ defmodule RiddlerAdmin.PublishRequests.PublishRequest do
     publish_request
     |> cast(attrs, [:subject, :message])
     |> validate_required([:subject])
+  end
+
+  def approve_changeset(publish_request, approver_id) do
+    publish_request
+    |> cast(%{}, [])
+    |> put_change(:approved_by_id, approver_id)
+    |> put_change(:approved_at, DateTime.utc_now())
+    |> validate_required([:approved_by_id, :approved_at])
   end
 end

@@ -32,6 +32,12 @@ defmodule RiddlerAdmin.PublishRequests do
     create_result
   end
 
+  def approve(%PublishRequest{} = publish_request, %Identity{id: approver_id}) do
+    publish_request
+    |> PublishRequest.approve_changeset(approver_id)
+    |> Repo.update()
+  end
+
   def list_workspace_publish_requests(workspace_id) do
     PublishRequest
     |> where(workspace_id: ^workspace_id)

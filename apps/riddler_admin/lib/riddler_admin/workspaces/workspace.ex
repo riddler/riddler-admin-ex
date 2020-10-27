@@ -5,7 +5,7 @@ defmodule RiddlerAdmin.Workspaces.Workspace do
 
   @derive {Jason.Encoder, only: [:id, :name, :conditions]}
   schema "workspaces" do
-    field :id, Ecto.UXID, primary_key: true, autogenerate: true, prefix: "wsp", rand_size: 5
+    field :id, Ecto.UXID, primary_key: true, autogenerate: true, prefix: "wsp", rand_size: 2
     field :name, :string
     field :account_id, Ecto.UXID
     field :owner_identity_id, Ecto.UXID

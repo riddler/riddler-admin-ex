@@ -2,7 +2,6 @@ defmodule RiddlerAdminWeb.AccountSwitchController do
   use RiddlerAdminWeb, :controller
 
   alias RiddlerAdmin.Accounts
-  alias RiddlerAdminWeb.AccountSwitch
 
   @doc """
   Switches the current Account.
@@ -13,7 +12,7 @@ defmodule RiddlerAdminWeb.AccountSwitchController do
     account = Accounts.get_account!(account_id)
 
     conn
-    |> AccountSwitch.switch_current_account(account, params)
+    |> put_session(:current_account_id, account.id)
     |> redirect(to: Routes.workspace_path(conn, :index))
   end
 end
