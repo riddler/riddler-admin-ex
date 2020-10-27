@@ -1,0 +1,5 @@
+<h1>Edit Agent</h1>
+
+<%= render "form.html", Map.put(assigns, :action, Routes.account_workspace_agent_path(@conn, :update, @account_id, @workspace_id, @agent)) %>
+
+<span><%= link "Back", to: Routes.account_workspace_agent_path(@conn, :index, @account_id, @workspace_id) %></span>

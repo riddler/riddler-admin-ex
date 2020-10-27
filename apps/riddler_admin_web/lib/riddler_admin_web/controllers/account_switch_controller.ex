@@ -10,6 +10,6 @@ defmodule RiddlerAdminWeb.AccountSwitchController do
 
     conn
     |> AccountSwitch.switch_current_account(account, params)
-    |> redirect(to: "/workspaces")
+    |> redirect(to: Routes.account_workspace_path(conn, :index, account_id))
   end
 end

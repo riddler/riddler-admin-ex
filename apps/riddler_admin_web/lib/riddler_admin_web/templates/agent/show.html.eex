@@ -1,0 +1,23 @@
+<h1>Show Agent</h1>
+
+<ul>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @agent.name %>
+  </li>
+
+  <li>
+    <strong>Api key:</strong>
+    <%= @agent.api_key %>
+  </li>
+
+  <li>
+    <strong>Api secret:</strong>
+    <%= @agent.api_secret %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.account_workspace_agent_path(@conn, :edit, @account_id, @workspace_id, @agent) %></span>
+<span><%= link "Back", to: Routes.account_workspace_agent_path(@conn, :index, @account_id, @workspace_id) %></span>

@@ -1,0 +1,30 @@
+<h1>Listing Agents</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Api key</th>
+      <th>Api secret</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for agent <- @agents do %>
+    <tr>
+      <td><%= agent.name %></td>
+      <td><%= agent.api_key %></td>
+      <td><%= agent.api_secret %></td>
+
+      <td>
+        <span><%= link "Show", to: Routes.account_workspace_agent_path(@conn, :show, @account_id, @workspace_id, agent) %></span>
+        <span><%= link "Edit", to: Routes.account_workspace_agent_path(@conn, :edit, @account_id, @workspace_id, agent) %></span>
+        <span><%= link "Delete", to: Routes.account_workspace_agent_path(@conn, :delete, @account_id, @workspace_id, agent), method: :delete, data: [confirm: "Are you sure?"] %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Agent", to: Routes.account_workspace_agent_path(@conn, :new, @account_id, @workspace_id) %></span>
