@@ -35,7 +35,7 @@ defmodule RiddlerAdmin.PublishRequests.PublishRequest do
     |> changeset(attrs)
     |> put_change(:workspace_id, workspace_id)
     |> put_change(:created_by_id, author_id)
-    |> put_change(:status, "pending")
+    |> put_change(:status, "Pending Approval")
     |> put_change(:data, workspace_definition)
     |> validate_required([:workspace_id, :created_by_id])
   end
@@ -52,6 +52,16 @@ defmodule RiddlerAdmin.PublishRequests.PublishRequest do
     |> cast(%{}, [])
     |> put_change(:approved_by_id, approver_id)
     |> put_change(:approved_at, DateTime.utc_now())
+    |> put_change(:status, "Approved")
     |> validate_required([:approved_by_id, :approved_at])
+  end
+
+  def publish_changeset(publish_request, publisher_id) do
+    publish_request
+    |> cast(%{}, [])
+    |> put_change(:published_by_id, publisher_id)
+    |> put_change(:published_at, DateTime.utc_now())
+    |> put_change(:status, "Published")
+    |> validate_required([:published_by_id, :published_at])
   end
 end

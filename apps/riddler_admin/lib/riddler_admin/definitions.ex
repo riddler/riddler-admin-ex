@@ -9,10 +9,13 @@ defmodule RiddlerAdmin.Definitions do
   alias RiddlerAdmin.Definitions.Definition
 
   def next_version(workspace_id) do
-    Definition
+    previous_version =
+      Definition
     |> where([def], def.workspace_id == ^workspace_id)
     |> select([def], max(def.version))
     |> Repo.one!()
+
+    (previous_version || 0) + 1
   end
 
   def list_workspace_definitions(workspace_id) do
@@ -52,19 +55,9 @@ defmodule RiddlerAdmin.Definitions do
 
   @doc """
   Creates a definition.
-
-  ## Examples
-
-      iex> create_definition(%{field: value})
-      {:ok, %Definition{}}
-
-      iex> create_definition(%{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
   """
-  def create_definition(attrs \\ %{}) do
-    %Definition{}
-    |> Definition.changeset(attrs)
+  def create_definition(workspace_id, publish_request_id) do
+    Definition.create_changeset(workspace_id, publish_request_id)
     |> Repo.insert()
   end
 

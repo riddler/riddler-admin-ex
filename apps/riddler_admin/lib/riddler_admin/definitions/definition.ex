@@ -27,12 +27,11 @@ defmodule RiddlerAdmin.Definitions.Definition do
 
   def id_opts(), do: @id_opts
 
-  @doc false
-  def create_changeset(definition, attrs, workspace_id, publish_request_id) do
+  def create_changeset(workspace_id, publish_request_id) do
     workspace_definition = Workspaces.generate_definition!(workspace_id)
 
-    definition
-    |> cast(attrs, [])
+    %__MODULE__{}
+    |> cast(%{}, [])
     |> put_change(:workspace_id, workspace_id)
     |> put_change(:publish_request_id, publish_request_id)
     |> put_change(:schema_version, @current_schema_version)
