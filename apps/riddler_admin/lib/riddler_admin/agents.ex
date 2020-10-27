@@ -55,9 +55,9 @@ defmodule RiddlerAdmin.Agents do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_agent(attrs, account_id) do
+  def create_agent(attrs, workspace_id) do
     %Agent{}
-    |> Agent.create_changeset(attrs, account_id)
+    |> Agent.create_changeset(attrs, workspace_id)
     |> Repo.insert()
   end
 

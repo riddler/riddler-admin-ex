@@ -18,6 +18,7 @@ defmodule RiddlerAdmin.MixProject do
     {:postgrex, ">= 0.0.0"},
     {:predicator, "~> 0.9"},
     {:uxid, "~> 0.0"},
+    {:ymlr, "~> 1.0"},
 
     # Development
     {:phx_gen_auth, "~> 0.5", only: [:dev], runtime: false}

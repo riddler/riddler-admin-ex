@@ -4,9 +4,39 @@ defmodule RiddlerAdmin.PublishRequests do
   """
 
   import Ecto.Query, warn: false
-  alias RiddlerAdmin.Repo
 
+  alias RiddlerAdmin.Identities.Identity
+  alias RiddlerAdmin.Repo
   alias RiddlerAdmin.PublishRequests.PublishRequest
+  alias RiddlerAdmin.PublishRequests.UseCases.PublishDefinition
+
+  require Logger
+
+  def approve(%PublishRequest{} = publish_request, %Identity{id: approver_id}) do
+    publish_request
+    |> PublishRequest.approve_changeset(approver_id)
+    |> Repo.update()
+  end
+
+  def publish(%PublishRequest{} = publish_request, %Identity{id: publisher_id}) do
+    {:ok, pr} =
+      create_result =
+      publish_request
+      |> PublishRequest.publish_changeset(publisher_id)
+      |> Repo.update()
+
+    pr
+    |> PublishDefinition.new()
+    |> PublishDefinition.execute()
+
+    create_result
+  end
+
+  def list_workspace_publish_requests(workspace_id) do
+    PublishRequest
+    |> where(workspace_id: ^workspace_id)
+    |> Repo.all()
+  end
 
   @doc """
   Returns the list of publish_requests.
@@ -49,9 +79,9 @@ defmodule RiddlerAdmin.PublishRequests do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_publish_request(attrs \\ %{}) do
+  def create_publish_request(attrs, workspace_id, author_id) do
     %PublishRequest{}
-    |> PublishRequest.changeset(attrs)
+    |> PublishRequest.create_changeset(attrs, workspace_id, author_id)
     |> Repo.insert()
   end
 

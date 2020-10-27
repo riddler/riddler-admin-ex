@@ -1,5 +1,5 @@
 <h1>Edit Publish request</h1>
 
-<%= render "form.html", Map.put(assigns, :action, Routes.publish_request_path(@conn, :update, @publish_request)) %>
+<%= render "form.html", Map.put(assigns, :action, Routes.workspace_publish_request_path(@conn, :update, @workspace_id, @publish_request)) %>
 
-<span><%= link "Back", to: Routes.publish_request_path(@conn, :index) %></span>
+<span><%= link "Back", to: Routes.workspace_publish_request_path(@conn, :index, @workspace_id) %></span>

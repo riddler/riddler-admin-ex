@@ -7,9 +7,9 @@ defmodule RiddlerAdmin.Repo.Migrations.CreateAgents do
       timestamps()
       add :workspace_id, references(:workspaces, on_delete: :delete_all), null: false
 
-      add :name, :text
-      add :api_key, :text
-      add :api_secret, :text
+      add :name, :text, null: false
+      add :api_key, :text, null: false
+      add :api_secret, :text, null: false
     end
 
     create index(:agents, [:workspace_id])

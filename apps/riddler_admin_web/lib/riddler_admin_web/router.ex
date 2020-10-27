@@ -35,6 +35,7 @@ defmodule RiddlerAdminWeb.Router do
     resources "/workspaces", WorkspaceController do
       resources "/agents", AgentController
       resources "/conditions", ConditionController
+      resources "/publish_requests", PublishRequestController
     end
   end
 
@@ -84,7 +85,6 @@ defmodule RiddlerAdminWeb.Router do
     put "/identities/settings/update_password", IdentitySettingsController, :update_password
     put "/identities/settings/update_email", IdentitySettingsController, :update_email
     get "/identities/settings/confirm_email/:token", IdentitySettingsController, :confirm_email
-
   end
 
   scope "/", RiddlerAdminWeb do

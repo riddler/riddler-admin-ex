@@ -5,20 +5,8 @@
     </div>
   <% end %>
 
-  <%= label f, :approved_at %>
-  <%= text_input f, :approved_at %>
-  <%= error_tag f, :approved_at %>
-
-  <%= label f, :published_at %>
-  <%= text_input f, :published_at %>
-  <%= error_tag f, :published_at %>
-
-  <%= label f, :status %>
-  <%= textarea f, :status %>
-  <%= error_tag f, :status %>
-
   <%= label f, :subject %>
-  <%= textarea f, :subject %>
+  <%= text_input f, :subject %>
   <%= error_tag f, :subject %>
 
   <%= label f, :message %>

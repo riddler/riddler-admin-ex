@@ -3,18 +3,24 @@ defmodule RiddlerAdmin.Repo.Migrations.CreatePublishRequests do
 
   def change do
     create table(:publish_requests) do
+      add :id, :text, primary_key: true
+      timestamps()
       add :approved_at, :utc_datetime_usec
       add :published_at, :utc_datetime_usec
-      add :status, :text
-      add :subject, :text
-      add :message, :text
-      add :workspace_id, references(:workspaces, on_delete: :nothing)
-      add :approved_by_identity_id, references(:identities, on_delete: :nothing)
 
-      timestamps()
+      add :workspace_id, references(:workspaces, on_delete: :delete_all), null: false
+      add :created_by_id, references(:identities, on_delete: :nothing)
+      add :approved_by_id, references(:identities, on_delete: :nothing)
+      add :published_by_id, references(:identities, on_delete: :nothing)
+
+      add :status, :text, null: false
+      add :subject, :text, null: false
+      add :message, :text
     end
 
     create index(:publish_requests, [:workspace_id])
-    create index(:publish_requests, [:approved_by_identity_id])
+    create index(:publish_requests, [:created_by_id])
+    create index(:publish_requests, [:approved_by_id])
+    create index(:publish_requests, [:published_by_id])
   end
 end

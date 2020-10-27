@@ -1,11 +1,15 @@
 defmodule RiddlerAdmin.Conditions.Condition do
   use RiddlerAdmin.Schema
 
+  alias RiddlerAdmin.Workspaces.Workspace
+
   @id_opts [prefix: "cnd", rand_size: 8]
 
+  @derive {Jason.Encoder, only: [:id, :key, :source, :instructions]}
   schema "conditions" do
     field :id, Ecto.UXID, @id_opts ++ [primary_key: true, autogenerate: true]
-    field :workspace_id, Ecto.UXID
+    # field :workspace_id, Ecto.UXID
+    belongs_to :workspace, Workspace
 
     field :key, :string
     field :source, :string

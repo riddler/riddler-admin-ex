@@ -3,16 +3,6 @@
 <ul>
 
   <li>
-    <strong>Approved at:</strong>
-    <%= @publish_request.approved_at %>
-  </li>
-
-  <li>
-    <strong>Published at:</strong>
-    <%= @publish_request.published_at %>
-  </li>
-
-  <li>
     <strong>Status:</strong>
     <%= @publish_request.status %>
   </li>
@@ -29,5 +19,7 @@
 
 </ul>
 
-<span><%= link "Edit", to: Routes.publish_request_path(@conn, :edit, @publish_request) %></span>
-<span><%= link "Back", to: Routes.publish_request_path(@conn, :index) %></span>
+<pre><%= @definition %></pre>
+
+<span><%= link "Edit", to: Routes.workspace_publish_request_path(@conn, :edit, @workspace_id, @publish_request) %></span>
+<span><%= link "Back", to: Routes.workspace_publish_request_path(@conn, :index, @workspace_id) %></span>
