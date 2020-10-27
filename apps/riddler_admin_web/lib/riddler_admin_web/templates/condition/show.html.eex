@@ -14,5 +14,5 @@
 
 </ul>
 
-<span><%= link "Edit", to: Routes.condition_path(@conn, :edit, @condition) %></span>
-<span><%= link "Back", to: Routes.condition_path(@conn, :index) %></span>
+<span><%= link "Edit", to: Routes.workspace_condition_path(@conn, :edit, @workspace_id, @condition) %></span>
+<span><%= link "Back", to: Routes.workspace_condition_path(@conn, :index, @workspace_id) %></span>

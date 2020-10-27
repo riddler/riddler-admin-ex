@@ -7,6 +7,14 @@
     <%= @workspace.name %>
   </li>
 
+  <li>
+    <%= link "Agents", to: Routes.workspace_agent_path(@conn, :index, @workspace) %>
+  </li>
+
+  <li>
+    <%= link "Conditions", to: Routes.workspace_condition_path(@conn, :index, @workspace) %>
+  </li>
+
 </ul>
 
 <span><%= link "Edit", to: Routes.workspace_path(@conn, :edit, @workspace) %></span>

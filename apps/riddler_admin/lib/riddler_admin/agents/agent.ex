@@ -5,7 +5,7 @@ defmodule RiddlerAdmin.Agents.Agent do
 
   schema "agents" do
     field :id, Ecto.UXID, @id_opts ++ [primary_key: true, autogenerate: true]
-    field :account_id, Ecto.UXID
+    field :workspace_id, Ecto.UXID
 
     field :name, :string
     field :api_key, :string
@@ -17,13 +17,13 @@ defmodule RiddlerAdmin.Agents.Agent do
   def id_opts(), do: @id_opts
 
   @doc false
-  def create_changeset(agent, attrs, account_id) do
+  def create_changeset(agent, attrs, workspace_id) do
     agent
     |> changeset(attrs)
-    |> put_change(:account_id, account_id)
+    |> put_change(:workspace_id, workspace_id)
     |> put_change(:api_key, generate_api_key())
     |> put_change(:api_secret, generate_api_secret())
-    |> validate_required([:account_id, :api_key, :api_secret])
+    |> validate_required([:workspace_id, :api_key, :api_secret])
   end
 
   @doc false

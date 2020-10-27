@@ -4,7 +4,11 @@ defmodule RiddlerAdminWeb.WorkspaceController do
   alias RiddlerAdmin.Workspaces
   alias RiddlerAdmin.Workspaces.Workspace
 
-  def index(conn, %{"account_id" => account_id}) do
+  def index(conn, _params) do
+    account_id =
+      conn
+      |> get_session(:current_account_id)
+
     current_workspace_id = conn |> get_session(:current_workspace_id)
 
     workspaces = Workspaces.list_account_workspaces(account_id)

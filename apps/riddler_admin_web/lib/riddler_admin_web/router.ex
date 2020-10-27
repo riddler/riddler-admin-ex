@@ -23,6 +23,21 @@ defmodule RiddlerAdminWeb.Router do
     live "/", PageLive, :index
   end
 
+  # Authenticated routes
+
+  scope "/", RiddlerAdminWeb do
+    pipe_through [:browser, :require_authenticated_identity]
+
+    resources "/accounts", AccountController do
+      get "/switch", AccountSwitchController, :switch
+    end
+
+    resources "/workspaces", WorkspaceController do
+      resources "/agents", AgentController
+      resources "/conditions", ConditionController
+    end
+  end
+
   # Other scopes may use custom stacks.
   # scope "/api", RiddlerAdminWeb do
   #   pipe_through :api
@@ -70,17 +85,6 @@ defmodule RiddlerAdminWeb.Router do
     put "/identities/settings/update_email", IdentitySettingsController, :update_email
     get "/identities/settings/confirm_email/:token", IdentitySettingsController, :confirm_email
 
-    resources "/accounts", AccountController do
-      get "/switch", AccountSwitchController, :switch
-
-      resources "/workspaces", WorkspaceController do
-        get "/switch", WorkspaceSwitchController, :switch
-
-        resources "/agents", AgentController
-      end
-    end
-
-    resources "/conditions", ConditionController
   end
 
   scope "/", RiddlerAdminWeb do

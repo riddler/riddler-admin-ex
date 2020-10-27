@@ -19,5 +19,5 @@
 
 </ul>
 
-<span><%= link "Edit", to: Routes.account_workspace_agent_path(@conn, :edit, @account_id, @workspace_id, @agent) %></span>
-<span><%= link "Back", to: Routes.account_workspace_agent_path(@conn, :index, @account_id, @workspace_id) %></span>
+<span><%= link "Edit", to: Routes.workspace_agent_path(@conn, :edit, @workspace_id, @agent) %></span>
+<span><%= link "Back", to: Routes.workspace_agent_path(@conn, :index, @workspace_id) %></span>

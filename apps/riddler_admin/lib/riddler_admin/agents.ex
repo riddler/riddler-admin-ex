@@ -8,6 +8,12 @@ defmodule RiddlerAdmin.Agents do
 
   alias RiddlerAdmin.Agents.Agent
 
+  def list_workspace_agents(workspace_id) do
+    Agent
+    |> where(workspace_id: ^workspace_id)
+    |> Repo.all()
+  end
+
   @doc """
   Returns the list of agents.
 

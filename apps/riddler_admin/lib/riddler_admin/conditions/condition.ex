@@ -5,7 +5,7 @@ defmodule RiddlerAdmin.Conditions.Condition do
 
   schema "conditions" do
     field :id, Ecto.UXID, @id_opts ++ [primary_key: true, autogenerate: true]
-    field :account_id, Ecto.UXID
+    field :workspace_id, Ecto.UXID
 
     field :key, :string
     field :source, :string
@@ -26,11 +26,11 @@ defmodule RiddlerAdmin.Conditions.Condition do
   end
 
   @doc false
-  def create_changeset(condition, attrs, account_id) do
+  def create_changeset(condition, attrs, workspace_id) do
     condition
     |> changeset(attrs)
-    |> put_change(:account_id, account_id)
-    |> validate_required([:account_id])
+    |> put_change(:workspace_id, workspace_id)
+    |> validate_required([:workspace_id])
   end
 
   defp compile(changeset) do
