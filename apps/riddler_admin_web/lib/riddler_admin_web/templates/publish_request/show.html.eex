@@ -1,0 +1,33 @@
+<h1>Show Publish request</h1>
+
+<ul>
+
+  <li>
+    <strong>Approved at:</strong>
+    <%= @publish_request.approved_at %>
+  </li>
+
+  <li>
+    <strong>Published at:</strong>
+    <%= @publish_request.published_at %>
+  </li>
+
+  <li>
+    <strong>Status:</strong>
+    <%= @publish_request.status %>
+  </li>
+
+  <li>
+    <strong>Subject:</strong>
+    <%= @publish_request.subject %>
+  </li>
+
+  <li>
+    <strong>Message:</strong>
+    <%= @publish_request.message %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.publish_request_path(@conn, :edit, @publish_request) %></span>
+<span><%= link "Back", to: Routes.publish_request_path(@conn, :index) %></span>
