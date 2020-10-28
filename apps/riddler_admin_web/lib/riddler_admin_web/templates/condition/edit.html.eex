@@ -1,0 +1,5 @@
+<h1>Edit Condition</h1>
+
+<%= render "form.html", Map.put(assigns, :action, Routes.condition_path(@conn, :update, @condition)) %>
+
+<span><%= link "Back", to: Routes.condition_path(@conn, :index) %></span>
