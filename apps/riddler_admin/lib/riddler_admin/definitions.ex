@@ -9,10 +9,13 @@ defmodule RiddlerAdmin.Definitions do
   alias RiddlerAdmin.Definitions.Definition
 
   def next_version(workspace_id) do
-    Definition
+    previous_version =
+      Definition
     |> where([def], def.workspace_id == ^workspace_id)
     |> select([def], max(def.version))
     |> Repo.one!()
+
+    (previous_version || 0) + 1
   end
 
   def list_workspace_definitions(workspace_id) do
@@ -52,38 +55,12 @@ defmodule RiddlerAdmin.Definitions do
 
   @doc """
   Creates a definition.
-
-  ## Examples
-
-      iex> create_definition(%{field: value})
-      {:ok, %Definition{}}
-
-      iex> create_definition(%{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
   """
-  def create_definition(attrs \\ %{}) do
-    %Definition{}
-    |> Definition.changeset(attrs)
+  def create_definition(attrs) do
+    # %{data: workspace_definition} = PublishRequests.get_publish_request!(publish_request_id)
+
+    Definition.create_changeset(attrs)
     |> Repo.insert()
-  end
-
-  @doc """
-  Updates a definition.
-
-  ## Examples
-
-      iex> update_definition(definition, %{field: new_value})
-      {:ok, %Definition{}}
-
-      iex> update_definition(definition, %{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def update_definition(%Definition{} = definition, attrs) do
-    definition
-    |> Definition.changeset(attrs)
-    |> Repo.update()
   end
 
   @doc """
@@ -100,18 +77,5 @@ defmodule RiddlerAdmin.Definitions do
   """
   def delete_definition(%Definition{} = definition) do
     Repo.delete(definition)
-  end
-
-  @doc """
-  Returns an `%Ecto.Changeset{}` for tracking definition changes.
-
-  ## Examples
-
-      iex> change_definition(definition)
-      %Ecto.Changeset{data: %Definition{}}
-
-  """
-  def change_definition(%Definition{} = definition, attrs \\ %{}) do
-    Definition.changeset(definition, attrs)
   end
 end

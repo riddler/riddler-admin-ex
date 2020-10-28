@@ -8,6 +8,7 @@ defmodule RiddlerAdmin.Repo.Migrations.CreateDefinitions do
       add :workspace_id, references(:workspaces, on_delete: :nothing), null: false
       add :publish_request_id, references(:publish_requests, on_delete: :nothing), null: false
 
+      add :label, :text, null: false
       add :schema_version, :integer, null: false
       add :version, :integer, null: false
       add :data, :jsonb, null: false

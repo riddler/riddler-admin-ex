@@ -10,12 +10,11 @@
   </thead>
   <tbody>
 <%= for workspace <- @workspaces do %>
-    <tr style="<%= if workspace.id == @current_workspace_id, do: "font-weight: bold" %>">
+  <tr>
       <td><%= workspace.name %></td>
 
       <td>
         <span><%= link "Show", to: Routes.workspace_path(@conn, :show, workspace) %></span>
-        <span><%= link "Switch", to: Routes.workspace_workspace_switch_path(@conn, :switch, workspace.id) %></span>
         <span><%= link "Edit", to: Routes.workspace_path(@conn, :edit, workspace) %></span>
         <span><%= link "Delete", to: Routes.workspace_path(@conn, :delete, workspace), method: :delete, data: [confirm: "Are you sure?"] %></span>
       </td>

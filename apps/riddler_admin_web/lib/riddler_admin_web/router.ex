@@ -36,7 +36,11 @@ defmodule RiddlerAdminWeb.Router do
       resources "/agents", AgentController
       resources "/conditions", ConditionController
       resources "/definitions", DefinitionController
-      resources "/publish_requests", PublishRequestController
+
+      resources "/publish_requests", PublishRequestController do
+        get "/approve", ApprovalController, :approve
+        get "/publish", PublishController, :publish
+      end
     end
   end
 

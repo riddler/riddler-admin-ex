@@ -12,12 +12,9 @@
     <%= @definition.schema_version %>
   </li>
 
-  <li>
-    <strong>Data:</strong>
-    <%= @definition.data %>
-  </li>
-
 </ul>
 
-<span><%= link "Edit", to: Routes.definition_path(@conn, :edit, @definition) %></span>
-<span><%= link "Back", to: Routes.definition_path(@conn, :index) %></span>
+<pre><%= @definition.yaml %></pre>
+
+<span><%= link "Edit", to: Routes.workspace_definition_path(@conn, :edit, @workspace_id, @definition) %></span>
+<span><%= link "Back", to: Routes.workspace_definition_path(@conn, :index, @workspace_id) %></span>

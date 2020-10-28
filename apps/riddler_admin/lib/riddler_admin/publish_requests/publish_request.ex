@@ -7,6 +7,9 @@ defmodule RiddlerAdmin.PublishRequests.PublishRequest do
 
   @id_opts [prefix: "pr", rand_size: 2]
 
+  # @derive {Jason.Encoder, except: [:__meta__]}
+  @derive {Jason.Encoder, only: [:id, :data, :workspace_id, :subject]}
+  # @derive {Jason.Encoder, only: [:id, :status, :subject, :message, :approved_at, :approved_by_id, :published_at, :published_by_id, :created_by_id, :workspace_id, :created_at, :updated_at]}
   schema "publish_requests" do
     field :id, Ecto.UXID, @id_opts ++ [primary_key: true, autogenerate: true]
 
@@ -28,7 +31,6 @@ defmodule RiddlerAdmin.PublishRequests.PublishRequest do
 
   def id_opts(), do: @id_opts
 
-  @doc false
   def create_changeset(publish_request, attrs, workspace_id, author_id) do
     workspace_definition = Workspaces.generate_definition!(workspace_id)
 
@@ -36,7 +38,7 @@ defmodule RiddlerAdmin.PublishRequests.PublishRequest do
     |> changeset(attrs)
     |> put_change(:workspace_id, workspace_id)
     |> put_change(:created_by_id, author_id)
-    |> put_change(:status, "pending")
+    |> put_change(:status, "Pending Approval")
     |> put_change(:data, workspace_definition)
     |> validate_required([:workspace_id, :created_by_id])
   end
@@ -46,5 +48,23 @@ defmodule RiddlerAdmin.PublishRequests.PublishRequest do
     publish_request
     |> cast(attrs, [:subject, :message])
     |> validate_required([:subject])
+  end
+
+  def approve_changeset(publish_request, approver_id) do
+    publish_request
+    |> cast(%{}, [])
+    |> put_change(:approved_by_id, approver_id)
+    |> put_change(:approved_at, DateTime.utc_now())
+    |> put_change(:status, "Approved")
+    |> validate_required([:approved_by_id, :approved_at])
+  end
+
+  def publish_changeset(publish_request, publisher_id) do
+    publish_request
+    |> cast(%{}, [])
+    |> put_change(:published_by_id, publisher_id)
+    |> put_change(:published_at, DateTime.utc_now())
+    |> put_change(:status, "Published")
+    |> validate_required([:published_by_id, :published_at])
   end
 end
