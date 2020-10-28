@@ -9,6 +9,9 @@ defmodule RiddlerAdmin.Repo.Migrations.CreateFlags do
 
       add :type, :text, null: false
       add :key, :text, null: false
+
+      add :include_source, :text
+      add :include_instructions, :jsonb
     end
 
     create index(:flags, [:workspace_id])

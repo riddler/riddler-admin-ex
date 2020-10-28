@@ -25,6 +25,25 @@ defmodule RiddlerAgent do
     end
   end
 
+  def all_flags(context \\ %{}) do
+    Logger.info("[AGT] Generating all flags")
+
+    workspace_id()
+    |> storage().get_workspace()
+    |> Map.get(:flags)
+    |> Enum.filter(fn item ->
+      item.include_instructions
+      |> case do
+        nil -> true
+        instructions -> Predicator.evaluate_instructions!(instructions, context)
+      end
+    end)
+    |> Enum.map(fn item ->
+      {item.key, true}
+    end)
+    |> Enum.into(%{})
+  end
+
   defp storage(), do: MemoryStore
 
   defp workspace_id(), do: Confex.get_env(:riddler_agent, :workspace_id, @dev_workspace_id)

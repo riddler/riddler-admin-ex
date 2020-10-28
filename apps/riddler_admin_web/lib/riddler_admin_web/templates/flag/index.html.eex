@@ -26,4 +26,4 @@
 </table>
 
 <span><%= link "New Flag", to: Routes.workspace_flag_path(@conn, :new, @workspace_id) %></span>
-<span><%= link "Back", to: Routes.workspace_path(@conn, :index) %></span>
+<span><%= link "Back", to: Routes.workspace_path(@conn, :show, @workspace_id) %></span>
