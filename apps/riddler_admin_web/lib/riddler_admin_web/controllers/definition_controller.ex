@@ -2,7 +2,6 @@ defmodule RiddlerAdminWeb.DefinitionController do
   use RiddlerAdminWeb, :controller
 
   alias RiddlerAdmin.Definitions
-  alias RiddlerAdmin.Definitions.Definition
 
   def index(conn, %{"workspace_id" => workspace_id}) do
     definitions = Definitions.list_workspace_definitions(workspace_id)
