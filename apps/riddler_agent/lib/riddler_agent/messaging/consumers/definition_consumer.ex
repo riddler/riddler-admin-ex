@@ -24,7 +24,5 @@ defmodule RiddlerAgent.Messaging.Consumers.DefinitionConsumer do
 
   defp to_atom_map(v), do: v
 
-  defp storage() do
-    MemoryStore
-  end
+  defp storage(), do: MemoryStore
 end

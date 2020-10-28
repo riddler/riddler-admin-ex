@@ -3,8 +3,7 @@
 <table>
   <thead>
     <tr>
-      <th>Version</th>
-      <th>Schema version</th>
+      <th>Label</th>
 
       <th></th>
     </tr>
@@ -12,8 +11,7 @@
   <tbody>
 <%= for definition <- @definitions do %>
     <tr>
-      <td><%= definition.version %></td>
-      <td><%= definition.schema_version %></td>
+      <td><%= definition.label %></td>
 
       <td>
         <span><%= link "Show", to: Routes.workspace_definition_path(@conn, :show, @workspace_id, definition) %></span>

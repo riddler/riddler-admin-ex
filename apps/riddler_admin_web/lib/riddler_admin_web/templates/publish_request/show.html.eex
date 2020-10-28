@@ -19,7 +19,7 @@
 
   <%= if is_nil(@publish_request.approved_at) do %>
     <li>
-      <%= link "Approve", to: Routes.workspace_publish_request_approval_path(@conn, :approve, @workspace_id, @publish_request.id) %></span>
+      <%= link "Approve", to: Routes.workspace_publish_request_approval_path(@conn, :publish_request, @workspace_id, @publish_request.id) %></span>
     </li>
   <% else %>
     <li>
@@ -29,7 +29,7 @@
 
     <%= if is_nil(@publish_request.published_at) do %>
       <li>
-        <%= link "Publish", to: Routes.workspace_publish_request_publish_path(@conn, :publish, @workspace_id, @publish_request.id) %></span>
+        <%= link "Publish", to: Routes.workspace_publish_request_publish_path(@conn, :publish_request, @workspace_id, @publish_request.id) %></span>
       </li>
     <% else %>
       <li>

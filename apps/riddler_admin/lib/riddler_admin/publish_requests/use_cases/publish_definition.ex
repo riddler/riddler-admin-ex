@@ -74,7 +74,9 @@ defmodule RiddlerAdmin.PublishRequests.UseCases.PublishDefinition do
         label: label
       })
 
-    execute(definition)
+    definition
+    |> new()
+    |> execute()
   end
 
   # We have everything - publish the definition
