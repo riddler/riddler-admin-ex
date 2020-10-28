@@ -12,6 +12,7 @@ defmodule RiddlerAdmin.MixProject do
     {:confex, "~> 3.4"},
     {:ecto_psql_extras, "~> 0.2"},
     {:ecto_sql, "~> 3.4"},
+    {:elixir_nsq, "~> 1.1"},
     {:jason, "~> 1.0"},
     {:phoenix_pubsub, "~> 2.0"},
     {:postgrex, ">= 0.0.0"},
