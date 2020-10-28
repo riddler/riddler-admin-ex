@@ -1,0 +1,28 @@
+<h1>Listing Flags</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Key</th>
+      <th>Type</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for flag <- @flags do %>
+    <tr>
+      <td><%= flag.key %></td>
+      <td><%= flag.type %></td>
+
+      <td>
+        <span><%= link "Show", to: Routes.flag_path(@conn, :show, flag) %></span>
+        <span><%= link "Edit", to: Routes.flag_path(@conn, :edit, flag) %></span>
+        <span><%= link "Delete", to: Routes.flag_path(@conn, :delete, flag), method: :delete, data: [confirm: "Are you sure?"] %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Flag", to: Routes.flag_path(@conn, :new) %></span>
