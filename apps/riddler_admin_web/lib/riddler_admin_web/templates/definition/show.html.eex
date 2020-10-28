@@ -1,0 +1,23 @@
+<h1>Show Definition</h1>
+
+<ul>
+
+  <li>
+    <strong>Version:</strong>
+    <%= @definition.version %>
+  </li>
+
+  <li>
+    <strong>Schema version:</strong>
+    <%= @definition.schema_version %>
+  </li>
+
+  <li>
+    <strong>Data:</strong>
+    <%= @definition.data %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.definition_path(@conn, :edit, @definition) %></span>
+<span><%= link "Back", to: Routes.definition_path(@conn, :index) %></span>

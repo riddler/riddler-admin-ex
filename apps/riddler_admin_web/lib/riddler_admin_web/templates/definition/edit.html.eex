@@ -1,0 +1,5 @@
+<h1>Edit Definition</h1>
+
+<%= render "form.html", Map.put(assigns, :action, Routes.definition_path(@conn, :update, @definition)) %>
+
+<span><%= link "Back", to: Routes.definition_path(@conn, :index) %></span>

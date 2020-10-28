@@ -2,25 +2,26 @@ defmodule RiddlerAdmin.PublishRequests.PublishRequest do
   use RiddlerAdmin.Schema
 
   alias RiddlerAdmin.Workspaces
+  alias RiddlerAdmin.Workspaces.Workspace
+  alias RiddlerAdmin.Identities.Identity
 
   @id_opts [prefix: "pr", rand_size: 2]
 
   schema "publish_requests" do
     field :id, Ecto.UXID, @id_opts ++ [primary_key: true, autogenerate: true]
-    field :workspace_id, Ecto.UXID, null: false
 
     field :status, :string, null: false, default: "pending"
     field :subject, :string, null: false
     field :message, :string
     field :data, :map, null: false
 
-    field :created_by_id, Ecto.UXID
-
     field :approved_at, :utc_datetime_usec
-    field :approved_by_id, Ecto.UXID
-
     field :published_at, :utc_datetime_usec
-    field :published_by_id, Ecto.UXID
+
+    belongs_to :workspace, Workspace
+    belongs_to :created_by, Identity
+    belongs_to :approved_by, Identity
+    belongs_to :published_by, Identity
 
     timestamps()
   end

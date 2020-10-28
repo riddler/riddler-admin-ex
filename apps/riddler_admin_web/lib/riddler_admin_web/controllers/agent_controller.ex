@@ -34,7 +34,7 @@ defmodule RiddlerAdminWeb.AgentController do
         )
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", changeset: changeset)
+        render(conn, "new.html", changeset: changeset, workspace_id: workspace_id)
     end
   end
 
@@ -61,9 +61,7 @@ defmodule RiddlerAdminWeb.AgentController do
       {:ok, agent} ->
         conn
         |> put_flash(:info, "Agent updated successfully.")
-        |> redirect(
-          to: Routes.workspace_agent_path(conn, :show, workspace_id, agent)
-        )
+        |> redirect(to: Routes.workspace_agent_path(conn, :show, workspace_id, agent))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html",

@@ -16,6 +16,7 @@ defmodule RiddlerAdmin.Repo.Migrations.CreatePublishRequests do
       add :status, :text, null: false
       add :subject, :text, null: false
       add :message, :text
+      add :data, :jsonb, null: false
     end
 
     create index(:publish_requests, [:workspace_id])
