@@ -17,6 +17,7 @@
 
       <td>
         <span><%= link "Show", to: Routes.workspace_definition_path(@conn, :show, @workspace_id, definition) %></span>
+        <span><%= link "Publish", to: Routes.workspace_definition_publish_path(@conn, :definition, @workspace_id, definition) %></span>
         <span><%= link "Edit", to: Routes.workspace_definition_path(@conn, :edit, @workspace_id, definition) %></span>
         <span><%= link "Delete", to: Routes.workspace_definition_path(@conn, :delete, @workspace_id, definition), method: :delete, data: [confirm: "Are you sure?"] %></span>
       </td>

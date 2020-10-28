@@ -15,7 +15,7 @@ defmodule RiddlerAgent.MixProject do
     {:jason, "~> 1.0"},
     {:predicator, "~> 0.9"},
     {:uxid, "~> 0.0"},
-    {:ymlr, "~> 1.0"}
+    {:yaml_elixir, "~> 2.5"}
   ]
 
   def application do

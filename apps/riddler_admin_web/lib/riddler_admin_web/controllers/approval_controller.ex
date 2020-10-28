@@ -6,7 +6,7 @@ defmodule RiddlerAdminWeb.ApprovalController do
   @doc """
   Approves the provided PublishRequest
   """
-  def approve(
+  def publish_request(
         conn,
         %{"publish_request_id" => publish_request_id, "workspace_id" => workspace_id} = _params
       ) do
