@@ -3,11 +3,12 @@ defmodule RiddlerAdmin.Repo.Migrations.CreateFlags do
 
   def change do
     create table(:flags) do
-      add :key, :text
-      add :type, :text
-      add :workspace_id, references(:workspaces, on_delete: :nothing)
-
+      add :id, :text, primary_key: true
       timestamps()
+      add :workspace_id, references(:workspaces, on_delete: :delete_all), null: false
+
+      add :type, :text, null: false
+      add :key, :text, null: false
     end
 
     create index(:flags, [:workspace_id])

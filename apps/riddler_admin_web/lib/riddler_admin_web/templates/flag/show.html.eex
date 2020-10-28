@@ -14,5 +14,5 @@
 
 </ul>
 
-<span><%= link "Edit", to: Routes.flag_path(@conn, :edit, @flag) %></span>
-<span><%= link "Back", to: Routes.flag_path(@conn, :index) %></span>
+<span><%= link "Edit", to: Routes.workspace_flag_path(@conn, :edit, @workspace_id, @flag) %></span>
+<span><%= link "Back", to: Routes.workspace_flag_path(@conn, :index, @workspace_id) %></span>

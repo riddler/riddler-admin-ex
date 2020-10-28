@@ -8,6 +8,12 @@ defmodule RiddlerAdmin.Flags do
 
   alias RiddlerAdmin.Flags.Flag
 
+  def list_workspace_flags(workspace_id) do
+    Flag
+    |> where(workspace_id: ^workspace_id)
+    |> Repo.all()
+  end
+
   @doc """
   Returns the list of flags.
 
@@ -49,9 +55,9 @@ defmodule RiddlerAdmin.Flags do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_flag(attrs \\ %{}) do
+  def create_flag(attrs, workspace_id) do
     %Flag{}
-    |> Flag.changeset(attrs)
+    |> Flag.create_changeset(attrs, workspace_id)
     |> Repo.insert()
   end
 

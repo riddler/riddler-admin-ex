@@ -6,12 +6,8 @@
   <% end %>
 
   <%= label f, :key %>
-  <%= textarea f, :key %>
+  <%= text_input f, :key %>
   <%= error_tag f, :key %>
-
-  <%= label f, :type %>
-  <%= textarea f, :type %>
-  <%= error_tag f, :type %>
 
   <div>
     <%= submit "Save" %>
