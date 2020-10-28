@@ -9,6 +9,7 @@ defmodule RiddlerAdmin.MixProject do
   @deps [
     # Required
     {:argon2_elixir, "~> 2.0"},
+    {:confex, "~> 3.4"},
     {:ecto_psql_extras, "~> 0.2"},
     {:ecto_sql, "~> 3.4"},
     {:jason, "~> 1.0"},
@@ -24,8 +25,12 @@ defmodule RiddlerAdmin.MixProject do
   def application do
     [
       mod: {RiddlerAdmin.Application, []},
-      # os_mon is needed for LiveDashboard
-      extra_applications: [:logger, :runtime_tools, :os_mon]
+      extra_applications: [
+        :logger,
+        :runtime_tools,
+        # os_mon is needed for LiveDashboard
+        :os_mon
+      ]
     ]
   end
 

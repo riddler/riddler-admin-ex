@@ -10,26 +10,38 @@
 use Mix.Config
 
 # Configure Mix tasks and generators
+
 config :riddler_admin,
-  ecto_repos: [RiddlerAdmin.Repo]
+  ecto_log_level: {:system, :atom, "ECTO_LOG_LEVEL", :info},
+  ecto_repos: [RiddlerAdmin.Repo],
+  database_name: {:system, :string, "DATABASE_NAME"},
+  database_host: {:system, :string, "DATABASE_HOST"},
+  database_password: {:system, :string, "DATABASE_PASSWORD"},
+  database_pool_size: {:system, :integer, "DATABASE_POOL_SIZE", 10},
+  database_port: {:system, :integer, "DATABASE_PORT", 5432},
+  database_username: {:system, :string, "DATABASE_USERNAME"}
 
 config :riddler_admin_web,
   ecto_repos: [RiddlerAdmin.Repo],
-  generators: [context_app: :riddler_admin]
+  generators: [context_app: :riddler_admin],
+  http_port: {:system, :string, "HTTP_PORT", 6181},
+  secret_key_base: {:system, :string, "SECRET_KEY_BASE"},
+  signing_salt: {:system, :string, "SIGNING_SALT"},
+  url_host: {:system, :string, "URL_HOST"},
+  url_port: {:system, :integer, "URL_PORT"}
 
 # Configure the DB Repo
 config :riddler_admin, RiddlerAdmin.Repo,
   migration_primary_key: false,
   migration_foreign_key: [column: :id, type: :text],
-  migration_timestamps: [type: :utc_datetime_usec]
+  migration_timestamps: [type: :utc_datetime_usec],
+  show_sensitive_data_on_connection_error: true
 
 # Configures the endpoint
+# Setting from the env are handled in RiddlerAdminWeb.Endpoint.init/2
 config :riddler_admin_web, RiddlerAdminWeb.Endpoint,
-  url: [host: "localhost"],
-  secret_key_base: "j9txzGk+AebZ4XrvN1DdTy6zq4pBkG/b8OK7+PALFzx3UkVpHvi0KrwEdugu3iYU",
   render_errors: [view: RiddlerAdminWeb.ErrorView, accepts: ~w(html json), layout: false],
-  pubsub_server: RiddlerAdmin.PubSub,
-  live_view: [signing_salt: "pAIafCPw"]
+  pubsub_server: RiddlerAdmin.PubSub
 
 # Configures Elixir's Logger
 config :logger, :console,
