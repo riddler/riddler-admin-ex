@@ -8,6 +8,15 @@ defmodule RiddlerAdmin.Workspaces do
 
   alias RiddlerAdmin.Workspaces.Workspace
 
+  def generate_definition!(workspace_id) when is_binary(workspace_id) do
+    Workspace
+    |> preload(:conditions)
+    |> where([workspace], workspace.id == ^workspace_id)
+    |> Repo.one!()
+    |> Jason.encode!()
+    |> Jason.decode!()
+  end
+
   @doc """
   Returns the list of workspaces.
 

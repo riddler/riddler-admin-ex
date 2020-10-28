@@ -1,11 +1,16 @@
 defmodule RiddlerAdmin.Workspaces.Workspace do
   use RiddlerAdmin.Schema
 
+  alias RiddlerAdmin.Conditions.Condition
+
+  @derive {Jason.Encoder, only: [:id, :name, :conditions]}
   schema "workspaces" do
     field :id, Ecto.UXID, primary_key: true, autogenerate: true, prefix: "wsp", rand_size: 5
     field :name, :string
     field :account_id, Ecto.UXID
     field :owner_identity_id, Ecto.UXID
+
+    has_many :conditions, Condition, references: :id
 
     timestamps()
   end

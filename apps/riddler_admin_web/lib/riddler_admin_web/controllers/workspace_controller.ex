@@ -13,7 +13,11 @@ defmodule RiddlerAdminWeb.WorkspaceController do
 
     workspaces = Workspaces.list_account_workspaces(account_id)
 
-    render(conn, "index.html", workspaces: workspaces, current_workspace_id: current_workspace_id)
+    render(conn, "index.html",
+      account_id: account_id,
+      workspaces: workspaces,
+      current_workspace_id: current_workspace_id
+    )
   end
 
   def new(conn, _params) do

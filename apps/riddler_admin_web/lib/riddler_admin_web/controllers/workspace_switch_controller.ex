@@ -10,6 +10,6 @@ defmodule RiddlerAdminWeb.WorkspaceSwitchController do
 
     conn
     |> WorkspaceSwitch.switch_current_workspace(workspace, params)
-    |> redirect(to: "/workspaces")
+    |> redirect(to: Routes.workspace_agent_path(conn, :index, workspace_id))
   end
 end

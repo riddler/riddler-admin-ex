@@ -1,0 +1,25 @@
+<h1>Show Publish request</h1>
+
+<ul>
+
+  <li>
+    <strong>Status:</strong>
+    <%= @publish_request.status %>
+  </li>
+
+  <li>
+    <strong>Subject:</strong>
+    <%= @publish_request.subject %>
+  </li>
+
+  <li>
+    <strong>Message:</strong>
+    <%= @publish_request.message %>
+  </li>
+
+</ul>
+
+<pre><%= @definition %></pre>
+
+<span><%= link "Edit", to: Routes.workspace_publish_request_path(@conn, :edit, @workspace_id, @publish_request) %></span>
+<span><%= link "Back", to: Routes.workspace_publish_request_path(@conn, :index, @workspace_id) %></span>

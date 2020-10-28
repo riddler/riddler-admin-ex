@@ -20,7 +20,8 @@ defmodule RiddlerAdmin.Messaging do
     pub_sub_adapter().publish(topic, payload)
   end
 
-  def record(%Event{topic_name: topic, payload: payload}) when is_binary(topic) and is_binary(payload) do
+  def record(%Event{topic_name: topic, payload: payload})
+      when is_binary(topic) and is_binary(payload) do
     pub_sub_adapter().publish(topic, payload)
   end
 

@@ -5,13 +5,13 @@ defmodule RiddlerAdmin.Repo.Migrations.CreateConditions do
     create table(:conditions) do
       add :id, :text, primary_key: true
       timestamps()
-      add :account_id, references(:accounts, on_delete: :delete_all), null: false
+      add :workspace_id, references(:workspaces, on_delete: :delete_all), null: false
 
       add :key, :text
       add :source, :text
       add :instructions, :jsonb
     end
 
-    create index(:conditions, [:account_id])
+    create index(:conditions, [:workspace_id])
   end
 end

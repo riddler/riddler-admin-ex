@@ -1,9 +1,15 @@
 defmodule RiddlerAdmin.Conditions.Condition do
   use RiddlerAdmin.Schema
 
+  alias RiddlerAdmin.Workspaces.Workspace
+
+  @id_opts [prefix: "cnd", rand_size: 8]
+
+  @derive {Jason.Encoder, only: [:id, :key, :source, :instructions]}
   schema "conditions" do
-    field :id, Ecto.UXID, primary_key: true, autogenerate: true, prefix: "cnd", rand_size: 8
-    field :account_id, Ecto.UXID
+    field :id, Ecto.UXID, @id_opts ++ [primary_key: true, autogenerate: true]
+    # field :workspace_id, Ecto.UXID
+    belongs_to :workspace, Workspace
 
     field :key, :string
     field :source, :string
@@ -11,6 +17,8 @@ defmodule RiddlerAdmin.Conditions.Condition do
 
     timestamps()
   end
+
+  def id_opts(), do: @id_opts
 
   @doc false
   def changeset(condition, attrs) do
@@ -22,11 +30,11 @@ defmodule RiddlerAdmin.Conditions.Condition do
   end
 
   @doc false
-  def create_changeset(condition, attrs, account_id) do
+  def create_changeset(condition, attrs, workspace_id) do
     condition
     |> changeset(attrs)
-    |> put_change(:account_id, account_id)
-    |> validate_required([:account_id])
+    |> put_change(:workspace_id, workspace_id)
+    |> validate_required([:workspace_id])
   end
 
   defp compile(changeset) do

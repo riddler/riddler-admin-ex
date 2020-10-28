@@ -5,8 +5,21 @@ defmodule RiddlerAdmin.Conditions do
 
   import Ecto.Query, warn: false
   alias RiddlerAdmin.Repo
-
   alias RiddlerAdmin.Conditions.Condition
+
+  def generate_id(_model \\ :condition) do
+    Condition.id_opts()
+    |> UXID.generate!()
+  end
+
+  @doc """
+  Creates a condition with the provided workspace.
+  """
+  def create_condition_with_workspace(attrs \\ %{}, workspace_id) do
+    %Condition{}
+    |> Condition.create_changeset(attrs, workspace_id)
+    |> Repo.insert()
+  end
 
   @doc """
   Returns the list of conditions.
@@ -22,11 +35,11 @@ defmodule RiddlerAdmin.Conditions do
   end
 
   @doc """
-  Returns only the list of workspaces in the current account.
+  Returns only the list of workspaces in the current workspace.
   """
-  def list_account_conditions(account_id) when is_binary(account_id) do
+  def list_workspace_conditions(workspace_id) when is_binary(workspace_id) do
     Condition
-    |> where(account_id: ^account_id)
+    |> where(workspace_id: ^workspace_id)
     |> Repo.all()
   end
 
@@ -118,5 +131,19 @@ defmodule RiddlerAdmin.Conditions do
   """
   def change_condition(%Condition{} = condition, attrs \\ %{}) do
     Condition.changeset(condition, attrs)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for creating a new Condition.
+
+  ## Examples
+
+      iex> new_condition(attrs)
+      %Ecto.Changeset{data: %Condition{}}
+
+  """
+  def new_condition(attrs \\ %{}) do
+    %Condition{}
+    |> Condition.changeset(attrs)
   end
 end

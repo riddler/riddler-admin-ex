@@ -1,0 +1,31 @@
+<h1>Listing Publish requests</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Status</th>
+      <th>Subject</th>
+      <th>Message</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for publish_request <- @publish_requests do %>
+    <tr>
+      <td><%= publish_request.status %></td>
+      <td><%= publish_request.subject %></td>
+      <td><%= publish_request.message %></td>
+
+      <td>
+        <span><%= link "Show", to: Routes.workspace_publish_request_path(@conn, :show, @workspace_id, publish_request) %></span>
+        <span><%= link "Edit", to: Routes.workspace_publish_request_path(@conn, :edit, @workspace_id, publish_request) %></span>
+        <span><%= link "Delete", to: Routes.workspace_publish_request_path(@conn, :delete, @workspace_id, publish_request), method: :delete, data: [confirm: "Are you sure?"] %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Publish request", to: Routes.workspace_publish_request_path(@conn, :new, @workspace_id) %></span>
+<span><%= link "Back", to: Routes.workspace_path(@conn, :show, @workspace_id) %></span>
