@@ -25,6 +25,11 @@ defmodule RiddlerAdmin.Messaging do
     pub_sub_adapter().publish(topic, payload)
   end
 
+  def subscribe(topic, channel, handler)
+      when is_binary(topic) and is_binary(channel) and is_atom(handler) do
+    pub_sub_adapter().subscribe(topic, channel, handler)
+  end
+
   ## === Private Helpers ===
 
   defp pub_sub_adapter(),
