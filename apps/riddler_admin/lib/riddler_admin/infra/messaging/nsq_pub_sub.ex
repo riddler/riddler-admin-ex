@@ -18,7 +18,7 @@ defmodule RiddlerAdmin.Infra.Messaging.NSQPubSub do
 
   @impl GenServer
   def init(consumer_opts \\ []) do
-    Logger.debug("Starting NSQ Producer")
+    Logger.info("Starting NSQ Producer")
 
     {:ok, producer} =
       ProducerSupervisor.start_link(default_topic(), %NSQConfig{

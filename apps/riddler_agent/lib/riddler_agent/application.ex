@@ -6,14 +6,13 @@ defmodule RiddlerAgent.Application do
   use Application
 
   alias RiddlerAdmin.Messaging
-
   alias RiddlerAgent.Messaging.Consumers.DefinitionConsumer
 
   @impl true
   def start(_type, _args) do
     children = [
-      # Starts a worker by calling: RiddlerAgent.Worker.start_link(arg)
-      # {RiddlerAgent.Worker, arg}
+      # Start up the storage for Definitions
+      RiddlerAgent.MemoryStore
     ]
 
     # This is bad
