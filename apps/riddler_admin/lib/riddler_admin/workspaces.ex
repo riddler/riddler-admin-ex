@@ -9,12 +9,16 @@ defmodule RiddlerAdmin.Workspaces do
   alias RiddlerAdmin.Workspaces.Workspace
 
   def generate_definition!(workspace_id) when is_binary(workspace_id) do
+    map =
     Workspace
     |> preload(:conditions)
     |> where([workspace], workspace.id == ^workspace_id)
     |> Repo.one!()
     |> Jason.encode!()
     |> Jason.decode!()
+
+    map
+    |> Map.drop(["id", "name"])
   end
 
   @doc """

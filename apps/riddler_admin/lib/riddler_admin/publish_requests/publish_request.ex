@@ -7,6 +7,9 @@ defmodule RiddlerAdmin.PublishRequests.PublishRequest do
 
   @id_opts [prefix: "pr", rand_size: 2]
 
+  # @derive {Jason.Encoder, except: [:__meta__]}
+  @derive {Jason.Encoder, only: [:id, :data, :workspace_id, :subject]}
+  # @derive {Jason.Encoder, only: [:id, :status, :subject, :message, :approved_at, :approved_by_id, :published_at, :published_by_id, :created_by_id, :workspace_id, :created_at, :updated_at]}
   schema "publish_requests" do
     field :id, Ecto.UXID, @id_opts ++ [primary_key: true, autogenerate: true]
 

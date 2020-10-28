@@ -5,7 +5,6 @@ defmodule RiddlerAdmin.PublishRequests do
 
   import Ecto.Query, warn: false
 
-  alias RiddlerAdmin.Definitions
   alias RiddlerAdmin.Identities.Identity
   alias RiddlerAdmin.Repo
   alias RiddlerAdmin.PublishRequests.PublishRequest
@@ -31,24 +30,6 @@ defmodule RiddlerAdmin.PublishRequests do
     |> PublishDefinition.execute()
 
     create_result
-  end
-
-  require Logger
-
-  def approve(%PublishRequest{} = publish_request, %Identity{id: approver_id}) do
-    publish_request
-    |> PublishRequest.approve_changeset(approver_id)
-    |> Repo.update()
-  end
-
-  def publish(%PublishRequest{id: publish_request_id, workspace_id: workspace_id} = publish_request, %Identity{id: publisher_id}) do
-    {:ok, definition} = Definitions.create_definition(workspace_id, publish_request_id)
-
-    Logger.warn("NEED TO PUBLISH DEFINITION #{definition.id}")
-
-    publish_request
-    |> PublishRequest.publish_changeset(publisher_id)
-    |> Repo.update()
   end
 
   def list_workspace_publish_requests(workspace_id) do
