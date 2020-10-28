@@ -1,34 +1,57 @@
 defmodule RiddlerAgent.MixProject do
   use Mix.Project
 
-  def project do
+  @name "RiddlerAgent"
+  @app :riddler_agent
+  @description "Agent application for running Riddler"
+  @version "0.1.0"
+
+  @deps [
+    # Umbrella
+    {:riddler_admin, in_umbrella: true},
+
+    # Required
+    {:confex, "~> 3.4"},
+    {:jason, "~> 1.0"},
+    {:predicator, "~> 0.9"},
+    {:uxid, "~> 0.0"},
+    {:yaml_elixir, "~> 2.5"}
+  ]
+
+  def application do
     [
-      app: :riddler_agent,
-      version: "0.1.0",
+      mod: {RiddlerAgent.Application, []},
+      extra_applications: [:logger]
+    ]
+  end
+
+  def project() do
+    [
+      app: @app,
+      name: @name,
+      description: @description,
+      version: @version,
+      deps: @deps,
       build_path: "../../_build",
       config_path: "../../config/config.exs",
       deps_path: "../../deps",
       lockfile: "../../mix.lock",
-      elixir: "~> 1.11",
+      elixir: "~> 1.7",
+      aliases: aliases(),
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      elixirc_paths: elixirc_paths(Mix.env())
     ]
   end
 
-  # Run "mix help compile.app" to learn about applications.
-  def application do
+  # ---------------------------------------------------------------------------
+  # Private
+
+  defp aliases do
     [
-      extra_applications: [:logger],
-      mod: {RiddlerAgent.Application, []}
+      setup: ["deps.get", "deps.compile"]
     ]
   end
 
-  # Run "mix help deps" to learn about dependencies.
-  defp deps do
-    [
-      # {:dep_from_hexpm, "~> 0.3.0"},
-      # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"},
-      # {:sibling_app_in_umbrella, in_umbrella: true}
-    ]
-  end
+  defp elixirc_paths(:test), do: ["test/support", "lib"]
+  defp elixirc_paths(_), do: ["lib"]
 end
