@@ -40,6 +40,8 @@ defmodule RiddlerAdminWeb.Router do
         get "/publish", PublishController, :definition
       end
 
+      resources "/flags", FlagController
+
       resources "/publish_requests", PublishRequestController do
         get "/approve", ApprovalController, :publish_request
         get "/publish", PublishController, :publish_request

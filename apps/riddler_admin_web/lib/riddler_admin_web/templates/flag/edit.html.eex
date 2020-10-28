@@ -1,0 +1,5 @@
+<h1>Edit Flag</h1>
+
+<%= render "form.html", Map.put(assigns, :action, Routes.workspace_flag_path(@conn, :update, @workspace_id, @flag)) %>
+
+<span><%= link "Back", to: Routes.workspace_flag_path(@conn, :index, @workspace_id) %></span>

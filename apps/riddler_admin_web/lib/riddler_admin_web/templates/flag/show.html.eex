@@ -1,0 +1,18 @@
+<h1>Show Flag</h1>
+
+<ul>
+
+  <li>
+    <strong>Key:</strong>
+    <%= @flag.key %>
+  </li>
+
+  <li>
+    <strong>Type:</strong>
+    <%= @flag.type %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.workspace_flag_path(@conn, :edit, @workspace_id, @flag) %></span>
+<span><%= link "Back", to: Routes.workspace_flag_path(@conn, :index, @workspace_id) %></span>

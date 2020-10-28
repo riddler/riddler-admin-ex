@@ -20,6 +20,10 @@
   </li>
 
   <li>
+    <%= link "Flags", to: Routes.workspace_flag_path(@conn, :index, @workspace) %>
+  </li>
+
+  <li>
     <%= link "Publish Requests", to: Routes.workspace_publish_request_path(@conn, :index, @workspace) %>
   </li>
 
