@@ -84,7 +84,7 @@ defmodule RiddlerAdmin.Infra.Messaging.NSQPubSub do
   defp nsqd(), do: Confex.get_env(:riddler_admin, :messaging_nsqd, @default_nsqd)
 
   defp start_consumer({topic, channel, handler}) do
-    Logger.debug("Starting NSQ Consumer for #{topic}:#{channel} using #{handler}")
+    Logger.info("Starting NSQ Consumer for #{topic}:#{channel} using #{handler}")
 
     {:ok, consumer} =
       ConsumerSupervisor.start_link(topic, channel, %NSQConfig{
