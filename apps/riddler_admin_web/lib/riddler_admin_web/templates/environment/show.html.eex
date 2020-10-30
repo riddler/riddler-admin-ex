@@ -14,5 +14,5 @@
 
 </ul>
 
-<span><%= link "Edit", to: Routes.environment_path(@conn, :edit, @environment) %></span>
-<span><%= link "Back", to: Routes.environment_path(@conn, :index) %></span>
+<span><%= link "Edit", to: Routes.workspace_environment_path(@conn, :edit, @workspace_id, @environment) %></span>
+<span><%= link "Back", to: Routes.workspace_environment_path(@conn, :index, @workspace_id) %></span>

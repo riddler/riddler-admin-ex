@@ -8,6 +8,12 @@ defmodule RiddlerAdmin.Environments do
 
   alias RiddlerAdmin.Environments.Environment
 
+  def list_workspace_environments(workspace_id) do
+    Environment
+    |> where(workspace_id: ^workspace_id)
+    |> Repo.all()
+  end
+
   @doc """
   Returns the list of environments.
 
@@ -49,9 +55,9 @@ defmodule RiddlerAdmin.Environments do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_environment(attrs \\ %{}) do
+  def create_environment(attrs, workspace_id) do
     %Environment{}
-    |> Environment.changeset(attrs)
+    |> Environment.create_changeset(attrs, workspace_id)
     |> Repo.insert()
   end
 

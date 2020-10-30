@@ -16,13 +16,14 @@
       <td><%= environment.key %></td>
 
       <td>
-        <span><%= link "Show", to: Routes.environment_path(@conn, :show, environment) %></span>
-        <span><%= link "Edit", to: Routes.environment_path(@conn, :edit, environment) %></span>
-        <span><%= link "Delete", to: Routes.environment_path(@conn, :delete, environment), method: :delete, data: [confirm: "Are you sure?"] %></span>
+        <span><%= link "Show", to: Routes.workspace_environment_path(@conn, :show, @workspace_id, environment) %></span>
+        <span><%= link "Edit", to: Routes.workspace_environment_path(@conn, :edit, @workspace_id, environment) %></span>
+        <span><%= link "Delete", to: Routes.workspace_environment_path(@conn, :delete, @workspace_id, environment), method: :delete, data: [confirm: "Are you sure?"] %></span>
       </td>
     </tr>
 <% end %>
   </tbody>
 </table>
 
-<span><%= link "New Environment", to: Routes.environment_path(@conn, :new) %></span>
+<span><%= link "New Environment", to: Routes.workspace_environment_path(@conn, :new, @workspace_id) %></span>
+<span><%= link "Back", to: Routes.workspace_path(@conn, :show, @workspace_id) %></span>

@@ -45,15 +45,6 @@ defmodule RiddlerAdmin.Agents do
 
   @doc """
   Creates a agent.
-
-  ## Examples
-
-      iex> create_agent(%{field: value})
-      {:ok, %Agent{}}
-
-      iex> create_agent(%{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
   """
   def create_agent(attrs, workspace_id) do
     %Agent{}

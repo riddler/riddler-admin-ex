@@ -20,6 +20,10 @@
   </li>
 
   <li>
+    <%= link "Environments", to: Routes.workspace_environment_path(@conn, :index, @workspace) %>
+  </li>
+
+  <li>
     <%= link "Flags", to: Routes.workspace_flag_path(@conn, :index, @workspace) %>
   </li>
 

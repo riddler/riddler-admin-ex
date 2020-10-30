@@ -3,11 +3,12 @@ defmodule RiddlerAdmin.Repo.Migrations.CreateEnvironments do
 
   def change do
     create table(:environments) do
-      add :name, :text
-      add :key, :text
-      add :workspace_id, references(:workspaces, on_delete: :nothing)
-
+      add :id, :text, primary_key: true
       timestamps()
+      add :workspace_id, references(:workspaces, on_delete: :delete_all), null: false
+
+      add :name, :text, null: false
+      add :key, :text, null: false
     end
 
     create index(:environments, [:workspace_id])
