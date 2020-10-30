@@ -11,6 +11,7 @@ defmodule RiddlerAdmin.Conditions.Condition do
     # field :workspace_id, Ecto.UXID
     belongs_to :workspace, Workspace
 
+    field :name, :string
     field :key, :string
     field :source, :string
     field :instructions, Ecto.PredicatorInstructions
@@ -23,9 +24,10 @@ defmodule RiddlerAdmin.Conditions.Condition do
   @doc false
   def changeset(condition, attrs) do
     condition
-    |> cast(attrs, [:key, :source])
-    |> validate_required([:key, :source])
-    # |> validate_source(source)
+    |> cast(attrs, [:name, :key, :source])
+    |> put_key_change()
+    |> validate_required([:name, :key, :source])
+    |> validate_format(:key, ~r/^[a-z][a-z0-9_]+$/)
     |> compile()
   end
 
@@ -50,4 +52,16 @@ defmodule RiddlerAdmin.Conditions.Condition do
     do:
       changeset
       |> put_change(:instructions, Predicator.compile!(source))
+
+  defp put_key_change(%{data: %{key: nil, name: name}} = changeset) when is_binary(name) do
+    key =
+      name
+      |> String.downcase()
+      |> String.replace(~r/[^a-z0-9_]/, "")
+
+    changeset
+    |> put_change(:key, key)
+  end
+
+  defp put_key_change(changeset), do: changeset
 end

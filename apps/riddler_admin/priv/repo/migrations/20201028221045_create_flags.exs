@@ -8,6 +8,7 @@ defmodule RiddlerAdmin.Repo.Migrations.CreateFlags do
       add :workspace_id, references(:workspaces, on_delete: :delete_all), null: false
 
       add :type, :text, null: false
+      add :name, :text, null: false
       add :key, :text, null: false
 
       add :include_source, :text
@@ -15,5 +16,6 @@ defmodule RiddlerAdmin.Repo.Migrations.CreateFlags do
     end
 
     create index(:flags, [:workspace_id])
+    create unique_index(:flags, [:workspace_id, :key])
   end
 end

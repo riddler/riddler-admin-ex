@@ -11,5 +11,6 @@ defmodule RiddlerAdmin.Repo.Migrations.CreateEnvironments do
     end
 
     create index(:environments, [:workspace_id])
+    create unique_index(:environments, [:workspace_id, :key])
   end
 end

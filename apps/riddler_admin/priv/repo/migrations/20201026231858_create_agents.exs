@@ -13,5 +13,7 @@ defmodule RiddlerAdmin.Repo.Migrations.CreateAgents do
     end
 
     create index(:agents, [:workspace_id])
+    create unique_index(:agents, [:api_key])
+    create unique_index(:agents, [:api_secret])
   end
 end
