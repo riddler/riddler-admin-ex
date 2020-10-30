@@ -1,0 +1,5 @@
+<h1>Edit Environment</h1>
+
+<%= render "form.html", Map.put(assigns, :action, Routes.environment_path(@conn, :update, @environment)) %>
+
+<span><%= link "Back", to: Routes.environment_path(@conn, :index) %></span>

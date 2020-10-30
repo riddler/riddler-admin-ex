@@ -1,0 +1,28 @@
+<h1>Listing Environments</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Key</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for environment <- @environments do %>
+    <tr>
+      <td><%= environment.name %></td>
+      <td><%= environment.key %></td>
+
+      <td>
+        <span><%= link "Show", to: Routes.environment_path(@conn, :show, environment) %></span>
+        <span><%= link "Edit", to: Routes.environment_path(@conn, :edit, environment) %></span>
+        <span><%= link "Delete", to: Routes.environment_path(@conn, :delete, environment), method: :delete, data: [confirm: "Are you sure?"] %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Environment", to: Routes.environment_path(@conn, :new) %></span>

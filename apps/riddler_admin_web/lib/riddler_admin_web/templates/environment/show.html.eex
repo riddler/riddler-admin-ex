@@ -1,0 +1,18 @@
+<h1>Show Environment</h1>
+
+<ul>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @environment.name %>
+  </li>
+
+  <li>
+    <strong>Key:</strong>
+    <%= @environment.key %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.environment_path(@conn, :edit, @environment) %></span>
+<span><%= link "Back", to: Routes.environment_path(@conn, :index) %></span>
