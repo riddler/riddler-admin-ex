@@ -8,9 +8,9 @@ defmodule RiddlerAdmin.Agents do
 
   alias RiddlerAdmin.Agents.Agent
 
-  def list_workspace_agents(workspace_id) do
+  def list_environment_agents(environment_id) do
     Agent
-    |> where(workspace_id: ^workspace_id)
+    |> where(environment_id: ^environment_id)
     |> Repo.all()
   end
 
@@ -46,9 +46,9 @@ defmodule RiddlerAdmin.Agents do
   @doc """
   Creates a agent.
   """
-  def create_agent(attrs, workspace_id) do
+  def create_agent(attrs, environment_id) do
     %Agent{}
-    |> Agent.create_changeset(attrs, workspace_id)
+    |> Agent.create_changeset(attrs, environment_id)
     |> Repo.insert()
   end
 

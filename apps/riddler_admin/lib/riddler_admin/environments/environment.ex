@@ -39,14 +39,14 @@ defmodule RiddlerAdmin.Environments.Environment do
     key =
       name
       |> String.downcase()
-      |> String.replace(~r/[^a-z0-9_]/, "")
+      |> String.replace(~r/[^a-z0-9_]/, "_")
+      |> String.replace(~r/_+/, "_")
 
     changeset
     |> put_change(:key, key)
   end
 
   defp put_key_change(changeset) do
-    IO.inspect(changeset.data)
     changeset
   end
 end

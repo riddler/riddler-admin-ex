@@ -5,7 +5,7 @@ defmodule RiddlerAdmin.Repo.Migrations.CreateAgents do
     create table(:agents) do
       add :id, :text, primary_key: true
       timestamps()
-      add :workspace_id, references(:workspaces, on_delete: :delete_all), null: false
+      add :environment_id, references(:environments, on_delete: :delete_all), null: false
 
       add :name, :text, null: false
       add :key, :text, null: false
@@ -13,8 +13,8 @@ defmodule RiddlerAdmin.Repo.Migrations.CreateAgents do
       add :api_secret, :text, null: false
     end
 
-    create index(:agents, [:workspace_id])
-    create unique_index(:agents, [:workspace_id, :key])
+    create index(:agents, [:environment_id])
+    create unique_index(:agents, [:environment_id, :key])
     create unique_index(:agents, [:api_key])
     create unique_index(:agents, [:api_secret])
   end

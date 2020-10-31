@@ -8,10 +8,6 @@
   </li>
 
   <li>
-    <%= link "Agents", to: Routes.workspace_agent_path(@conn, :index, @workspace) %>
-  </li>
-
-  <li>
     <%= link "Conditions", to: Routes.workspace_condition_path(@conn, :index, @workspace) %>
   </li>
 
