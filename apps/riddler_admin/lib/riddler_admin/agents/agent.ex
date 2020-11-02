@@ -33,6 +33,7 @@ defmodule RiddlerAdmin.Agents.Agent do
     |> cast(attrs, [:name, :key])
     |> put_key_change()
     |> validate_required([:name, :key])
+    |> validate_format(:key, ~r/^[a-z][a-z0-9_]+$/)
   end
 
   defp generate_api_key(), do: UXID.generate!(prefix: "apikey", rand_size: 5)
@@ -60,7 +61,5 @@ defmodule RiddlerAdmin.Agents.Agent do
     |> put_change(:key, key)
   end
 
-  defp put_key_change(changeset) do
-    changeset
-  end
+  defp put_key_change(changeset), do: changeset
 end

@@ -46,7 +46,5 @@ defmodule RiddlerAdmin.Environments.Environment do
     |> put_change(:key, key)
   end
 
-  defp put_key_change(changeset) do
-    changeset
-  end
+  defp put_key_change(changeset), do: changeset
 end

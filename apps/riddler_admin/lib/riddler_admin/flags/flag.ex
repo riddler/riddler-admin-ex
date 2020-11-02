@@ -55,11 +55,13 @@ defmodule RiddlerAdmin.Flags.Flag do
       changeset
       |> put_change(:include_instructions, Predicator.compile!(source))
 
-  defp put_key_change(%{data: %{key: nil, name: name}} = changeset) when is_binary(name) do
+  defp put_key_change(%{data: %{key: nil}, changes: %{name: name}} = changeset)
+       when is_binary(name) do
     key =
       name
       |> String.downcase()
-      |> String.replace(~r/[^a-z0-9_]/, "")
+      |> String.replace(~r/[^a-z0-9_]/, "_")
+      |> String.replace(~r/_+/, "_")
 
     changeset
     |> put_change(:key, key)
