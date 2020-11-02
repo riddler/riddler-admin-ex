@@ -7,11 +7,13 @@ defmodule RiddlerAdmin.Repo.Migrations.CreateConditions do
       timestamps()
       add :workspace_id, references(:workspaces, on_delete: :delete_all), null: false
 
-      add :key, :text
-      add :source, :text
-      add :instructions, :jsonb
+      add :name, :text, null: false
+      add :key, :text, null: false
+      add :source, :text, null: false
+      add :instructions, :jsonb, null: false
     end
 
     create index(:conditions, [:workspace_id])
+    create unique_index(:conditions, [:workspace_id, :key])
   end
 end

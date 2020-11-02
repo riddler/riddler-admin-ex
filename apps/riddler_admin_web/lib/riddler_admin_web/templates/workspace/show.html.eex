@@ -8,15 +8,15 @@
   </li>
 
   <li>
-    <%= link "Agents", to: Routes.workspace_agent_path(@conn, :index, @workspace) %>
-  </li>
-
-  <li>
     <%= link "Conditions", to: Routes.workspace_condition_path(@conn, :index, @workspace) %>
   </li>
 
   <li>
     <%= link "Definitions", to: Routes.workspace_definition_path(@conn, :index, @workspace) %>
+  </li>
+
+  <li>
+    <%= link "Environments", to: Routes.workspace_environment_path(@conn, :index, @workspace) %>
   </li>
 
   <li>

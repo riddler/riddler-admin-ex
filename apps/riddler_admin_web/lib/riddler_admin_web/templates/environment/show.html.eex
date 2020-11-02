@@ -1,0 +1,22 @@
+<h1>Show Environment</h1>
+
+<ul>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @environment.name %>
+  </li>
+
+  <li>
+    <strong>Key:</strong>
+    <%= @environment.key %>
+  </li>
+
+  <li>
+    <%= link "Agents", to: Routes.workspace_environment_agent_path(@conn, :index, @workspace_id, @environment) %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.workspace_environment_path(@conn, :edit, @workspace_id, @environment) %></span>
+<span><%= link "Back", to: Routes.workspace_environment_path(@conn, :index, @workspace_id) %></span>

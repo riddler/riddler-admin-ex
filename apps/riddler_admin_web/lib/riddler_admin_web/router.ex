@@ -33,11 +33,14 @@ defmodule RiddlerAdminWeb.Router do
     end
 
     resources "/workspaces", WorkspaceController do
-      resources "/agents", AgentController
       resources "/conditions", ConditionController
 
       resources "/definitions", DefinitionController do
         get "/publish", PublishController, :definition
+      end
+
+      resources "/environments", EnvironmentController do
+        resources "/agents", AgentController
       end
 
       resources "/flags", FlagController
