@@ -17,6 +17,7 @@ account = Repo.insert!(%Accounts.Account{name: "Default", owner_identity_id: ide
 
 workspace =
   Repo.insert!(%Workspaces.Workspace{
+    id: "wsp_SEED",
     name: "Default",
     key: "default",
     owner_identity_id: identity.id,
@@ -69,5 +70,7 @@ _flag =
     name: "Of Age",
     key: "of_age",
     type: "Variant",
-    workspace_id: workspace.id
+    workspace_id: workspace.id,
+    include_source: "age > 18",
+    include_instructions: [["load", "age"], ["lit", 18], ["compare", "GT"]]
   })

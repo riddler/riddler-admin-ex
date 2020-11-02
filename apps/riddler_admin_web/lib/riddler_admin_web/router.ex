@@ -23,6 +23,14 @@ defmodule RiddlerAdminWeb.Router do
     live "/", PageLive, :index
   end
 
+  # Agent routes
+
+  scope "/agent", RiddlerAdminWeb do
+    pipe_through :browser
+
+    get "/config", RemoteAgentController, :config
+  end
+
   # Authenticated routes
 
   scope "/", RiddlerAdminWeb do
