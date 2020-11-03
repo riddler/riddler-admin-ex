@@ -3,7 +3,12 @@ defmodule RiddlerAgent.Config do
 
   require Logger
 
-  defstruct [:api_key, :api_secret, :base_url, :workspace_id]
+  alias RiddlerAgent.Remote
+
+  @initial_delay_ms 10
+
+  defstruct [:api_key, :api_secret, :base_url,
+    :agent_id, :agent_key, :workspace_id, :workspace_key, :environment_id, :environment_key]
 
   # === Messaging / GenServer Client Functions ===-----------------------------
 
@@ -16,6 +21,12 @@ defmodule RiddlerAgent.Config do
   """
   @spec api_key() :: String.t()
   def api_key(), do: GenServer.call(__MODULE__, {:api_key, []})
+
+  @doc """
+  Returns the currently configured api_secret
+  """
+  @spec api_secret() :: String.t()
+  def api_secret(), do: GenServer.call(__MODULE__, {:api_secret, []})
 
   @doc """
   Returns the currently configured base_url
@@ -35,16 +46,19 @@ defmodule RiddlerAgent.Config do
   def init(%{api_key: api_key, api_secret: api_secret, base_url: base_url} \\ []) do
     Logger.info("Starting #{__MODULE__}")
 
-    config = %__MODULE__{api_key: api_key, api_secret: api_secret, base_url: base_url}
+    Process.send_after(self(), :request_remote_config, @initial_delay_ms)
 
-    updated_config = request_remote_config(config)
-
-    {:ok, updated_config}
+    {:ok, %__MODULE__{api_key: api_key, api_secret: api_secret, base_url: base_url}}
   end
 
   @impl GenServer
   def handle_call({:api_key, _opts}, _from, %__MODULE__{api_key: api_key} = state) do
     {:reply, api_key, state}
+  end
+
+  @impl GenServer
+  def handle_call({:api_secret, _opts}, _from, %__MODULE__{api_secret: api_secret} = state) do
+    {:reply, api_secret, state}
   end
 
   @impl GenServer
@@ -57,9 +71,19 @@ defmodule RiddlerAgent.Config do
     {:reply, workspace_id, state}
   end
 
-  def request_remote_config(%__MODULE__{base_url: _base_url, api_key: _api_key, api_secret: _api_secret} = module) do
+  @impl GenServer
+  def handle_info(:request_remote_config, %__MODULE__{base_url: base_url, api_key: api_key, api_secret: api_secret} = state) do
+    remote_config = request_remote_config({base_url, api_key, api_secret})
 
-    IO.inspect(module)
-    module
+    {:noreply, %{state |
+      agent_id: remote_config.agent_id, agent_key: remote_config.agent_key,
+      workspace_id: remote_config.workspace_id, workspace_key: remote_config.workspace_key,
+      environment_id: remote_config.environment_id, environment_key: remote_config.environment_key
+    }}
+  end
+
+  defp request_remote_config(remote_connection_opts) do
+    Remote.client(remote_connection_opts)
+    |> Remote.config()
   end
 end

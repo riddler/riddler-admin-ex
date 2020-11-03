@@ -5,12 +5,14 @@ defmodule RiddlerAdmin.Agents.Agent do
 
   schema "agents" do
     field :id, Ecto.UXID, @id_opts ++ [primary_key: true, autogenerate: true]
-    field :environment_id, Ecto.UXID
+    # field :environment_id, Ecto.UXID
 
     field :name, :string
     field :key, :string
     field :api_key, :string
     field :api_secret, :string
+
+    belongs_to :environment, RiddlerAdmin.Environments.Environment
 
     timestamps()
   end
