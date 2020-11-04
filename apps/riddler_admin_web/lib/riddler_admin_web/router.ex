@@ -3,6 +3,8 @@ defmodule RiddlerAdminWeb.Router do
 
   import RiddlerAdminWeb.IdentityAuth
 
+  alias RiddlerAdmin.Agents
+
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
@@ -17,10 +19,31 @@ defmodule RiddlerAdminWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :require_agent_creds do
+    plug :agent_auth
+  end
+
+  defp agent_auth(conn, _opts) do
+    with {user, pass} <- Plug.BasicAuth.parse_basic_auth(conn),
+         %Agents.Agent{} = agent <- Agents.find_by_api_key_and_secret(user, pass) do
+      assign(conn, :current_agent, agent)
+    else
+      _ -> conn |> Plug.BasicAuth.request_basic_auth() |> halt()
+    end
+  end
+
   scope "/", RiddlerAdminWeb do
     pipe_through :browser
 
     live "/", PageLive, :index
+  end
+
+  # Agent routes
+
+  scope "/agent", RiddlerAdminWeb do
+    pipe_through [:api, :require_agent_creds]
+
+    get "/config", RemoteAgentController, :config
   end
 
   # Authenticated routes

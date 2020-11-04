@@ -8,6 +8,13 @@ defmodule RiddlerAdmin.Agents do
 
   alias RiddlerAdmin.Agents.Agent
 
+  def find_by_api_key_and_secret(api_key, api_secret) do
+    Agent
+    |> preload(environment: :workspace)
+    |> where(api_key: ^api_key, api_secret: ^api_secret)
+    |> Repo.one()
+  end
+
   def list_environment_agents(environment_id) do
     Agent
     |> where(environment_id: ^environment_id)
