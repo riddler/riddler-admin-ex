@@ -17,7 +17,7 @@ defmodule RiddlerAgent do
       %{id: "cnd_" <> _other, instructions: instructions} ->
         Logger.info("[AGT] Evaluating #{type} #{key}")
 
-        Predicator.evaluate_instructions!(instructions, context)
+        condition_value(instructions, context)
 
       _ ->
         IO.puts("OTHER")
@@ -34,7 +34,7 @@ defmodule RiddlerAgent do
       item.include_instructions
       |> case do
         nil -> true
-        instructions -> Predicator.evaluate_instructions!(instructions, context)
+        instructions -> condition_value(instructions, context)
       end
     end)
     |> Enum.map(fn item ->
@@ -44,4 +44,13 @@ defmodule RiddlerAgent do
   end
 
   defp storage(), do: MemoryStore
+
+  defp condition_value(instructions, context) do
+    case Predicator.evaluate_instructions!(instructions, context) do
+      true -> true
+      _ -> false
+    end
+  rescue
+    _ -> false
+  end
 end
