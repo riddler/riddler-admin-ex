@@ -1,7 +1,7 @@
 defmodule RiddlerAdminWeb.RemoteAgentController do
   use RiddlerAdminWeb, :controller
 
-  def config(%{assigns: %{current_agent: current_agent}} = conn, params) do
+  def config(%{assigns: %{current_agent: current_agent}} = conn, _params) do
     json(conn, %{
       agent_id: current_agent.id,
       agent_key: current_agent.key,

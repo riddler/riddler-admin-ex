@@ -1,24 +1,18 @@
-# defmodule RiddlerAgent.Remote do
-#   use Tesla
-
-#   alias RiddlerAgent.Config
-
-#   plug Tesla.Middleware.BaseUrl, Config.base_url()
-#   plug Tesla.Middleware.BasicAuth, username: Config.api_key(), password: Config.api_secret()
-#   plug Tesla.Middleware.JSON
-
-#   def config({_base_url, _api_key, _api_secret}) do
-#     {:ok, %{body: string_key_map}} = get("/agent/config")
-
-#     for {key, val} <- string_key_map, into: %{}, do: {String.to_atom(key), val}
-#   end
-# end
-
 defmodule RiddlerAgent.Remote do
-  def config(client) do
-    {:ok, %{body: string_key_map}} = Tesla.get(client, "/agent/config")
+  require Logger
 
-    for {key, val} <- string_key_map, into: %{}, do: {String.to_atom(key), val}
+  def config(client) do
+    case Tesla.get(client, "/agent/config") do
+      {:ok, %{status: 200, body: string_key_map}} ->
+        remote_config =
+          for {key, val} <- string_key_map, into: %{}, do: {String.to_atom(key), val}
+
+        {:ok, remote_config}
+
+      {:ok, %{status: 401}} ->
+        Logger.error("[AGT] Unauthorized error fetching remote config. Check API credentials.")
+        {:error, :unauthorized}
+    end
   end
 
   def client({base_url, api_key, api_secret}) do

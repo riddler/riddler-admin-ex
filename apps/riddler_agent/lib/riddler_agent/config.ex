@@ -7,8 +7,17 @@ defmodule RiddlerAgent.Config do
 
   @initial_delay_ms 10
 
-  defstruct [:api_key, :api_secret, :base_url,
-    :agent_id, :agent_key, :workspace_id, :workspace_key, :environment_id, :environment_key]
+  defstruct [
+    :api_key,
+    :api_secret,
+    :base_url,
+    :agent_id,
+    :agent_key,
+    :workspace_id,
+    :workspace_key,
+    :environment_id,
+    :environment_key
+  ]
 
   # === Messaging / GenServer Client Functions ===-----------------------------
 
@@ -72,14 +81,28 @@ defmodule RiddlerAgent.Config do
   end
 
   @impl GenServer
-  def handle_info(:request_remote_config, %__MODULE__{base_url: base_url, api_key: api_key, api_secret: api_secret} = state) do
-    remote_config = request_remote_config({base_url, api_key, api_secret})
+  def handle_info(
+        :request_remote_config,
+        %__MODULE__{base_url: base_url, api_key: api_key, api_secret: api_secret} = state
+      ) do
+    {base_url, api_key, api_secret}
+    |> request_remote_config()
+    |> case do
+      {:ok, remote_config} ->
+        {:noreply,
+         %{
+           state
+           | agent_id: remote_config.agent_id,
+             agent_key: remote_config.agent_key,
+             workspace_id: remote_config.workspace_id,
+             workspace_key: remote_config.workspace_key,
+             environment_id: remote_config.environment_id,
+             environment_key: remote_config.environment_key
+         }}
 
-    {:noreply, %{state |
-      agent_id: remote_config.agent_id, agent_key: remote_config.agent_key,
-      workspace_id: remote_config.workspace_id, workspace_key: remote_config.workspace_key,
-      environment_id: remote_config.environment_id, environment_key: remote_config.environment_key
-    }}
+      {:error, _} ->
+        raise "Error fetching remote config"
+    end
   end
 
   defp request_remote_config(remote_connection_opts) do

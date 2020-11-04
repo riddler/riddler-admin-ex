@@ -10,14 +10,15 @@ defmodule RiddlerAgent.Application do
 
   @dev_base_url "http://lh:6181"
 
-  @seed_api_key "apikey_01EP4FXYHR2NE4W8S7"
-  @seed_api_secret "apisecret_lPQX1OUtOTKMdzECAgLYILmLk5rWsSBfADnbk5ua7Cms_ogRT_qXWcfHP2Y32f6k"
+  @seed_api_key "apikey_PRODSEED"
+  @seed_api_secret "apisecret_PRODSEED"
 
   @impl true
   def start(_type, _args) do
     children = [
       # Start up the configuration
-      {RiddlerAgent.Config, %{api_key: api_key(), api_secret: api_secret(), base_url: base_url()}},
+      {RiddlerAgent.Config,
+       %{api_key: api_key(), api_secret: api_secret(), base_url: base_url()}},
       # Start up the storage for Definitions
       RiddlerAgent.MemoryStore
     ]
@@ -32,7 +33,6 @@ defmodule RiddlerAgent.Application do
     opts = [strategy: :one_for_one, name: RiddlerAgent.Supervisor]
     Supervisor.start_link(children, opts)
   end
-
 
   # defp workspace_id(), do: @seed_workspace_id
 

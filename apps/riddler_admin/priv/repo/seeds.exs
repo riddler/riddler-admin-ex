@@ -9,7 +9,16 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
-alias RiddlerAdmin.{Repo, Identities, Accounts, Workspaces, Environments, Conditions, Flags, Agents}
+alias RiddlerAdmin.{
+  Repo,
+  Identities,
+  Accounts,
+  Workspaces,
+  Environments,
+  Conditions,
+  Flags,
+  Agents
+}
 
 {:ok, identity} = Identities.register_identity(%{email: "foo@bar.com", password: "Asdfjkl;1234"})
 
@@ -26,33 +35,35 @@ workspace =
 
 prod_env =
   Repo.insert!(%Environments.Environment{
+    id: "env_PRODSEED",
     name: "Production",
     key: "prod",
     workspace_id: workspace.id
   })
 
-_prod_agent = 
+_prod_agent =
   Repo.insert!(%Agents.Agent{
     name: "Prod Agent",
     key: "prodagent",
-    api_key: "apikey_01EP4FXYHR2NE4W8S7",
-    api_secret: "apisecret_lPQX1OUtOTKMdzECAgLYILmLk5rWsSBfADnbk5ua7Cms_ogRT_qXWcfHP2Y32f6k",
+    api_key: "apikey_PRODSEED",
+    api_secret: "apisecret_PRODSEED",
     environment_id: prod_env.id
   })
 
 test_env =
   Repo.insert!(%Environments.Environment{
+    id: "env_TESTSEED",
     name: "Test",
     key: "test",
     workspace_id: workspace.id
   })
 
-_test_agent = 
+_test_agent =
   Repo.insert!(%Agents.Agent{
     name: "Test Agent",
     key: "testagent",
-    api_key: "apikey_01EP4FYPJ50M4JD14T",
-    api_secret: "apisecret_hLVevrfCCy2vzAXBxhRd1eZa3vamX77PR_zd_m_ykaYipOwXONLKN6zdUDupu_fj",
+    api_key: "apikey_TESTSEED",
+    api_secret: "apisecret_TESTSEED",
     environment_id: test_env.id
   })
 
