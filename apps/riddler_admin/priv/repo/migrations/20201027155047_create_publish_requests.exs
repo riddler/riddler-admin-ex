@@ -9,6 +9,8 @@ defmodule RiddlerAdmin.Repo.Migrations.CreatePublishRequests do
       add :published_at, :utc_datetime_usec
 
       add :workspace_id, references(:workspaces, on_delete: :delete_all), null: false
+      add :environment_id, references(:environments, on_delete: :delete_all), null: false
+
       add :created_by_id, references(:identities, on_delete: :nothing)
       add :approved_by_id, references(:identities, on_delete: :nothing)
       add :published_by_id, references(:identities, on_delete: :nothing)
@@ -20,6 +22,8 @@ defmodule RiddlerAdmin.Repo.Migrations.CreatePublishRequests do
     end
 
     create index(:publish_requests, [:workspace_id])
+    create index(:publish_requests, [:environment_id])
+
     create index(:publish_requests, [:created_by_id])
     create index(:publish_requests, [:approved_by_id])
     create index(:publish_requests, [:published_by_id])
