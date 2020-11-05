@@ -10,11 +10,11 @@ config :riddler_admin,
   database_username: "postgres"
 
 config :riddler_admin_web,
-  http_port: 6181,
+  http_port: 16180,
   secret_key_base: "this really should be a long secret string but for development ...",
   signing_salt: "it's a secret to everybody",
   url_host: "lh",
-  url_port: 6181
+  url_port: 16180
 
 # For development, we disable any cache and enable
 # debugging and code reloading.
