@@ -65,7 +65,11 @@ defmodule RiddlerAdmin.PublishRequests do
       ** (Ecto.NoResultsError)
 
   """
-  def get_publish_request!(id), do: Repo.get!(PublishRequest, id)
+  def get_publish_request!(id) do
+    PublishRequest
+    |> preload(:definition)
+    |> Repo.get!(id)
+  end
 
   @doc """
   Creates a publish_request.

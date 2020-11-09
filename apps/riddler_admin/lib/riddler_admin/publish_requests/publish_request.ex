@@ -1,9 +1,9 @@
 defmodule RiddlerAdmin.PublishRequests.PublishRequest do
   use RiddlerAdmin.Schema
 
+  alias RiddlerAdmin.Environments.Environment
   alias RiddlerAdmin.Definitions.Definition
   alias RiddlerAdmin.Identities.Identity
-  alias RiddlerAdmin.Workspaces
   alias RiddlerAdmin.Workspaces.Workspace
 
   @id_opts [prefix: "pr", rand_size: 2]
@@ -12,15 +12,15 @@ defmodule RiddlerAdmin.PublishRequests.PublishRequest do
   schema "publish_requests" do
     field :id, Ecto.UXID, @id_opts ++ [primary_key: true, autogenerate: true]
 
-    field :status, :string, null: false, default: "pending"
+    field :status, :string, null: false, default: "Pending Approval"
     field :subject, :string, null: false
     field :message, :string
-    field :data, :map, null: false
 
     field :approved_at, :utc_datetime_usec
     field :published_at, :utc_datetime_usec
 
     belongs_to :definition, Definition
+    belongs_to :environment, Environment
     belongs_to :workspace, Workspace
     belongs_to :created_by, Identity
     belongs_to :approved_by, Identity
@@ -43,8 +43,8 @@ defmodule RiddlerAdmin.PublishRequests.PublishRequest do
   @doc false
   def changeset(publish_request, attrs) do
     publish_request
-    |> cast(attrs, [:subject, :message])
-    |> validate_required([:subject])
+    |> cast(attrs, [:subject, :message, :definition_id, :environment_id])
+    |> validate_required([:subject, :definition_id, :environment_id])
   end
 
   def approve_changeset(publish_request, approver_id) do

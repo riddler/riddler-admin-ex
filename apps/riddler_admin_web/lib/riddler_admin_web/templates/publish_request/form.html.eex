@@ -17,6 +17,10 @@
   <%= select f, :definition_id, Enum.map(@definitions, &{&1.label, &1.id}) %>
   <%= error_tag f, :definition_id %>
 
+  <%= label f, :environment_id %>
+  <%= select f, :environment_id, Enum.map(@environments, &{&1.name, &1.id}) %>
+  <%= error_tag f, :environment_id %>
+
   <div>
     <%= submit "Save" %>
   </div>
