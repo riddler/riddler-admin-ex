@@ -6,7 +6,6 @@ defmodule RiddlerAdmin.PublishRequests.UseCases.PublishDefinition do
   alias RiddlerAdmin.Definitions.Definition
   alias RiddlerAdmin.PublishRequests.PublishRequest
 
-  # @derive {Jason.Encoder, only: [:id, :schema_version, :version, :workspace_id, :publish_request_id, :label]}
   @derive {Jason.Encoder,
            only: [:id, :schema_version, :version, :workspace_id, :publish_request_id, :yaml]}
   defstruct [
@@ -35,7 +34,6 @@ defmodule RiddlerAdmin.PublishRequests.UseCases.PublishDefinition do
   end
 
   def new(%Definition{
-        publish_request_id: publish_request_id,
         workspace_id: workspace_id,
         label: label,
         data: data,
@@ -49,7 +47,7 @@ defmodule RiddlerAdmin.PublishRequests.UseCases.PublishDefinition do
       schema_version: schema_version,
       version: version,
       workspace_id: workspace_id,
-      publish_request_id: publish_request_id,
+      # publish_request_id: publish_request_id,
       data: data,
       label: label,
       yaml: yaml
