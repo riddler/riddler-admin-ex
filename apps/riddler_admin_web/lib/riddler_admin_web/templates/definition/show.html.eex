@@ -11,6 +11,10 @@
     <strong>Schema version:</strong>
     <%= @definition.schema_version %>
   </li>
+
+  <li>
+    <strong><%= link "Publish", to: Routes.workspace_publish_request_path(@conn, :new, @workspace_id, %{definition_id: @definition.id}) %></strong>
+  </li>
 </ul>
 
 <pre><%= @definition.yaml %></pre>

@@ -1,12 +1,26 @@
 defmodule RiddlerAdminWeb.PublishRequestController do
   use RiddlerAdminWeb, :controller
 
+  alias RiddlerAdmin.Definitions
   alias RiddlerAdmin.PublishRequests
   alias RiddlerAdmin.PublishRequests.PublishRequest
 
   def index(conn, %{"workspace_id" => workspace_id}) do
     publish_requests = PublishRequests.list_workspace_publish_requests(workspace_id)
     render(conn, "index.html", publish_requests: publish_requests, workspace_id: workspace_id)
+  end
+
+  def new(conn, %{"workspace_id" => workspace_id, "definition_id" => definition_id}) do
+    changeset =
+      PublishRequests.change_publish_request(%PublishRequest{definition_id: definition_id})
+
+    definitions = Definitions.list_workspace_definitions(workspace_id)
+
+    render(conn, "new.html",
+      changeset: changeset,
+      workspace_id: workspace_id,
+      definitions: definitions
+    )
   end
 
   def new(conn, %{"workspace_id" => workspace_id}) do

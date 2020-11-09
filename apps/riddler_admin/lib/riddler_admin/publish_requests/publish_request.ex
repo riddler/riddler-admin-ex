@@ -1,9 +1,10 @@
 defmodule RiddlerAdmin.PublishRequests.PublishRequest do
   use RiddlerAdmin.Schema
 
+  alias RiddlerAdmin.Definitions.Definition
+  alias RiddlerAdmin.Identities.Identity
   alias RiddlerAdmin.Workspaces
   alias RiddlerAdmin.Workspaces.Workspace
-  alias RiddlerAdmin.Identities.Identity
 
   @id_opts [prefix: "pr", rand_size: 2]
 
@@ -19,6 +20,7 @@ defmodule RiddlerAdmin.PublishRequests.PublishRequest do
     field :approved_at, :utc_datetime_usec
     field :published_at, :utc_datetime_usec
 
+    belongs_to :definition, Definition
     belongs_to :workspace, Workspace
     belongs_to :created_by, Identity
     belongs_to :approved_by, Identity
@@ -30,14 +32,11 @@ defmodule RiddlerAdmin.PublishRequests.PublishRequest do
   def id_opts(), do: @id_opts
 
   def create_changeset(publish_request, attrs, workspace_id, author_id) do
-    workspace_definition = Workspaces.generate_definition!(workspace_id)
-
     publish_request
     |> changeset(attrs)
     |> put_change(:workspace_id, workspace_id)
     |> put_change(:created_by_id, author_id)
     |> put_change(:status, "Pending Approval")
-    |> put_change(:data, workspace_definition)
     |> validate_required([:workspace_id, :created_by_id])
   end
 
