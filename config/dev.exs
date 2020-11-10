@@ -47,7 +47,7 @@ config :riddler_admin_web, RiddlerAdminWeb.Endpoint,
 
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"
-config :logger, level: :info
+config :logger, level: :debug
 
 config :phoenix,
   # Initialize plugs at runtime for faster development compilation

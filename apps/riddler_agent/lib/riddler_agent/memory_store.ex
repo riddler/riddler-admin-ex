@@ -3,7 +3,7 @@ defmodule RiddlerAgent.MemoryStore do
 
   require Logger
 
-  defstruct [:definitions, :workspaces]
+  defstruct [:definitions, :workspaces, :environments]
 
   def start_link(opts) do
     GenServer.start_link(__MODULE__, opts, name: __MODULE__)
@@ -13,7 +13,7 @@ defmodule RiddlerAgent.MemoryStore do
   def init(_consumer_opts \\ []) do
     Logger.info("Starting #{__MODULE__}")
 
-    {:ok, %__MODULE__{definitions: %{}, workspaces: %{}}}
+    {:ok, %__MODULE__{definitions: %{}, workspaces: %{}, environments: %{}}}
   end
 
   # === Messaging / GenServer Client Functions ===-----------------------------
@@ -21,9 +21,10 @@ defmodule RiddlerAgent.MemoryStore do
   @doc """
   Update state from new definition
   """
-  @spec add_definition(definition :: Map.t()) :: :ok | :error
-  def add_definition(definition) when is_map(definition) do
-    GenServer.call(__MODULE__, {:add_definition, definition})
+  @spec add_definition(definition :: Map.t(), environment_id :: String.t()) :: :ok | :error
+  def add_definition(definition, environment_id)
+      when is_map(definition) and is_binary(environment_id) do
+    GenServer.call(__MODULE__, {:add_definition, {definition, environment_id}})
   end
 
   @doc """
@@ -34,15 +35,27 @@ defmodule RiddlerAgent.MemoryStore do
     GenServer.call(__MODULE__, {:get_workspace, workspace_id})
   end
 
+  @doc """
+  Gets the current definition for an environment
+  """
+  @spec get_environment(environment_id :: String.t()) :: Map.t()
+  def get_environment(environment_id) when is_binary(environment_id) do
+    GenServer.call(__MODULE__, {:get_environment, environment_id})
+  end
+
   # === GenServer Server Functions ===---------------------------------------
 
   @impl GenServer
   def handle_call(
-        {:add_definition, %{id: definition_id, workspace_id: workspace_id} = map},
+        {:add_definition,
+         {%{id: definition_id, workspace_id: workspace_id} = map, environment_id}},
         _from,
-        %__MODULE__{definitions: definitions, workspaces: workspaces} = state
+        %__MODULE__{definitions: definitions, workspaces: workspaces, environments: environments} =
+          state
       ) do
-    Logger.info("[AGT] Adding Definition #{definition_id} for Workspace #{workspace_id}")
+    Logger.info(
+      "[AGT] Adding Definition #{definition_id} for Workspace #{workspace_id} in #{environment_id}"
+    )
 
     new_definitions =
       definitions
@@ -52,7 +65,17 @@ defmodule RiddlerAgent.MemoryStore do
       workspaces
       |> Map.put(workspace_id, map)
 
-    {:reply, :ok, %__MODULE__{state | definitions: new_definitions, workspaces: new_workspaces}}
+    new_environments =
+      environments
+      |> Map.put(environment_id, map)
+
+    {:reply, :ok,
+     %__MODULE__{
+       state
+       | definitions: new_definitions,
+         workspaces: new_workspaces,
+         environments: new_environments
+     }}
   end
 
   @impl GenServer
@@ -64,5 +87,16 @@ defmodule RiddlerAgent.MemoryStore do
     Logger.debug("[AGT] Retrieving Definition for Workspace #{workspace_id}")
 
     {:reply, Map.get(workspaces, workspace_id), state}
+  end
+
+  @impl GenServer
+  def handle_call(
+        {:get_environment, environment_id},
+        _from,
+        %__MODULE__{environments: environments} = state
+      ) do
+    Logger.debug("[AGT] Retrieving Definition for Environment #{environment_id}")
+
+    {:reply, Map.get(environments, environment_id), state}
   end
 end

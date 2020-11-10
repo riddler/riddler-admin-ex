@@ -12,11 +12,18 @@ defmodule RiddlerAdminWeb.PublishRequestController do
   end
 
   def new(conn, %{"workspace_id" => workspace_id, "definition_id" => definition_id}) do
-    changeset =
-      PublishRequests.change_publish_request(%PublishRequest{
-        definition_id: definition_id
-      })
+    PublishRequests.change_publish_request(%PublishRequest{
+      definition_id: definition_id
+    })
+    |> render_new(conn, workspace_id)
+  end
 
+  def new(conn, %{"workspace_id" => workspace_id}) do
+    PublishRequests.change_publish_request(%PublishRequest{})
+    |> render_new(conn, workspace_id)
+  end
+
+  defp render_new(changeset, conn, workspace_id) do
     definitions = Definitions.list_workspace_definitions(workspace_id)
     environments = Environments.list_workspace_environments(workspace_id)
 
@@ -26,12 +33,6 @@ defmodule RiddlerAdminWeb.PublishRequestController do
       definitions: definitions,
       environments: environments
     )
-  end
-
-  def new(conn, %{"workspace_id" => workspace_id}) do
-    changeset = PublishRequests.change_publish_request(%PublishRequest{})
-
-    render(conn, "new.html", changeset: changeset, workspace_id: workspace_id)
   end
 
   def create(%{assigns: %{current_identity: %{id: author_id}}} = conn, %{

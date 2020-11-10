@@ -9,8 +9,8 @@ defmodule RiddlerAgent do
   require Logger
 
   def evaluate(type, key, context \\ %{}) when is_atom(type) and is_binary(key) do
-    Config.workspace_id()
-    |> storage().get_workspace()
+    Config.environment_id()
+    |> storage().get_environment()
     |> Map.get(type)
     |> Enum.find(fn item -> item.key == key end)
     |> case do
@@ -27,8 +27,8 @@ defmodule RiddlerAgent do
   def all_flags(context \\ %{}) do
     Logger.info("[AGT] Generating all flags")
 
-    Config.workspace_id()
-    |> storage().get_workspace()
+    Config.environment_id()
+    |> storage().get_environment()
     |> Map.get(:flags)
     |> Enum.filter(fn item ->
       item.include_instructions
@@ -43,8 +43,6 @@ defmodule RiddlerAgent do
     |> Enum.into(%{})
   end
 
-  defp storage(), do: MemoryStore
-
   defp condition_value(instructions, context) do
     case Predicator.evaluate_instructions!(instructions, context) do
       true -> true
@@ -53,4 +51,24 @@ defmodule RiddlerAgent do
   rescue
     _ -> false
   end
+
+  def store_definition(yaml, environment_id) do
+    map = YamlElixir.read_from_string!(yaml, atoms: true)
+
+    map
+    |> to_atom_map()
+    |> storage().add_definition(environment_id)
+
+    :ok
+  end
+
+  defp to_atom_map(map) when is_map(map),
+    do: Map.new(map, fn {k, v} -> {String.to_atom(k), to_atom_map(v)} end)
+
+  defp to_atom_map(list) when is_list(list),
+    do: Enum.map(list, fn v -> to_atom_map(v) end)
+
+  defp to_atom_map(v), do: v
+
+  defp storage(), do: MemoryStore
 end

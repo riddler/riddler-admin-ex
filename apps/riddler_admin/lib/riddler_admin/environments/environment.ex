@@ -1,6 +1,7 @@
 defmodule RiddlerAdmin.Environments.Environment do
   use RiddlerAdmin.Schema
 
+  alias RiddlerAdmin.Definitions.Definition
   alias RiddlerAdmin.Workspaces.Workspace
 
   @id_opts [prefix: "env", rand_size: 3]
@@ -12,6 +13,7 @@ defmodule RiddlerAdmin.Environments.Environment do
     field :name, :string
     field :key, :string
 
+    belongs_to :definition, Definition
     belongs_to :workspace, Workspace
 
     timestamps()
@@ -28,7 +30,7 @@ defmodule RiddlerAdmin.Environments.Environment do
   @doc false
   def changeset(flag, attrs) do
     flag
-    |> cast(attrs, [:name, :key])
+    |> cast(attrs, [:name, :key, :definition_id])
     |> put_key_change()
     |> validate_required([:name, :key])
     |> validate_format(:key, ~r/^[a-z][a-z0-9_]+$/)

@@ -28,18 +28,6 @@ defmodule RiddlerAdmin.Repo.Migrations.Genesis do
     create index(:workspaces, [:owner_identity_id])
     create unique_index(:workspaces, [:id, :key])
 
-    create table(:environments) do
-      add :id, :text, primary_key: true
-      timestamps()
-      add :workspace_id, references(:workspaces, on_delete: :delete_all), null: false
-
-      add :name, :text, null: false
-      add :key, :text, null: false
-    end
-
-    create index(:environments, [:workspace_id])
-    create unique_index(:environments, [:workspace_id, :key])
-
     create table(:definitions) do
       add :id, :text, primary_key: true
       timestamps()
@@ -54,6 +42,19 @@ defmodule RiddlerAdmin.Repo.Migrations.Genesis do
 
     create index(:definitions, [:workspace_id])
     create unique_index(:definitions, [:workspace_id, :version])
+
+    create table(:environments) do
+      add :id, :text, primary_key: true
+      timestamps()
+      add :workspace_id, references(:workspaces, on_delete: :delete_all), null: false
+      add :definition_id, references(:definitions, on_delete: :delete_all)
+
+      add :name, :text, null: false
+      add :key, :text, null: false
+    end
+
+    create index(:environments, [:workspace_id])
+    create unique_index(:environments, [:workspace_id, :key])
 
     create table(:publish_requests) do
       add :id, :text, primary_key: true

@@ -13,7 +13,7 @@
   </li>
 
   <li>
-    <strong><%= link "Publish", to: Routes.workspace_publish_request_path(@conn, :new, @workspace_id, %{definition_id: @definition.id}) %></strong>
+    <strong><%= link "Publish Request", to: Routes.workspace_publish_request_path(@conn, :new, @workspace_id, %{definition_id: @definition.id}) %></strong>
   </li>
 </ul>
 
