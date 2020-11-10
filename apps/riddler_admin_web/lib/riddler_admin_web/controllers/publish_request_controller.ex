@@ -1,6 +1,8 @@
 defmodule RiddlerAdminWeb.PublishRequestController do
   use RiddlerAdminWeb, :controller
 
+  alias RiddlerAdmin.Definitions
+  alias RiddlerAdmin.Environments
   alias RiddlerAdmin.PublishRequests
   alias RiddlerAdmin.PublishRequests.PublishRequest
 
@@ -9,10 +11,28 @@ defmodule RiddlerAdminWeb.PublishRequestController do
     render(conn, "index.html", publish_requests: publish_requests, workspace_id: workspace_id)
   end
 
-  def new(conn, %{"workspace_id" => workspace_id}) do
-    changeset = PublishRequests.change_publish_request(%PublishRequest{})
+  def new(conn, %{"workspace_id" => workspace_id, "definition_id" => definition_id}) do
+    PublishRequests.change_publish_request(%PublishRequest{
+      definition_id: definition_id
+    })
+    |> render_new(conn, workspace_id)
+  end
 
-    render(conn, "new.html", changeset: changeset, workspace_id: workspace_id)
+  def new(conn, %{"workspace_id" => workspace_id}) do
+    PublishRequests.change_publish_request(%PublishRequest{})
+    |> render_new(conn, workspace_id)
+  end
+
+  defp render_new(changeset, conn, workspace_id) do
+    definitions = Definitions.list_workspace_definitions(workspace_id)
+    environments = Environments.list_workspace_environments(workspace_id)
+
+    render(conn, "new.html",
+      changeset: changeset,
+      workspace_id: workspace_id,
+      definitions: definitions,
+      environments: environments
+    )
   end
 
   def create(%{assigns: %{current_identity: %{id: author_id}}} = conn, %{
@@ -40,12 +60,11 @@ defmodule RiddlerAdminWeb.PublishRequestController do
 
   def show(conn, %{"id" => id, "workspace_id" => workspace_id}) do
     publish_request = PublishRequests.get_publish_request!(id)
-    definition = Ymlr.document!(publish_request.data)
 
     render(conn, "show.html",
       publish_request: publish_request,
       workspace_id: workspace_id,
-      definition: definition
+      definition: publish_request.definition.yaml
     )
   end
 

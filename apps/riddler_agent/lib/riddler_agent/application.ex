@@ -8,10 +8,10 @@ defmodule RiddlerAgent.Application do
   alias RiddlerAdmin.Messaging
   alias RiddlerAgent.Messaging.Consumers.DefinitionConsumer
 
-  @dev_base_url "http://lh:6181"
+  @dev_base_url "http://lh:16180"
 
-  @seed_api_key "apikey_PRODSEED"
-  @seed_api_secret "apisecret_PRODSEED"
+  @seed_api_key "apikey_TESTSEED"
+  @seed_api_secret "apisecret_TESTSEED"
 
   @impl true
   def start(_type, _args) do

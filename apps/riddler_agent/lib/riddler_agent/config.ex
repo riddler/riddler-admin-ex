@@ -46,6 +46,12 @@ defmodule RiddlerAgent.Config do
   @doc """
   Returns the currently configured workspace_id
   """
+  @spec environment_id() :: String.t()
+  def environment_id(), do: GenServer.call(__MODULE__, {:environment_id, []})
+
+  @doc """
+  Returns the currently configured workspace_id
+  """
   @spec workspace_id() :: String.t()
   def workspace_id(), do: GenServer.call(__MODULE__, {:workspace_id, []})
 
@@ -76,6 +82,15 @@ defmodule RiddlerAgent.Config do
   end
 
   @impl GenServer
+  def handle_call(
+        {:environment_id, _opts},
+        _from,
+        %__MODULE__{environment_id: environment_id} = state
+      ) do
+    {:reply, environment_id, state}
+  end
+
+  @impl GenServer
   def handle_call({:workspace_id, _opts}, _from, %__MODULE__{workspace_id: workspace_id} = state) do
     {:reply, workspace_id, state}
   end
@@ -89,6 +104,8 @@ defmodule RiddlerAgent.Config do
     |> request_remote_config()
     |> case do
       {:ok, remote_config} ->
+        RiddlerAgent.store_definition(remote_config.definition, remote_config.environment_id)
+
         {:noreply,
          %{
            state

@@ -24,11 +24,11 @@ config :riddler_admin,
 config :riddler_admin_web,
   ecto_repos: [RiddlerAdmin.Repo],
   generators: [context_app: :riddler_admin],
-  http_port: {:system, :string, "HTTP_PORT", 6181},
+  http_port: {:system, :string, "HTTP_PORT", 16180},
   secret_key_base: {:system, :string, "SECRET_KEY_BASE"},
   signing_salt: {:system, :string, "SIGNING_SALT"},
   url_host: {:system, :string, "URL_HOST"},
-  url_port: {:system, :integer, "URL_PORT"}
+  url_port: {:system, :integer, "URL_PORT", 16180}
 
 # Configure the DB Repo
 config :riddler_admin, RiddlerAdmin.Repo,

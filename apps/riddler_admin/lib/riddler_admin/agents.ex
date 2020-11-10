@@ -10,7 +10,7 @@ defmodule RiddlerAdmin.Agents do
 
   def find_by_api_key_and_secret(api_key, api_secret) do
     Agent
-    |> preload(environment: :workspace)
+    |> preload(environment: [:definition, :workspace])
     |> where(api_key: ^api_key, api_secret: ^api_secret)
     |> Repo.one()
   end

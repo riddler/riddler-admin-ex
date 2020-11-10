@@ -58,9 +58,7 @@ defmodule RiddlerAdminWeb.Router do
     resources "/workspaces", WorkspaceController do
       resources "/conditions", ConditionController
 
-      resources "/definitions", DefinitionController do
-        get "/publish", PublishController, :definition
-      end
+      resources "/definitions", DefinitionController
 
       resources "/environments", EnvironmentController do
         resources "/agents", AgentController
