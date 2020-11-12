@@ -114,13 +114,22 @@ defmodule RiddlerAdmin.Repo.Migrations.Genesis do
     create index(:flags, [:workspace_id])
     create unique_index(:flags, [:workspace_id, :key])
 
-    create table(:flag_variants) do
+    create table(:flag_segments) do
       add :id, :text, primary_key: true
       timestamps()
       add :flag_id, references(:flags, on_delete: :delete_all), null: false
+      add :sequence, :integer, null: false
+
+      add :name, :text, null: false
+      add :key, :text, null: false
+
+      add :condition_source, :text
+      add :condition_instructions, :jsonb
     end
 
-    create index(:flag_variants, [:flag_id])
+    create index(:flag_segments, [:flag_id])
+    create unique_index(:flag_segments, [:flag_id, :sequence])
+    create unique_index(:flag_segments, [:flag_id, :key])
 
     create table(:agents) do
       add :id, :text, primary_key: true
