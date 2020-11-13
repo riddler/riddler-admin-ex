@@ -118,7 +118,7 @@ defmodule RiddlerAdmin.Repo.Migrations.Genesis do
       add :id, :text, primary_key: true
       timestamps()
       add :flag_id, references(:flags, on_delete: :delete_all), null: false
-      add :sequence, :integer, null: false
+      add :rank, :integer, null: false
 
       add :name, :text, null: false
       add :key, :text, null: false
@@ -128,7 +128,7 @@ defmodule RiddlerAdmin.Repo.Migrations.Genesis do
     end
 
     create index(:flag_segments, [:flag_id])
-    create unique_index(:flag_segments, [:flag_id, :sequence])
+    create unique_index(:flag_segments, [:flag_id, :rank])
     create unique_index(:flag_segments, [:flag_id, :key])
 
     create table(:agents) do
