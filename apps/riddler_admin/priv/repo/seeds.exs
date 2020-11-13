@@ -102,11 +102,30 @@ _disabled =
     rank: 2
   })
 
-# _flag =
-#   Repo.insert!(%Flags.Flag{
-#     name: "Of Age",
-#     key: "of_age",
-#     workspace_id: workspace.id,
-#     include_source: "age > 18",
-#     include_instructions: [["load", "age"], ["lit", 18], ["compare", "GT"]]
-#   })
+beers_flag =
+  Repo.insert!(%Flags.Flag{
+    name: "Beers",
+    key: "beers",
+    type: "Segment",
+    workspace_id: workspace.id,
+    include_source: "age > 18",
+    include_instructions: [["load", "age"], ["lit", 18], ["compare", "GT"]]
+  })
+
+_enabled =
+  Repo.insert!(%Flags.FlagSegment{
+    name: "Enabled",
+    key: "enabled",
+    flag_id: beers_flag.id,
+    rank: 1,
+    condition_source: "is_beta",
+    condition_instructions: [["load", "is_beta"], ["to_bool"]]
+  })
+
+_disabled =
+  Repo.insert!(%Flags.FlagSegment{
+    name: "Disabled",
+    key: "disabled",
+    flag_id: beers_flag.id,
+    rank: 2
+  })
