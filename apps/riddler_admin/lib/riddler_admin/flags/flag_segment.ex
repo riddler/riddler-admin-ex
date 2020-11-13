@@ -1,43 +1,40 @@
-defmodule RiddlerAdmin.Flags.Flag do
+defmodule RiddlerAdmin.Flags.FlagSegment do
   use RiddlerAdmin.Schema
 
-  alias RiddlerAdmin.Flags.FlagSegment
-  alias RiddlerAdmin.Workspaces.Workspace
+  alias RiddlerAdmin.Flags.Flag
 
-  @id_opts [prefix: "fl", rand_size: 3]
+  @id_opts [prefix: "flsg", rand_size: 3]
 
-  @derive {Jason.Encoder,
-           only: [:id, :name, :key, :include_source, :include_instructions, :segments]}
-  schema "flags" do
+  @derive {Jason.Encoder, only: [:id, :name, :key, :condition_source, :condition_instructions]}
+  schema "flag_segments" do
     field :id, Ecto.UXID, @id_opts ++ [primary_key: true, autogenerate: true]
+    field :rank, :integer
 
     field :name, :string
     field :key, :string
-    field :type, :string
 
-    field :include_source, :string
-    field :include_instructions, Ecto.PredicatorInstructions
+    field :condition_source, :string
+    field :condition_instructions, Ecto.PredicatorInstructions
 
-    belongs_to :workspace, Workspace
-    has_many :segments, FlagSegment, references: :id
+    belongs_to :flag, Flag
 
     timestamps()
   end
 
   def id_opts(), do: @id_opts
 
-  def create_changeset(agent, attrs, workspace_id) do
+  def create_changeset(agent, attrs, flag_id) do
     agent
     |> changeset(attrs)
     |> put_change(:type, "Segment")
-    |> put_change(:workspace_id, workspace_id)
+    |> put_change(:flag_id, flag_id)
     |> validate_required([:type])
   end
 
   @doc false
-  def changeset(flag, attrs) do
-    flag
-    |> cast(attrs, [:name, :key, :include_source])
+  def changeset(flag_segment, attrs) do
+    flag_segment
+    |> cast(attrs, [:name, :key, :condition_source])
     |> put_key_change()
     |> validate_required([:name, :key])
     |> validate_format(:key, ~r/^[a-z][a-z0-9_]+$/)
@@ -45,7 +42,7 @@ defmodule RiddlerAdmin.Flags.Flag do
   end
 
   defp compile(changeset) do
-    case get_change(changeset, :include_source) do
+    case get_change(changeset, :condition_source) do
       nil -> changeset
       source -> compile_instructions(changeset, source)
     end
@@ -56,7 +53,7 @@ defmodule RiddlerAdmin.Flags.Flag do
   defp compile_instructions(changeset, source) when is_binary(source),
     do:
       changeset
-      |> put_change(:include_instructions, Predicator.compile!(source))
+      |> put_change(:condition_instructions, Predicator.compile!(source))
 
   defp put_key_change(%{data: %{key: nil}, changes: %{name: name}} = changeset)
        when is_binary(name) do

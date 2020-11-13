@@ -76,12 +76,37 @@ _condition =
     instructions: [["lit", true]]
   })
 
-_flag =
+feature_flag =
   Repo.insert!(%Flags.Flag{
-    name: "Of Age",
-    key: "of_age",
-    type: "Variant",
-    workspace_id: workspace.id,
-    include_source: "age > 18",
-    include_instructions: [["load", "age"], ["lit", 18], ["compare", "GT"]]
+    name: "New Feature",
+    key: "new_feature",
+    type: "Segment",
+    workspace_id: workspace.id
   })
+
+_enabled =
+  Repo.insert!(%Flags.FlagSegment{
+    name: "Enabled",
+    key: "enabled",
+    flag_id: feature_flag.id,
+    rank: 1,
+    condition_source: "is_beta",
+    condition_instructions: [["load", "is_beta"], ["to_bool"]]
+  })
+
+_disabled =
+  Repo.insert!(%Flags.FlagSegment{
+    name: "Disabled",
+    key: "disabled",
+    flag_id: feature_flag.id,
+    rank: 2
+  })
+
+# _flag =
+#   Repo.insert!(%Flags.Flag{
+#     name: "Of Age",
+#     key: "of_age",
+#     workspace_id: workspace.id,
+#     include_source: "age > 18",
+#     include_instructions: [["load", "age"], ["lit", 18], ["compare", "GT"]]
+#   })
