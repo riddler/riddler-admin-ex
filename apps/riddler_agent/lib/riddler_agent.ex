@@ -52,6 +52,9 @@ defmodule RiddlerAgent do
     _ -> false
   end
 
+  def store_definition("", environment_id), do: :ok
+  def store_definition(nil, environment_id), do: :ok
+
   def store_definition(yaml, environment_id) do
     map = YamlElixir.read_from_string!(yaml, atoms: true)
 
