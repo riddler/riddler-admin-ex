@@ -3,6 +3,7 @@
 <table>
   <thead>
     <tr>
+      <th>Name</th>
       <th>Key</th>
       <th>Type</th>
 
@@ -12,6 +13,7 @@
   <tbody>
 <%= for flag <- @flags do %>
     <tr>
+      <td><%= flag.name %></td>
       <td><%= flag.key %></td>
       <td><%= flag.type %></td>
 

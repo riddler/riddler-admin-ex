@@ -4,7 +4,7 @@ defmodule RiddlerAgent.Messaging.Consumers.DefinitionConsumer do
   def handle_message(body, %{attempts: _attempts, id: _message_id, timestamp: _timestamp}) do
     Logger.info("[AGT] Received Definition")
 
-    with %{"environment_id" => environment_id, "yaml" => yaml} = json <- Jason.decode!(body) do
+    with %{"environment_id" => environment_id, "yaml" => yaml} <- Jason.decode!(body) do
       RiddlerAgent.store_definition(yaml, environment_id)
     end
   end
