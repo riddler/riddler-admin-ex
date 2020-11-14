@@ -1,4 +1,4 @@
-defmodule RiddlerAdmin.Infra.Messaging.NSQPubSub do
+defmodule Messaging.Infra.NSQPubSub do
   use GenServer
 
   alias NSQ.Config, as: NSQConfig

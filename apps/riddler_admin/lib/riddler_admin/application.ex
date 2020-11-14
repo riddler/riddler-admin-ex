@@ -9,8 +9,6 @@ defmodule RiddlerAdmin.Application do
     children = [
       # Start the Ecto repository
       RiddlerAdmin.Repo,
-      # Start the Messaging system
-      RiddlerAdmin.Messaging.Supervisor,
       # Start the PubSub system
       {Phoenix.PubSub, adapter: Phoenix.PubSub.PG2, name: RiddlerAdmin.PubSub}
       # Start a worker by calling: RiddlerAdmin.Worker.start_link(arg)

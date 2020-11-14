@@ -1,27 +1,21 @@
-defmodule RiddlerAgent.MixProject do
+defmodule Messaging.MixProject do
   use Mix.Project
 
-  @name "RiddlerAgent"
-  @app :riddler_agent
-  @description "Agent application for running Riddler"
+  @name "Messaging"
+  @app :messaging
+  @description "Messaging for Riddler apps"
   @version "0.1.0"
 
   @deps [
-    # Umbrella
-    {:messaging, in_umbrella: true},
-
     # Required
     {:confex, "~> 3.4"},
-    {:jason, "~> 1.0"},
-    {:predicator, "~> 0.9"},
-    {:tesla, "~> 1.3"},
-    {:uxid, "~> 0.0"},
-    {:yaml_elixir, "~> 2.5"}
+    {:elixir_nsq, "~> 1.1"},
+    {:jason, "~> 1.0"}
   ]
 
   def application do
     [
-      mod: {RiddlerAgent.Application, []},
+      mod: {Messaging.Application, []},
       extra_applications: [:logger]
     ]
   end
@@ -49,7 +43,7 @@ defmodule RiddlerAgent.MixProject do
 
   defp aliases do
     [
-      setup: ["deps.get", "deps.compile"]
+      setup: ["deps.get"]
     ]
   end
 

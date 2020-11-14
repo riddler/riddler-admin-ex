@@ -1,6 +1,5 @@
 defmodule RiddlerAdmin.PublishRequests.UseCases.PublishDefinition do
-  alias RiddlerAdmin.Event
-  alias RiddlerAdmin.Messaging
+  alias Messaging.Event
 
   alias RiddlerAdmin.Definitions
   alias RiddlerAdmin.Definitions.Definition
