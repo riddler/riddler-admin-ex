@@ -25,6 +25,8 @@ alias RiddlerAdmin.{
 
 account = Repo.insert!(%Accounts.Account{name: "Default", owner_identity_id: identity.id})
 
+IO.puts("+++ Seeding Workspaces")
+
 workspace =
   Repo.insert!(%Workspaces.Workspace{
     id: "wsp_SEED",
@@ -33,6 +35,8 @@ workspace =
     owner_identity_id: identity.id,
     account_id: account.id
   })
+
+IO.puts("+++ Seeding Environments and Agents")
 
 prod_env =
   Repo.insert!(%Environments.Environment{
@@ -68,6 +72,8 @@ _test_agent =
     environment_id: test_env.id
   })
 
+IO.puts("+++ Seeding Conditions")
+
 _condition =
   Repo.insert!(%Conditions.Condition{
     name: "true",
@@ -77,16 +83,18 @@ _condition =
     instructions: [["lit", true]]
   })
 
+IO.puts("+++ Seeding Flags")
+
 feature_flag =
   Repo.insert!(%Flags.Flag{
     name: "New Feature",
     key: "new_feature",
-    type: "Segment",
+    type: "Variant",
     workspace_id: workspace.id
   })
 
 _enabled =
-  Repo.insert!(%Flags.FlagSegment{
+  Repo.insert!(%Flags.FlagVariant{
     name: "Enabled",
     key: "enabled",
     flag_id: feature_flag.id,
@@ -96,7 +104,7 @@ _enabled =
   })
 
 _disabled =
-  Repo.insert!(%Flags.FlagSegment{
+  Repo.insert!(%Flags.FlagVariant{
     name: "Disabled",
     key: "disabled",
     flag_id: feature_flag.id,
@@ -107,14 +115,14 @@ beers_flag =
   Repo.insert!(%Flags.Flag{
     name: "Beers",
     key: "beers",
-    type: "Segment",
+    type: "Variant",
     workspace_id: workspace.id,
     include_source: "age > 18",
     include_instructions: [["load", "age"], ["lit", 18], ["compare", "GT"]]
   })
 
 _enabled =
-  Repo.insert!(%Flags.FlagSegment{
+  Repo.insert!(%Flags.FlagVariant{
     name: "Enabled",
     key: "enabled",
     flag_id: beers_flag.id,
@@ -124,39 +132,40 @@ _enabled =
   })
 
 _disabled =
-  Repo.insert!(%Flags.FlagSegment{
+  Repo.insert!(%Flags.FlagVariant{
     name: "Disabled",
     key: "disabled",
     flag_id: beers_flag.id,
     rank: 2
   })
 
-rollout_flag =
-  Repo.insert!(%Flags.Flag{
-    name: "Rollout",
-    key: "rollout",
-    type: "Percentage",
-    workspace_id: workspace.id,
-    unit: "id"
-  })
+# rollout_flag =
+#   Repo.insert!(%Flags.Flag{
+#     name: "Rollout",
+#     key: "rollout",
+#     type: "Percentage",
+#     workspace_id: workspace.id,
+#   })
 
-_enabled =
-  Repo.insert!(%Flags.FlagSegment{
-    name: "Enabled",
-    key: "enabled",
-    flag_id: feature_flag.id,
-    rank: 1,
-    percentage: 0.1
-  })
+# _enabled =
+#   Repo.insert!(%Flags.FlagVariant{
+#     name: "Enabled",
+#     key: "enabled",
+#     flag_id: feature_flag.id,
+#     rank: 1,
+#     percentage: 0.1
+#   })
 
-_disabled =
-  Repo.insert!(%Flags.FlagSegment{
-    name: "Disabled",
-    key: "disabled",
-    flag_id: feature_flag.id,
-    rank: 2,
-    percentage: 0.9
-  })
+# _disabled =
+#   Repo.insert!(%Flags.FlagVariant{
+#     name: "Disabled",
+#     key: "disabled",
+#     flag_id: feature_flag.id,
+#     rank: 2,
+#     percentage: 0.9
+#   })
+
+IO.puts("+++ Creating Definition")
 
 {:ok, _definition} =
   Definitions.create_definition(

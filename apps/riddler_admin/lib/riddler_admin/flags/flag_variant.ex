@@ -1,12 +1,12 @@
-defmodule RiddlerAdmin.Flags.FlagSegment do
+defmodule RiddlerAdmin.Flags.FlagVariant do
   use RiddlerAdmin.Schema
 
   alias RiddlerAdmin.Flags.Flag
 
-  @id_opts [prefix: "flsg", rand_size: 3]
+  @id_opts [prefix: "flva", rand_size: 3]
 
   @derive {Jason.Encoder, only: [:id, :name, :key, :condition_source, :condition_instructions]}
-  schema "flag_segments" do
+  schema "flag_variants" do
     field :id, Ecto.UXID, @id_opts ++ [primary_key: true, autogenerate: true]
     field :rank, :integer
 
@@ -26,14 +26,14 @@ defmodule RiddlerAdmin.Flags.FlagSegment do
   def create_changeset(agent, attrs, flag_id) do
     agent
     |> changeset(attrs)
-    |> put_change(:type, "Segment")
+    |> put_change(:type, "Variant")
     |> put_change(:flag_id, flag_id)
     |> validate_required([:type])
   end
 
   @doc false
-  def changeset(flag_segment, attrs) do
-    flag_segment
+  def changeset(flag_variant, attrs) do
+    flag_variant
     |> cast(attrs, [:name, :key, :condition_source])
     |> put_key_change()
     |> validate_required([:name, :key])
