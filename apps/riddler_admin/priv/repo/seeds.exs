@@ -17,7 +17,8 @@ alias RiddlerAdmin.{
   Environments,
   Conditions,
   Flags,
-  Agents
+  Agents,
+  Definitions
 }
 
 {:ok, identity} = Identities.register_identity(%{email: "foo@bar.com", password: "Asdfjkl;1234"})
@@ -129,3 +130,38 @@ _disabled =
     flag_id: beers_flag.id,
     rank: 2
   })
+
+rollout_flag =
+  Repo.insert!(%Flags.Flag{
+    name: "Rollout",
+    key: "rollout",
+    type: "Percentage",
+    workspace_id: workspace.id,
+    unit: "id"
+  })
+
+_enabled =
+  Repo.insert!(%Flags.FlagSegment{
+    name: "Enabled",
+    key: "enabled",
+    flag_id: feature_flag.id,
+    rank: 1,
+    percentage: 0.1
+  })
+
+_disabled =
+  Repo.insert!(%Flags.FlagSegment{
+    name: "Disabled",
+    key: "disabled",
+    flag_id: feature_flag.id,
+    rank: 2,
+    percentage: 0.9
+  })
+
+{:ok, _definition} =
+  Definitions.create_definition(
+    %{
+      label: "Seed definition"
+    },
+    workspace.id
+  )
