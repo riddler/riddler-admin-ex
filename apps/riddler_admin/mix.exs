@@ -7,12 +7,15 @@ defmodule RiddlerAdmin.MixProject do
   @version "0.1.0"
 
   @deps [
+    # Umbrella
+    {:messaging, in_umbrella: true},
+    {:riddler_agent, in_umbrella: true},
+
     # Required
     {:argon2_elixir, "~> 2.0"},
     {:confex, "~> 3.4"},
     {:ecto_psql_extras, "~> 0.2"},
     {:ecto_sql, "~> 3.4"},
-    {:elixir_nsq, "~> 1.1"},
     {:jason, "~> 1.0"},
     {:phoenix_pubsub, "~> 2.0"},
     {:postgrex, ">= 0.0.0"},

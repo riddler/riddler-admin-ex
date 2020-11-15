@@ -1,8 +1,12 @@
-defmodule RiddlerAdmin.Messaging do
-  alias RiddlerAdmin.Event
-  alias RiddlerAdmin.Command
+defmodule Messaging do
+  @moduledoc """
+  Messaging for publishing and subscribing to topics.
+  """
 
-  @default_pub_sub_adapter RiddlerAdmin.Infra.Messaging.NSQPubSub
+  alias Messaging.Event
+  alias Messaging.Command
+
+  @default_pub_sub_adapter Messaging.Infra.NSQPubSub
 
   def publish(topic, payload) when is_binary(topic) do
     pub_sub_adapter().publish(topic, payload)

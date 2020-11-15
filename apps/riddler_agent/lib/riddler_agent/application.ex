@@ -5,8 +5,7 @@ defmodule RiddlerAgent.Application do
 
   use Application
 
-  alias RiddlerAdmin.Messaging
-  alias RiddlerAgent.Messaging.Consumers.DefinitionConsumer
+  alias RiddlerAgent.Consumers.DefinitionConsumer
 
   @dev_base_url "http://lh:16180"
 

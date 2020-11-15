@@ -1,4 +1,4 @@
-defmodule RiddlerAdmin.Event do
+defmodule Messaging.Event do
   defstruct [:topic_name, :payload]
 
   def new(payload, topic_name) when is_struct(payload) and is_binary(topic_name) do
