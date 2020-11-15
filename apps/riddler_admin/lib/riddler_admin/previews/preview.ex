@@ -1,10 +1,16 @@
 defmodule RiddlerAdmin.Previews.Preview do
-  use Ecto.Schema
-  import Ecto.Changeset
+  use RiddlerAdmin.Schema
+
+  @id_opts [prefix: "prectx", rand_size: 2]
 
   schema "previews" do
-    field :workspace_id, :id
-    field :definition_id, :id
+    field :id, Ecto.UXID, @id_opts ++ [primary_key: true, autogenerate: true]
+
+    field :name, :string
+    field :context_overrides, :map
+
+    belongs_to :workspace, RiddlerAdmin.Workspaces.Workspace
+    belongs_to :definition, RiddlerAdmin.Definitions.Definition
 
     timestamps()
   end
@@ -12,7 +18,7 @@ defmodule RiddlerAdmin.Previews.Preview do
   @doc false
   def changeset(preview, attrs) do
     preview
-    |> cast(attrs, [])
-    |> validate_required([])
+    |> cast(attrs, [:name, :context_overrides])
+    |> validate_required([:name])
   end
 end

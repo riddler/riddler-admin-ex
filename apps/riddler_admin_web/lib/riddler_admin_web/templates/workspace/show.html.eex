@@ -27,6 +27,10 @@
     <%= link "Publish Requests", to: Routes.workspace_publish_request_path(@conn, :index, @workspace) %>
   </li>
 
+  <li>
+    <%= link "Preview Contexts", to: Routes.workspace_preview_context_path(@conn, :index, @workspace) %>
+  </li>
+
 </ul>
 
 <span><%= link "Edit", to: Routes.workspace_path(@conn, :edit, @workspace) %></span>
