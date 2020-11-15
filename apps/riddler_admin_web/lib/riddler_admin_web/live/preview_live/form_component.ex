@@ -14,10 +14,17 @@ defmodule RiddlerAdminWeb.PreviewLive.FormComponent do
   end
 
   @impl true
-  def handle_event("validate", %{"preview" => preview_params}, socket) do
+  def handle_event(
+        "validate",
+        %{"preview" => %{"context_overrides" => context_overrides} = preview_params},
+        socket
+      ) do
     changeset =
       socket.assigns.preview
-      |> Previews.change_preview(preview_params)
+      |> Previews.change_preview(%{
+        preview_params
+        | "context_overrides" => YamlElixir.read_from_string!(context_overrides)
+      })
       |> Map.put(:action, :validate)
 
     {:noreply, assign(socket, :changeset, changeset)}
@@ -27,8 +34,11 @@ defmodule RiddlerAdminWeb.PreviewLive.FormComponent do
     save_preview(socket, socket.assigns.action, preview_params)
   end
 
-  defp save_preview(socket, :edit, preview_params) do
-    case Previews.update_preview(socket.assigns.preview, preview_params) do
+  defp save_preview(socket, :edit, %{"context_overrides" => context_overrides} = preview_params) do
+    case Previews.update_preview(socket.assigns.preview, %{
+           preview_params
+           | "context_overrides" => YamlElixir.read_from_string!(context_overrides)
+         }) do
       {:ok, _preview} ->
         {:noreply,
          socket
@@ -40,8 +50,18 @@ defmodule RiddlerAdminWeb.PreviewLive.FormComponent do
     end
   end
 
-  defp save_preview(socket, :new, preview_params) do
-    case Previews.create_preview(preview_params) do
+  defp save_preview(
+         %{assigns: %{workspace_id: workspace_id}} = socket,
+         :new,
+         %{"context_overrides" => context_overrides} = preview_params
+       ) do
+    case Previews.create_preview(
+           %{
+             preview_params
+             | "context_overrides" => YamlElixir.read_from_string!(context_overrides)
+           },
+           workspace_id
+         ) do
       {:ok, _preview} ->
         {:noreply,
          socket

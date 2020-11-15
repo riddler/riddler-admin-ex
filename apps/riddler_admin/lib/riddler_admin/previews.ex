@@ -56,9 +56,9 @@ defmodule RiddlerAdmin.Previews do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_preview(attrs \\ %{}) do
+  def create_preview(attrs, workspace_id) do
     %Preview{}
-    |> Preview.changeset(attrs)
+    |> Preview.create_changeset(attrs, workspace_id)
     |> Repo.insert()
   end
 

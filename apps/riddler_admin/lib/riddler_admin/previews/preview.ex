@@ -15,6 +15,12 @@ defmodule RiddlerAdmin.Previews.Preview do
     timestamps()
   end
 
+  def create_changeset(preview, attrs, workspace_id) do
+    preview
+    |> changeset(attrs)
+    |> put_change(:workspace_id, workspace_id)
+  end
+
   @doc false
   def changeset(preview, attrs) do
     preview
