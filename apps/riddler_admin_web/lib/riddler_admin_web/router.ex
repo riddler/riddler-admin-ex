@@ -66,6 +66,13 @@ defmodule RiddlerAdminWeb.Router do
 
       resources "/flags", FlagController
 
+      live "/previews", PreviewLive.Index, :index
+      live "/previews/new", PreviewLive.Index, :new
+      live "/previews/:id/edit", PreviewLive.Index, :edit
+
+      live "/previews/:id", PreviewLive.Show, :show
+      live "/previews/:id/show/edit", PreviewLive.Show, :edit
+
       resources "/publish_requests", PublishRequestController do
         get "/approve", ApprovalController, :publish_request
         get "/publish", PublishController, :publish_request

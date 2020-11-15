@@ -1,0 +1,17 @@
+<h1>Show Preview</h1>
+
+<%= if @live_action in [:edit] do %>
+  <%= live_modal @socket, RiddlerAdminWeb.PreviewLive.FormComponent,
+    id: @preview.id,
+    title: @page_title,
+    action: @live_action,
+    preview: @preview,
+    return_to: Routes.preview_show_path(@socket, :show, @preview) %>
+<% end %>
+
+<ul>
+
+</ul>
+
+<span><%= live_patch "Edit", to: Routes.preview_show_path(@socket, :edit, @preview), class: "button" %></span>
+<span><%= live_redirect "Back", to: Routes.preview_index_path(@socket, :index) %></span>
