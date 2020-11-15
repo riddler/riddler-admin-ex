@@ -5,7 +5,7 @@ defmodule RiddlerAgent.Config do
 
   alias RiddlerAgent.Remote
 
-  @initial_delay_ms 500
+  @initial_delay_ms 1000
 
   defstruct [
     :api_key,
