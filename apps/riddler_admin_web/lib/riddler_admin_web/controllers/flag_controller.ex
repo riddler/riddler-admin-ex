@@ -72,7 +72,7 @@ defmodule RiddlerAdminWeb.FlagController do
     end
   end
 
-  def delete(conn, %{"id" => id, "workdspace_id" => workspace_id}) do
+  def delete(conn, %{"id" => id, "workspace_id" => workspace_id}) do
     flag = Flags.get_flag!(id)
     {:ok, _flag} = Flags.delete_flag(flag)
 
