@@ -146,5 +146,29 @@ defmodule RiddlerAdmin.Repo.Migrations.Genesis do
     create unique_index(:agents, [:environment_id, :key])
     create unique_index(:agents, [:api_key])
     create unique_index(:agents, [:api_secret])
+
+    create table(:preview_contexts) do
+      add :id, :text, primary_key: true
+      timestamps()
+      add :workspace_id, references(:workspaces, on_delete: :delete_all), null: false
+
+      add :name, :text, null: false
+      add :data, :jsonb, null: false
+    end
+
+    create index(:preview_contexts, [:workspace_id])
+
+    create table(:previews) do
+      add :id, :text, primary_key: true
+      timestamps()
+      add :workspace_id, references(:workspaces, on_delete: :delete_all), null: false
+      add :definition_id, references(:definitions, on_delete: :delete_all)
+      add :preview_context_id, references(:preview_contexts, on_delete: :nothing)
+
+      add :name, :text, null: false
+      add :context_overrides, :jsonb
+    end
+
+    create index(:previews, [:workspace_id])
   end
 end

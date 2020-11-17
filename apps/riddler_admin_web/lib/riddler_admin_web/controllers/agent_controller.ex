@@ -87,7 +87,16 @@ defmodule RiddlerAdminWeb.AgentController do
       {:ok, agent} ->
         conn
         |> put_flash(:info, "Agent updated successfully.")
-        |> redirect(to: Routes.workspace_environment_agent_path(conn, :show, workspace_id, environment_id, agent))
+        |> redirect(
+          to:
+            Routes.workspace_environment_agent_path(
+              conn,
+              :show,
+              workspace_id,
+              environment_id,
+              agent
+            )
+        )
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html",
@@ -99,12 +108,18 @@ defmodule RiddlerAdminWeb.AgentController do
     end
   end
 
-  def delete(conn, %{"id" => id, "workdspace_id" => workspace_id, "environment_id" => environment_id}) do
+  def delete(conn, %{
+        "id" => id,
+        "workspace_id" => workspace_id,
+        "environment_id" => environment_id
+      }) do
     agent = Agents.get_agent!(id)
     {:ok, _agent} = Agents.delete_agent(agent)
 
     conn
     |> put_flash(:info, "Agent deleted successfully.")
-    |> redirect(to: Routes.workspace_environment_agent_path(conn, :index, workspace_id, environment_id))
+    |> redirect(
+      to: Routes.workspace_environment_agent_path(conn, :index, workspace_id, environment_id)
+    )
   end
 end

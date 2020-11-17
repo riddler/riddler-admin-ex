@@ -76,7 +76,7 @@ defmodule RiddlerAdminWeb.EnvironmentController do
     end
   end
 
-  def delete(conn, %{"id" => id, "workdspace_id" => workspace_id}) do
+  def delete(conn, %{"id" => id, "workspace_id" => workspace_id}) do
     environment = Environments.get_environment!(id)
     {:ok, _environment} = Environments.delete_environment(environment)
 

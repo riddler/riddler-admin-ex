@@ -18,14 +18,17 @@ alias RiddlerAdmin.{
   Conditions,
   Flags,
   Agents,
-  Definitions
+  Definitions,
+  Previews
 }
+
+require Logger
 
 {:ok, identity} = Identities.register_identity(%{email: "foo@bar.com", password: "Asdfjkl;1234"})
 
 account = Repo.insert!(%Accounts.Account{name: "Default", owner_identity_id: identity.id})
 
-IO.puts("+++ Seeding Workspaces")
+Logger.info("+++ Seeding Workspaces")
 
 workspace =
   Repo.insert!(%Workspaces.Workspace{
@@ -36,7 +39,7 @@ workspace =
     account_id: account.id
   })
 
-IO.puts("+++ Seeding Environments and Agents")
+Logger.info("+++ Seeding Environments and Agents")
 
 prod_env =
   Repo.insert!(%Environments.Environment{
@@ -72,7 +75,7 @@ _test_agent =
     environment_id: test_env.id
   })
 
-IO.puts("+++ Seeding Conditions")
+Logger.info("+++ Seeding Conditions")
 
 _condition =
   Repo.insert!(%Conditions.Condition{
@@ -83,7 +86,7 @@ _condition =
     instructions: [["lit", true]]
   })
 
-IO.puts("+++ Seeding Flags")
+Logger.info("+++ Seeding Flags")
 
 feature_flag =
   Repo.insert!(%Flags.Flag{
@@ -165,7 +168,29 @@ _disabled =
 #     percentage: 0.9
 #   })
 
-IO.puts("+++ Creating Definition")
+Logger.info("+++ Creating Previews (and PreviewContexts)")
+
+of_age_context =
+  Repo.insert!(%Previews.PreviewContext{
+    workspace_id: workspace.id,
+    name: "Of Age",
+    data: %{age: 21}
+  })
+
+_beta_context =
+  Repo.insert!(%Previews.PreviewContext{
+    workspace_id: workspace.id,
+    name: "Beta",
+    data: %{is_beta: true}
+  })
+
+_preview =
+  Repo.insert!(%Previews.Preview{
+    workspace_id: workspace.id,
+    name: "Default Preview"
+  })
+
+Logger.info("+++ Creating Definition")
 
 {:ok, _definition} =
   Definitions.create_definition(

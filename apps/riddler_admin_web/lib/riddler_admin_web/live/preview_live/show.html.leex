@@ -1,0 +1,28 @@
+<h1>Show Preview</h1>
+
+<%= if @live_action in [:edit] do %>
+  <%= live_modal @socket, RiddlerAdminWeb.PreviewLive.FormComponent,
+    id: @preview.id,
+    title: @page_title,
+    action: @live_action,
+    preview: @preview,
+    workspace_id: @workspace_id,
+    return_to: Routes.workspace_preview_show_path(@socket, :show, @workspace_id, @preview) %>
+<% end %>
+
+<ul>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @preview.name %>
+  </li>
+
+  <li>
+    <strong>Context Overrides:</strong>
+    <pre><%= Ymlr.document!(@preview.context_overrides) %></pre>
+  </li>
+
+</ul>
+
+<span><%= live_patch "Edit", to: Routes.workspace_preview_show_path(@socket, :edit, @workspace_id, @preview), class: "button" %></span>
+<span><%= live_redirect "Back", to: Routes.workspace_preview_index_path(@socket, :index, @workspace_id) %></span>

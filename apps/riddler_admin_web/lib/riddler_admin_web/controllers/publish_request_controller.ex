@@ -103,7 +103,7 @@ defmodule RiddlerAdminWeb.PublishRequestController do
     end
   end
 
-  def delete(conn, %{"id" => id, "workdspace_id" => workspace_id}) do
+  def delete(conn, %{"id" => id, "workspace_id" => workspace_id}) do
     publish_request = PublishRequests.get_publish_request!(id)
     {:ok, _publish_request} = PublishRequests.delete_publish_request(publish_request)
 
