@@ -5,10 +5,11 @@ defmodule Messaging.Application do
 
   use Application
 
+  alias Messaging.Infra.NSQ.Server, as: NSQServer
+
   require Logger
 
-  alias Messaging.Infra.NSQEchoHandler
-  alias Messaging.Infra.NSQPubSub
+  @default_adapter :nsq
 
   def start(_type, _args) do
     Supervisor.start_link(children(), strategy: :one_for_one, name: Messaging.Supervisor)
@@ -16,20 +17,17 @@ defmodule Messaging.Application do
 
   # === Private Helpers
 
-  defp nsq_enabled?(), do: Confex.get_env(:messaging, :nsq_enabled?, true)
-
   defp children() do
-    if nsq_enabled?() do
-      [
-        {NSQPubSub,
-         [
-           {"conditions__command", "processor", NSQEchoHandler}
-         ]}
-      ]
-    else
-      Logger.info("Not starting #{NSQPubSub} due to NSQ not being enabled.")
-
-      []
+    case adapter() do
+      :nsq ->
+        [NSQServer]
+      other ->
+        Logger.info("Not starting #{NSQServer}. Messaging adapter: #{other}")
+        []
     end
+  end
+
+  defp adapter() do
+    Confex.get_env(:messaging, :adapter, @default_adapter)
   end
 end

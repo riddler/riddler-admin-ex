@@ -1,4 +1,6 @@
-defmodule RiddlerAgent.Consumers.DefinitionConsumer do
+defmodule RiddlerAgent.Infra.Consumers.DefinitionConsumer do
+  use Messaging.Consumer, topic: "definitions", group: "agent-persist"
+
   require Logger
 
   def handle_message(body, %{attempts: _attempts, id: _message_id, timestamp: _timestamp}) do
