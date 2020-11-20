@@ -5,7 +5,7 @@ defmodule RiddlerAgent.Application do
 
   use Application
 
-  alias RiddlerAgent.Consumers.DefinitionConsumer
+  alias RiddlerAgent.Infra.Consumers.DefinitionConsumer
 
   @dev_base_url "http://lh:16180"
 
@@ -19,13 +19,9 @@ defmodule RiddlerAgent.Application do
       {RiddlerAgent.Config,
        %{api_key: api_key(), api_secret: api_secret(), base_url: base_url()}},
       # Start up the storage for Definitions
-      RiddlerAgent.MemoryStore
+      RiddlerAgent.MemoryStore,
+      DefinitionConsumer
     ]
-
-    # This is bad
-    # (not storing process here - Messaging and NSQPubSub need the attention)
-    # help please!
-    Messaging.subscribe("definitions", "riddler_agent", DefinitionConsumer)
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options

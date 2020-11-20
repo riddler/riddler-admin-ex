@@ -10,6 +10,8 @@
 use Mix.Config
 
 # Configure Mix tasks and generators
+config :messaging,
+  adapter: {:system, :atom, "MESSAGING_ADAPTER", :nsq}
 
 config :riddler_admin,
   ecto_log_level: {:system, :atom, "ECTO_LOG_LEVEL", :info},

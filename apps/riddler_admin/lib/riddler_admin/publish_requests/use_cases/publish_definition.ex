@@ -76,6 +76,6 @@ defmodule RiddlerAdmin.PublishRequests.UseCases.PublishDefinition do
     %{use_case | yaml: definition.yaml}
     |> Map.drop([:label])
     |> Event.new("definitions")
-    |> Messaging.record()
+    |> Messaging.publish()
   end
 end
