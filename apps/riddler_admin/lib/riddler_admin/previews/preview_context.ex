@@ -4,7 +4,7 @@ defmodule RiddlerAdmin.Previews.PreviewContext do
   @id_opts [prefix: "prectx", rand_size: 2]
 
   schema "preview_contexts" do
-    field :id, Ecto.UXID, @id_opts ++ [primary_key: true, autogenerate: true]
+    field :id, UXID, @id_opts ++ [primary_key: true, autogenerate: true]
 
     field :name, :string
     field :data, :map

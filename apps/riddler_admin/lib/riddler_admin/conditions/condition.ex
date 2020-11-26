@@ -7,8 +7,7 @@ defmodule RiddlerAdmin.Conditions.Condition do
 
   @derive {Jason.Encoder, only: [:id, :key, :source, :instructions]}
   schema "conditions" do
-    field :id, Ecto.UXID, @id_opts ++ [primary_key: true, autogenerate: true]
-    # field :workspace_id, Ecto.UXID
+    field :id, UXID, @id_opts ++ [primary_key: true, autogenerate: true]
     belongs_to :workspace, Workspace
 
     field :name, :string

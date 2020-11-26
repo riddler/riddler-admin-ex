@@ -11,7 +11,7 @@ defmodule RiddlerAdmin.Definitions.Definition do
 
   @derive {Jason.Encoder, only: [:id, :schema_version, :version, :workspace_id]}
   schema "definitions" do
-    field :id, Ecto.UXID, @id_opts ++ [primary_key: true, autogenerate: true]
+    field :id, UXID, @id_opts ++ [primary_key: true, autogenerate: true]
 
     field :schema_version, :integer, null: false
     field :version, :integer, null: false

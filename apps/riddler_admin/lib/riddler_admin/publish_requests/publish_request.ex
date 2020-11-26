@@ -10,7 +10,7 @@ defmodule RiddlerAdmin.PublishRequests.PublishRequest do
 
   @derive {Jason.Encoder, only: [:id, :data, :workspace_id, :subject]}
   schema "publish_requests" do
-    field :id, Ecto.UXID, @id_opts ++ [primary_key: true, autogenerate: true]
+    field :id, UXID, @id_opts ++ [primary_key: true, autogenerate: true]
 
     field :status, :string, null: false, default: "Pending Approval"
     field :subject, :string, null: false

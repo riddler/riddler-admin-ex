@@ -9,7 +9,7 @@ defmodule RiddlerAdmin.Flags.Flag do
   @derive {Jason.Encoder,
            only: [:id, :name, :key, :include_source, :include_instructions, :variants]}
   schema "flags" do
-    field :id, Ecto.UXID, @id_opts ++ [primary_key: true, autogenerate: true]
+    field :id, UXID, @id_opts ++ [primary_key: true, autogenerate: true]
 
     field :name, :string
     field :key, :string
