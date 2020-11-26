@@ -8,7 +8,7 @@ defmodule RiddlerAdmin.Environments.Environment do
 
   @derive {Jason.Encoder, only: [:id, :name, :key]}
   schema "environments" do
-    field :id, Ecto.UXID, @id_opts ++ [primary_key: true, autogenerate: true]
+    field :id, UXID, @id_opts ++ [primary_key: true, autogenerate: true]
 
     field :name, :string
     field :key, :string

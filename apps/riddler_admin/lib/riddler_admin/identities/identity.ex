@@ -3,7 +3,7 @@ defmodule RiddlerAdmin.Identities.Identity do
 
   @derive {Inspect, except: [:password]}
   schema "identities" do
-    field :id, Ecto.UXID, primary_key: true, autogenerate: true, prefix: "idt", rand_size: 3
+    field :id, UXID, primary_key: true, autogenerate: true, prefix: "idt", rand_size: 3
     field :email, :string
     field :password, :string, virtual: true
     field :hashed_password, :string
