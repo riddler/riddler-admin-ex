@@ -4,7 +4,7 @@ defmodule RiddlerAdmin.Agents.Agent do
   @id_opts [prefix: "ag", rand_size: 2]
 
   schema "agents" do
-    field :id, Ecto.UXID, @id_opts ++ [primary_key: true, autogenerate: true]
+    field :id, UXID, @id_opts ++ [primary_key: true, autogenerate: true]
 
     field :name, :string
     field :key, :string

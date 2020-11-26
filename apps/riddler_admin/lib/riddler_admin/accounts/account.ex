@@ -2,9 +2,9 @@ defmodule RiddlerAdmin.Accounts.Account do
   use RiddlerAdmin.Schema
 
   schema "accounts" do
-    field :id, Ecto.UXID, primary_key: true, autogenerate: true, prefix: "acc", rand_size: 2
+    field :id, UXID, primary_key: true, autogenerate: true, prefix: "acc", rand_size: 2
     field :name, :string
-    field :owner_identity_id, Ecto.UXID
+    field :owner_identity_id, UXID
 
     timestamps()
   end

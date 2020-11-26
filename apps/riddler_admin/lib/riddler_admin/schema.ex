@@ -15,7 +15,7 @@ defmodule RiddlerAdmin.Schema do
       import Ecto.Changeset
 
       @primary_key false
-      @foreign_key_type Ecto.UXID
+      @foreign_key_type UXID
 
       @timestamps_opts [type: :utc_datetime_usec]
     end

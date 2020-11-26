@@ -20,7 +20,7 @@ defmodule RiddlerAdmin.MixProject do
     {:phoenix_pubsub, "~> 2.0"},
     {:postgrex, ">= 0.0.0"},
     {:predicator, "~> 0.9"},
-    {:uxid, "~> 0.0"},
+    {:uxid, "~> 0.2"},
     {:ymlr, "~> 1.0"},
 
     # Development
