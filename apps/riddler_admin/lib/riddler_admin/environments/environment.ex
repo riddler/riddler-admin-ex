@@ -4,7 +4,7 @@ defmodule RiddlerAdmin.Environments.Environment do
   alias RiddlerAdmin.Definitions.Definition
   alias RiddlerAdmin.Workspaces.Workspace
 
-  @id_opts [prefix: "env", rand_size: 3]
+  @id_opts [prefix: "env", size: :small]
 
   @derive {Jason.Encoder, only: [:id, :name, :key]}
   schema "environments" do

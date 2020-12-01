@@ -4,7 +4,7 @@ defmodule RiddlerAdmin.Flags.Flag do
   alias RiddlerAdmin.Flags.FlagVariant
   alias RiddlerAdmin.Workspaces.Workspace
 
-  @id_opts [prefix: "fl", rand_size: 3]
+  @id_opts [prefix: "fl", size: :small]
 
   @derive {Jason.Encoder,
            only: [:id, :name, :key, :include_source, :include_instructions, :variants]}

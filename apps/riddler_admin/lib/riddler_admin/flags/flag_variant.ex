@@ -3,7 +3,7 @@ defmodule RiddlerAdmin.Flags.FlagVariant do
 
   alias RiddlerAdmin.Flags.Flag
 
-  @id_opts [prefix: "flva", rand_size: 3]
+  @id_opts [prefix: "flva", size: :small]
 
   @derive {Jason.Encoder, only: [:id, :name, :key, :condition_source, :condition_instructions]}
   schema "flag_variants" do

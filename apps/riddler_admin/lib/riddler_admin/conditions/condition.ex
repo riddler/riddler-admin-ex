@@ -3,7 +3,7 @@ defmodule RiddlerAdmin.Conditions.Condition do
 
   alias RiddlerAdmin.Workspaces.Workspace
 
-  @id_opts [prefix: "cnd", rand_size: 5]
+  @id_opts [prefix: "cnd", size: :small]
 
   @derive {Jason.Encoder, only: [:id, :key, :source, :instructions]}
   schema "conditions" do

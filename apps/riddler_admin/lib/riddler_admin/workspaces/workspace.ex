@@ -6,7 +6,7 @@ defmodule RiddlerAdmin.Workspaces.Workspace do
 
   @derive {Jason.Encoder, only: [:id, :name, :conditions, :flags]}
   schema "workspaces" do
-    field :id, UXID, primary_key: true, autogenerate: true, prefix: "wsp", rand_size: 2
+    field :id, UXID, primary_key: true, autogenerate: true, prefix: "wsp", size: :small
     field :name, :string
     field :key, :string
     field :account_id, UXID
