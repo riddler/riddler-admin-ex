@@ -1,7 +1,7 @@
 defmodule RiddlerAdmin.Agents.Agent do
   use RiddlerAdmin.Schema
 
-  @id_opts [prefix: "ag", rand_size: 2]
+  @id_opts [prefix: "ag", size: :small]
 
   schema "agents" do
     field :id, UXID, @id_opts ++ [primary_key: true, autogenerate: true]
@@ -37,7 +37,7 @@ defmodule RiddlerAdmin.Agents.Agent do
     |> validate_format(:key, ~r/^[a-z][a-z0-9_]+$/)
   end
 
-  defp generate_api_key(), do: UXID.generate!(prefix: "apikey", rand_size: 5)
+  defp generate_api_key(), do: UXID.generate!(prefix: "apikey", size: :medium)
 
   defp generate_api_secret(length \\ 64) do
     random_string =
