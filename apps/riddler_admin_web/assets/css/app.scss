@@ -1,6 +1,10 @@
 /* This file is for your main application css. */
-@import "./phoenix.css";
+// @import "./phoenix.css";
+
+@import "~bootstrap/scss/bootstrap";
 @import "../node_modules/nprogress/nprogress.css";
+
+@import "./bootstrap_dashboard.css";
 
 /* LiveView specific classes for your customizations */
 .phx-no-feedback.invalid-feedback,
