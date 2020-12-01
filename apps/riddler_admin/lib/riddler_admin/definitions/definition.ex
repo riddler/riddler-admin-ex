@@ -7,7 +7,7 @@ defmodule RiddlerAdmin.Definitions.Definition do
 
   @current_schema_version 1
 
-  @id_opts [prefix: "def", rand_size: 2]
+  @id_opts [prefix: "def", size: :small]
 
   @derive {Jason.Encoder, only: [:id, :schema_version, :version, :workspace_id]}
   schema "definitions" do

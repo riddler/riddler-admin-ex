@@ -6,7 +6,7 @@ defmodule RiddlerAdmin.PublishRequests.PublishRequest do
   alias RiddlerAdmin.Identities.Identity
   alias RiddlerAdmin.Workspaces.Workspace
 
-  @id_opts [prefix: "pr", rand_size: 2]
+  @id_opts [prefix: "pr", size: :small]
 
   @derive {Jason.Encoder, only: [:id, :data, :workspace_id, :subject]}
   schema "publish_requests" do

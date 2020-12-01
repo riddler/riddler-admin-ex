@@ -1,7 +1,7 @@
 defmodule RiddlerAdmin.Previews.PreviewContext do
   use RiddlerAdmin.Schema
 
-  @id_opts [prefix: "prectx", rand_size: 2]
+  @id_opts [prefix: "prectx", size: :small]
 
   schema "preview_contexts" do
     field :id, UXID, @id_opts ++ [primary_key: true, autogenerate: true]
