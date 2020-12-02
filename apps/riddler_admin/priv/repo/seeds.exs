@@ -93,8 +93,9 @@ feature_flag =
     name: "New Feature",
     key: "new_feature",
     type: "Feature",
+    workspace_id: workspace.id,
     enabled: true,
-    workspace_id: workspace.id
+    disabled_treatment: "disabled"
   })
 
 _enabled =
@@ -105,14 +106,6 @@ _enabled =
     rank: 1,
     condition_source: "is_beta",
     condition_instructions: [["load", "is_beta"], ["to_bool"]]
-  })
-
-_disabled =
-  Repo.insert!(%Flags.FlagTreatment{
-    name: "Disabled",
-    key: "disabled",
-    flag_id: feature_flag.id,
-    rank: 2
   })
 
 beers_flag =
@@ -123,7 +116,8 @@ beers_flag =
     workspace_id: workspace.id,
     enabled: true,
     include_source: "age > 18",
-    include_instructions: [["load", "age"], ["lit", 18], ["compare", "GT"]]
+    include_instructions: [["load", "age"], ["lit", 18], ["compare", "GT"]],
+    disabled_treatment: "disabled"
   })
 
 _enabled =
@@ -134,14 +128,6 @@ _enabled =
     rank: 1,
     condition_source: "is_beta",
     condition_instructions: [["load", "is_beta"], ["to_bool"]]
-  })
-
-_disabled =
-  Repo.insert!(%Flags.FlagTreatment{
-    name: "Disabled",
-    key: "disabled",
-    flag_id: beers_flag.id,
-    rank: 2
   })
 
 # rollout_flag =

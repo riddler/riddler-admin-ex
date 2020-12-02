@@ -111,6 +111,8 @@ defmodule RiddlerAdmin.Repo.Migrations.Genesis do
 
       add :include_source, :text
       add :include_instructions, :jsonb
+
+      add :disabled_treatment, :text
     end
 
     create index(:flags, [:workspace_id])

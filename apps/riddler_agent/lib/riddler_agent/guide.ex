@@ -29,7 +29,7 @@ defmodule RiddlerAgent.Guide do
   end
 
   defp evaluate_flag(flag, context) do
-    disabled_treatment = {flag.key, "disabled"}
+    disabled_treatment = {flag.key, flag.disabled_treatment}
 
     case flag do
       %{enabled: false} ->

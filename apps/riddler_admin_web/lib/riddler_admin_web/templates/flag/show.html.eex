@@ -23,6 +23,11 @@
   </li>
 
   <li>
+    <strong>Default Treatment:</strong>
+    <%= @flag.disabled_treatment %>
+  </li>
+
+  <li>
     <strong>Include Condition:</strong>
     <%= @flag.include_source %>
   </li>

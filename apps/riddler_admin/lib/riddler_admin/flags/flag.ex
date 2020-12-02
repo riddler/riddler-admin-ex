@@ -7,7 +7,16 @@ defmodule RiddlerAdmin.Flags.Flag do
   @id_opts [prefix: "fl", size: :small]
 
   @derive {Jason.Encoder,
-           only: [:id, :name, :key, :enabled, :include_source, :include_instructions, :treatments]}
+           only: [
+             :id,
+             :name,
+             :key,
+             :enabled,
+             :disabled_treatment,
+             :include_source,
+             :include_instructions,
+             :treatments
+           ]}
   schema "flags" do
     field :id, UXID, @id_opts ++ [primary_key: true, autogenerate: true]
 
@@ -16,6 +25,7 @@ defmodule RiddlerAdmin.Flags.Flag do
     field :type, :string
 
     field :enabled, :boolean
+    field :disabled_treatment, :string
 
     field :include_source, :string
     field :include_instructions, Ecto.PredicatorInstructions
@@ -39,9 +49,9 @@ defmodule RiddlerAdmin.Flags.Flag do
   @doc false
   def changeset(flag, attrs) do
     flag
-    |> cast(attrs, [:name, :key, :enabled, :include_source])
+    |> cast(attrs, [:name, :key, :enabled, :include_source, :disabled_treatment])
     |> put_key_change()
-    |> validate_required([:name, :key, :enabled])
+    |> validate_required([:name, :key, :enabled, :disabled_treatment])
     |> validate_format(:key, ~r/^[a-z][a-z0-9_]+$/)
     |> compile()
   end
