@@ -13,8 +13,12 @@
   <%= text_input f, :key %>
   <%= error_tag f, :key %>
 
+  <%= label f, :enabled %>
+  <%= checkbox f, :enabled %>
+  <%= error_tag f, :enabled %>
+
   <%= label f, :include_source %>
-  <%= textarea f, :include_source %>
+  <%= text_input f, :include_source %>
   <%= error_tag f, :include_source %>
 
   <div>

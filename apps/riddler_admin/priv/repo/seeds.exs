@@ -92,7 +92,8 @@ feature_flag =
   Repo.insert!(%Flags.Flag{
     name: "New Feature",
     key: "new_feature",
-    type: "Treatment",
+    type: "Feature",
+    enabled: true,
     workspace_id: workspace.id
   })
 
@@ -118,8 +119,9 @@ beers_flag =
   Repo.insert!(%Flags.Flag{
     name: "Beers",
     key: "beers",
-    type: "Treatment",
+    type: "Feature",
     workspace_id: workspace.id,
+    enabled: true,
     include_source: "age > 18",
     include_instructions: [["load", "age"], ["lit", 18], ["compare", "GT"]]
   })

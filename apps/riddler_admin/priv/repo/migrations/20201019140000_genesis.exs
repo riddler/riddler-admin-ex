@@ -107,6 +107,8 @@ defmodule RiddlerAdmin.Repo.Migrations.Genesis do
       add :name, :text, null: false
       add :key, :text, null: false
 
+      add :enabled, :boolean, null: false
+
       add :include_source, :text
       add :include_instructions, :jsonb
     end
