@@ -1,13 +1,22 @@
 defmodule RiddlerAdmin.Flags.Flag do
   use RiddlerAdmin.Schema
 
-  alias RiddlerAdmin.Flags.FlagVariant
+  alias RiddlerAdmin.Flags.FlagTreatment
   alias RiddlerAdmin.Workspaces.Workspace
 
   @id_opts [prefix: "fl", size: :small]
 
   @derive {Jason.Encoder,
-           only: [:id, :name, :key, :include_source, :include_instructions, :variants]}
+           only: [
+             :id,
+             :name,
+             :key,
+             :enabled,
+             :disabled_treatment,
+             :include_source,
+             :include_instructions,
+             :treatments
+           ]}
   schema "flags" do
     field :id, UXID, @id_opts ++ [primary_key: true, autogenerate: true]
 
@@ -15,11 +24,14 @@ defmodule RiddlerAdmin.Flags.Flag do
     field :key, :string
     field :type, :string
 
+    field :enabled, :boolean
+    field :disabled_treatment, :string
+
     field :include_source, :string
     field :include_instructions, Ecto.PredicatorInstructions
 
     belongs_to :workspace, Workspace
-    has_many :variants, FlagVariant, references: :id
+    has_many :treatments, FlagTreatment, references: :id
 
     timestamps()
   end
@@ -29,7 +41,7 @@ defmodule RiddlerAdmin.Flags.Flag do
   def create_changeset(agent, attrs, workspace_id) do
     agent
     |> changeset(attrs)
-    |> put_change(:type, "Variant")
+    |> put_change(:type, "Feature")
     |> put_change(:workspace_id, workspace_id)
     |> validate_required([:type])
   end
@@ -37,9 +49,9 @@ defmodule RiddlerAdmin.Flags.Flag do
   @doc false
   def changeset(flag, attrs) do
     flag
-    |> cast(attrs, [:name, :key, :include_source])
+    |> cast(attrs, [:name, :key, :enabled, :include_source, :disabled_treatment])
     |> put_key_change()
-    |> validate_required([:name, :key])
+    |> validate_required([:name, :key, :enabled, :disabled_treatment])
     |> validate_format(:key, ~r/^[a-z][a-z0-9_]+$/)
     |> compile()
   end

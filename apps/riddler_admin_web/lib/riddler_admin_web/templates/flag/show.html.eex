@@ -3,6 +3,11 @@
 <ul>
 
   <li>
+    <strong>Name:</strong>
+    <%= @flag.name %>
+  </li>
+
+  <li>
     <strong>Key:</strong>
     <%= @flag.key %>
   </li>
@@ -10,6 +15,21 @@
   <li>
     <strong>Type:</strong>
     <%= @flag.type %>
+  </li>
+
+  <li>
+    <strong>Enabled:</strong>
+    <%= @flag.enabled %>
+  </li>
+
+  <li>
+    <strong>Default Treatment:</strong>
+    <%= @flag.disabled_treatment %>
+  </li>
+
+  <li>
+    <strong>Include Condition:</strong>
+    <%= @flag.include_source %>
   </li>
 
 </ul>

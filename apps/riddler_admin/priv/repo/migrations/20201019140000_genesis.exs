@@ -107,14 +107,18 @@ defmodule RiddlerAdmin.Repo.Migrations.Genesis do
       add :name, :text, null: false
       add :key, :text, null: false
 
+      add :enabled, :boolean, null: false
+
       add :include_source, :text
       add :include_instructions, :jsonb
+
+      add :disabled_treatment, :text
     end
 
     create index(:flags, [:workspace_id])
     create unique_index(:flags, [:workspace_id, :key])
 
-    create table(:flag_variants) do
+    create table(:flag_treatments) do
       add :id, :text, primary_key: true
       timestamps()
       add :flag_id, references(:flags, on_delete: :delete_all), null: false
@@ -127,9 +131,9 @@ defmodule RiddlerAdmin.Repo.Migrations.Genesis do
       add :condition_instructions, :jsonb
     end
 
-    create index(:flag_variants, [:flag_id])
-    create unique_index(:flag_variants, [:flag_id, :rank])
-    create unique_index(:flag_variants, [:flag_id, :key])
+    create index(:flag_treatments, [:flag_id])
+    create unique_index(:flag_treatments, [:flag_id, :rank])
+    create unique_index(:flag_treatments, [:flag_id, :key])
 
     create table(:agents) do
       add :id, :text, primary_key: true
