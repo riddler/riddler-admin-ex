@@ -1,13 +1,13 @@
 defmodule RiddlerAdmin.Flags.Flag do
   use RiddlerAdmin.Schema
 
-  alias RiddlerAdmin.Flags.FlagVariant
+  alias RiddlerAdmin.Flags.FlagTreatment
   alias RiddlerAdmin.Workspaces.Workspace
 
   @id_opts [prefix: "fl", size: :small]
 
   @derive {Jason.Encoder,
-           only: [:id, :name, :key, :include_source, :include_instructions, :variants]}
+           only: [:id, :name, :key, :include_source, :include_instructions, :treatments]}
   schema "flags" do
     field :id, UXID, @id_opts ++ [primary_key: true, autogenerate: true]
 
@@ -19,7 +19,7 @@ defmodule RiddlerAdmin.Flags.Flag do
     field :include_instructions, Ecto.PredicatorInstructions
 
     belongs_to :workspace, Workspace
-    has_many :variants, FlagVariant, references: :id
+    has_many :treatments, FlagTreatment, references: :id
 
     timestamps()
   end
@@ -29,7 +29,7 @@ defmodule RiddlerAdmin.Flags.Flag do
   def create_changeset(agent, attrs, workspace_id) do
     agent
     |> changeset(attrs)
-    |> put_change(:type, "Variant")
+    |> put_change(:type, "Treatment")
     |> put_change(:workspace_id, workspace_id)
     |> validate_required([:type])
   end

@@ -11,7 +11,7 @@ defmodule RiddlerAdmin.Workspaces do
   def generate_definition!(workspace_id) when is_binary(workspace_id) do
     map =
       Workspace
-      |> preload([:conditions, flags: :variants])
+      |> preload([:conditions, flags: :treatments])
       |> where([workspace], workspace.id == ^workspace_id)
       |> Repo.one!()
       |> Jason.encode!()

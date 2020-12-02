@@ -29,10 +29,10 @@ defmodule RiddlerAgent.Guide do
   end
 
   defp evaluate_flag(flag, context) do
-    flag.variants
-    |> Enum.find_value({flag.key, "disabled"}, fn variant ->
-      if condition_value(variant.condition_instructions, context) do
-        {flag.key, variant.key}
+    flag.treatments
+    |> Enum.find_value({flag.key, "disabled"}, fn treatment ->
+      if condition_value(treatment.condition_instructions, context) do
+        {flag.key, treatment.key}
       end
     end)
   end

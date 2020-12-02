@@ -1,12 +1,12 @@
-defmodule RiddlerAdmin.Flags.FlagVariant do
+defmodule RiddlerAdmin.Flags.FlagTreatment do
   use RiddlerAdmin.Schema
 
   alias RiddlerAdmin.Flags.Flag
 
-  @id_opts [prefix: "flva", size: :small]
+  @id_opts [prefix: "fltr", size: :small]
 
   @derive {Jason.Encoder, only: [:id, :name, :key, :condition_source, :condition_instructions]}
-  schema "flag_variants" do
+  schema "flag_treatments" do
     field :id, UXID, @id_opts ++ [primary_key: true, autogenerate: true]
     field :rank, :integer
 
@@ -26,14 +26,14 @@ defmodule RiddlerAdmin.Flags.FlagVariant do
   def create_changeset(agent, attrs, flag_id) do
     agent
     |> changeset(attrs)
-    |> put_change(:type, "Variant")
+    |> put_change(:type, "Treatment")
     |> put_change(:flag_id, flag_id)
     |> validate_required([:type])
   end
 
   @doc false
-  def changeset(flag_variant, attrs) do
-    flag_variant
+  def changeset(flag_treatment, attrs) do
+    flag_treatment
     |> cast(attrs, [:name, :key, :condition_source])
     |> put_key_change()
     |> validate_required([:name, :key])

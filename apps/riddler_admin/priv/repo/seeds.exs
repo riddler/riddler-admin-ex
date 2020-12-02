@@ -92,12 +92,12 @@ feature_flag =
   Repo.insert!(%Flags.Flag{
     name: "New Feature",
     key: "new_feature",
-    type: "Variant",
+    type: "Treatment",
     workspace_id: workspace.id
   })
 
 _enabled =
-  Repo.insert!(%Flags.FlagVariant{
+  Repo.insert!(%Flags.FlagTreatment{
     name: "Enabled",
     key: "enabled",
     flag_id: feature_flag.id,
@@ -107,7 +107,7 @@ _enabled =
   })
 
 _disabled =
-  Repo.insert!(%Flags.FlagVariant{
+  Repo.insert!(%Flags.FlagTreatment{
     name: "Disabled",
     key: "disabled",
     flag_id: feature_flag.id,
@@ -118,14 +118,14 @@ beers_flag =
   Repo.insert!(%Flags.Flag{
     name: "Beers",
     key: "beers",
-    type: "Variant",
+    type: "Treatment",
     workspace_id: workspace.id,
     include_source: "age > 18",
     include_instructions: [["load", "age"], ["lit", 18], ["compare", "GT"]]
   })
 
 _enabled =
-  Repo.insert!(%Flags.FlagVariant{
+  Repo.insert!(%Flags.FlagTreatment{
     name: "Enabled",
     key: "enabled",
     flag_id: beers_flag.id,
@@ -135,7 +135,7 @@ _enabled =
   })
 
 _disabled =
-  Repo.insert!(%Flags.FlagVariant{
+  Repo.insert!(%Flags.FlagTreatment{
     name: "Disabled",
     key: "disabled",
     flag_id: beers_flag.id,
@@ -151,7 +151,7 @@ _disabled =
 #   })
 
 # _enabled =
-#   Repo.insert!(%Flags.FlagVariant{
+#   Repo.insert!(%Flags.FlagTreatment{
 #     name: "Enabled",
 #     key: "enabled",
 #     flag_id: feature_flag.id,
@@ -160,7 +160,7 @@ _disabled =
 #   })
 
 # _disabled =
-#   Repo.insert!(%Flags.FlagVariant{
+#   Repo.insert!(%Flags.FlagTreatment{
 #     name: "Disabled",
 #     key: "disabled",
 #     flag_id: feature_flag.id,
@@ -170,7 +170,7 @@ _disabled =
 
 Logger.info("+++ Creating Previews (and PreviewContexts)")
 
-of_age_context =
+_of_age_context =
   Repo.insert!(%Previews.PreviewContext{
     workspace_id: workspace.id,
     name: "Of Age",
