@@ -4,6 +4,8 @@ defmodule RiddlerAgent.Guide do
   and lead participants through their journeys along dynamic paths
   """
 
+  alias __MODULE__.FlagEvaluator
+
   def evaluate(definition, type, key, context \\ %{})
       when is_map(definition) and is_atom(type) and is_binary(key) do
     definition
@@ -28,26 +30,11 @@ defmodule RiddlerAgent.Guide do
     |> Enum.into(%{})
   end
 
-  defp evaluate_flag(flag, context) do
-    disabled_treatment = {flag.key, flag.disabled_treatment}
+  defdelegate evaluate_flag(flag, context), to: FlagEvaluator, as: :process
 
-    case flag do
-      %{enabled: false} ->
-        disabled_treatment
+  def condition_value(nil, _context), do: true
 
-      _ ->
-        flag.treatments
-        |> Enum.find_value(disabled_treatment, fn treatment ->
-          if condition_value(treatment.condition_instructions, context) do
-            {flag.key, treatment.key}
-          end
-        end)
-    end
-  end
-
-  defp condition_value(nil, _context), do: true
-
-  defp condition_value(instructions, context) do
+  def condition_value(instructions, context) do
     case Predicator.evaluate_instructions!(instructions, context) do
       true -> true
       _ -> false
