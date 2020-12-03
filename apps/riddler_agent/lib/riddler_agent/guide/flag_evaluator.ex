@@ -5,41 +5,47 @@ defmodule RiddlerAgent.Guide.FlagEvaluator do
   """
 
   alias RiddlerAgent.Guide
+  alias RiddlerAgent.Guide.Flag
 
   def process(flag), do: process(flag, %{})
 
   def process(
-        %{enabled: false, key: key, disabled_treatment: disabled_treatment},
+        %Flag{enabled: false, key: key, disabled_treatment: disabled_treatment},
         _context
       ),
       do: {key, disabled_treatment}
 
   def process(
-        %{enabled: true, activations: [], key: key, disabled_treatment: disabled_treatment},
+        %Flag{enabled: true, assigners: [], key: key, disabled_treatment: disabled_treatment},
         _context
       ),
       do: {key, disabled_treatment}
 
   def process(
-        %{enabled: true, activations: nil, key: key, disabled_treatment: disabled_treatment},
-        _context
-      ),
-      do: {key, disabled_treatment}
+        %Flag{
+          enabled: true,
+          assigners: assigners
+        } = flag,
+        context
+      ) do
+    assigners
+    |> Enum.find(fn %{condition_instructions: instructions} ->
+      Guide.condition_value(instructions, context)
+    end)
+    |> treatment_for_assigner(flag)
+  end
 
-  def process(flag, context) do
-    disabled_treatment = {flag.key, flag.disabled_treatment}
+  def treatment_for_assigner(
+        %Flag.Assigner{type: "Static", treatment: treatment},
+        %Flag{key: key}
+      ) do
+    {key, treatment}
+  end
 
-    case flag do
-      %{enabled: false} ->
-        disabled_treatment
-
-      _ ->
-        flag.treatments
-        |> Enum.find_value(disabled_treatment, fn treatment ->
-          if Guide.condition_value(treatment.condition_instructions, context) do
-            {flag.key, treatment.key}
-          end
-        end)
-    end
+  def treatment_for_assigner(_assigner, %Flag{
+        key: key,
+        disabled_treatment: disabled_treatment
+      }) do
+    {key, disabled_treatment}
   end
 end
