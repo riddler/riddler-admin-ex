@@ -13,6 +13,7 @@ defmodule RiddlerAgent.MixProject do
     # Required
     {:confex, "~> 3.4"},
     {:jason, "~> 1.0"},
+    {:murmur, "~> 1.0"},
     {:predicator, "~> 0.9"},
     {:tesla, "~> 1.3"},
     {:yaml_elixir, "~> 2.5"}
