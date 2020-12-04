@@ -1,6 +1,7 @@
 defmodule RiddlerAdmin.Flags.Flag do
   use RiddlerAdmin.Schema
 
+  alias RiddlerAdmin.Flags.FlagAssigner
   alias RiddlerAdmin.Flags.FlagTreatment
   alias RiddlerAdmin.Workspaces.Workspace
 
@@ -11,11 +12,12 @@ defmodule RiddlerAdmin.Flags.Flag do
              :id,
              :name,
              :key,
+             :type,
              :enabled,
              :disabled_treatment,
              :include_source,
              :include_instructions,
-             :treatments
+             :assigners
            ]}
   schema "flags" do
     field :id, UXID, @id_opts ++ [primary_key: true, autogenerate: true]
@@ -31,6 +33,7 @@ defmodule RiddlerAdmin.Flags.Flag do
     field :include_instructions, Ecto.PredicatorInstructions
 
     belongs_to :workspace, Workspace
+    has_many :assigners, FlagAssigner, references: :id
     has_many :treatments, FlagTreatment, references: :id
 
     timestamps()

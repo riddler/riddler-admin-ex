@@ -1,8 +1,4 @@
 defmodule RiddlerAgentTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
   doctest RiddlerAgent
-
-  test "greets the world" do
-    assert RiddlerAgent.hello() == :world
-  end
 end

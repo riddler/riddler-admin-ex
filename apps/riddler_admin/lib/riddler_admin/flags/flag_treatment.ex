@@ -5,16 +5,13 @@ defmodule RiddlerAdmin.Flags.FlagTreatment do
 
   @id_opts [prefix: "fltr", size: :small]
 
-  @derive {Jason.Encoder, only: [:id, :name, :key, :condition_source, :condition_instructions]}
+  @derive {Jason.Encoder, only: [:id, :description, :key]}
   schema "flag_treatments" do
     field :id, UXID, @id_opts ++ [primary_key: true, autogenerate: true]
     field :rank, :integer
 
-    field :name, :string
+    field :description, :string
     field :key, :string
-
-    field :condition_source, :string
-    field :condition_instructions, Ecto.PredicatorInstructions
 
     belongs_to :flag, Flag
 
@@ -34,9 +31,8 @@ defmodule RiddlerAdmin.Flags.FlagTreatment do
   @doc false
   def changeset(flag_treatment, attrs) do
     flag_treatment
-    |> cast(attrs, [:name, :key, :condition_source])
-    |> put_key_change()
-    |> validate_required([:name, :key])
+    |> cast(attrs, [:description, :key, :condition_source])
+    |> validate_required([:key])
     |> validate_format(:key, ~r/^[a-z][a-z0-9_]+$/)
     |> compile()
   end
@@ -54,18 +50,4 @@ defmodule RiddlerAdmin.Flags.FlagTreatment do
     do:
       changeset
       |> put_change(:condition_instructions, Predicator.compile!(source))
-
-  defp put_key_change(%{data: %{key: nil}, changes: %{name: name}} = changeset)
-       when is_binary(name) do
-    key =
-      name
-      |> String.downcase()
-      |> String.replace(~r/[^a-z0-9_]/, "_")
-      |> String.replace(~r/_+/, "_")
-
-    changeset
-    |> put_change(:key, key)
-  end
-
-  defp put_key_change(changeset), do: changeset
 end
