@@ -4,6 +4,6 @@ defmodule RiddlerAgent.Guide.Flag do
   defstruct [:key, :enabled, disabled_treatment: @default_disabled_treatment, assigners: []]
 
   defmodule __MODULE__.Assigner do
-    defstruct [:type, :treatment, :condition_source, :condition_instructions]
+    defstruct [:type, :enabled_treatment, :condition_source, :condition_instructions]
   end
 end

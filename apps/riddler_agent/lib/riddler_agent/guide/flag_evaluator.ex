@@ -9,6 +9,22 @@ defmodule RiddlerAgent.Guide.FlagEvaluator do
 
   def process(flag), do: process(flag, %{})
 
+  def process(flag, context) when is_map(flag) and not is_struct(flag) do
+    converted_map =
+      case flag do
+        %{assigners: [_at_least_one_assigner] = assigners} ->
+          assigner_structs = Enum.map(assigners, fn params ->
+            struct(Flag.Assigner, params)
+          end)
+
+          %{flag | assigners: assigner_structs}
+        _ ->
+          flag
+      end
+
+    process(struct(Flag, converted_map), context)
+  end
+
   def process(
         %Flag{enabled: false, key: key, disabled_treatment: disabled_treatment},
         _context
@@ -36,7 +52,7 @@ defmodule RiddlerAgent.Guide.FlagEvaluator do
   end
 
   def treatment_for_assigner(
-        %Flag.Assigner{type: "Static", treatment: treatment},
+        %Flag.Assigner{type: "Static", enabled_treatment: %{key: treatment}},
         %Flag{key: key}
       ) do
     {key, treatment}
