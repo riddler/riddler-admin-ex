@@ -81,7 +81,7 @@ feature_flag =
     disabled_treatment: "disabled"
   })
 
-enabled_treatment =
+feature_enabled_treatment =
   Repo.insert!(%Flags.FlagTreatment{
     key: "enabled",
     flag_id: feature_flag.id,
@@ -93,7 +93,7 @@ _static_assigner =
     flag_id: feature_flag.id,
     rank: 1,
     type: "Static",
-    enabled_treatment: enabled_treatment
+    enabled_treatment: feature_enabled_treatment
   })
 
 # _enabled =
@@ -106,17 +106,32 @@ _static_assigner =
 #     condition_instructions: [["load", "is_beta"], ["to_bool"]]
 #   })
 
-# beers_flag =
-#   Repo.insert!(%Flags.Flag{
-#     name: "Beers",
-#     key: "beers",
-#     type: "Feature",
-#     workspace_id: workspace.id,
-#     enabled: true,
-#     include_source: "age > 18",
-#     include_instructions: [["load", "age"], ["lit", 18], ["compare", "GT"]],
-#     disabled_treatment: "disabled"
-#   })
+beers_flag =
+  Repo.insert!(%Flags.Flag{
+    name: "Beers",
+    key: "beers",
+    type: "Feature",
+    workspace_id: workspace.id,
+    enabled: true,
+    include_source: "age > 18",
+    include_instructions: [["load", "age"], ["lit", 21], ["compare", "GT"]],
+    disabled_treatment: "disabled"
+  })
+
+beers_enabled_treatment =
+  Repo.insert!(%Flags.FlagTreatment{
+    key: "enabled",
+    flag_id: beers_flag.id,
+    rank: 1
+  })
+
+_static_assigner =
+  Repo.insert!(%Flags.FlagAssigner{
+    flag_id: beers_flag.id,
+    rank: 1,
+    type: "Static",
+    enabled_treatment: beers_enabled_treatment
+  })
 
 # _enabled =
 #   Repo.insert!(%Flags.FlagTreatment{
