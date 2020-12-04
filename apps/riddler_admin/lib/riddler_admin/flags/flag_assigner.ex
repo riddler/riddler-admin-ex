@@ -7,11 +7,24 @@ defmodule RiddlerAdmin.Flags.FlagAssigner do
   @id_opts [prefix: "flas", size: :small]
 
   @derive {Jason.Encoder,
-           only: [:id, :type, :enabled_treatment, :condition_source, :condition_instructions]}
+           only: [
+             :id,
+             :type,
+             :enabled_treatment,
+             :condition_source,
+             :condition_instructions,
+             :subject,
+             :custom_salt,
+             :percentage
+           ]}
   schema "flag_assigners" do
     field :id, UXID, @id_opts ++ [primary_key: true, autogenerate: true]
     field :rank, :integer
     field :type, :string
+
+    field :subject, :string
+    field :custom_salt, :string
+    field :percentage, :integer
 
     belongs_to :enabled_treatment, FlagTreatment, references: :id
 
