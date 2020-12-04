@@ -124,16 +124,33 @@ defmodule RiddlerAdmin.Repo.Migrations.Genesis do
       add :flag_id, references(:flags, on_delete: :delete_all), null: false
       add :rank, :integer, null: false
 
-      add :name, :text, null: false
       add :key, :text, null: false
-
-      add :condition_source, :text
-      add :condition_instructions, :jsonb
+      add :description, :text
     end
 
     create index(:flag_treatments, [:flag_id])
     create unique_index(:flag_treatments, [:flag_id, :rank])
     create unique_index(:flag_treatments, [:flag_id, :key])
+
+    create table(:flag_assigners) do
+      add :id, :text, primary_key: true
+      timestamps()
+      add :flag_id, references(:flags, on_delete: :delete_all), null: false
+      add :rank, :integer, null: false
+      add :type, :text, null: false
+
+      # add :unit, :text
+      # add :custom_salt, :text
+      # add :percentage, :integer
+
+      add :enabled_treatment_id, references(:flag_treatments, on_delete: :delete_all)
+
+      add :condition_source, :text
+      add :condition_instructions, :jsonb
+    end
+
+    create index(:flag_assigners, [:flag_id])
+    create unique_index(:flag_assigners, [:flag_id, :rank])
 
     create table(:agents) do
       add :id, :text, primary_key: true

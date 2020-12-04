@@ -41,23 +41,6 @@ workspace =
 
 Logger.info("+++ Seeding Environments and Agents")
 
-prod_env =
-  Repo.insert!(%Environments.Environment{
-    id: "env_PRODSEED",
-    name: "Production",
-    key: "prod",
-    workspace_id: workspace.id
-  })
-
-_prod_agent =
-  Repo.insert!(%Agents.Agent{
-    name: "Prod Agent",
-    key: "prodagent",
-    api_key: "apikey_PRODSEED",
-    api_secret: "apisecret_PRODSEED",
-    environment_id: prod_env.id
-  })
-
 test_env =
   Repo.insert!(%Environments.Environment{
     id: "env_TESTSEED",
@@ -90,45 +73,60 @@ Logger.info("+++ Seeding Flags")
 
 feature_flag =
   Repo.insert!(%Flags.Flag{
-    name: "New Feature",
-    key: "new_feature",
+    name: "Static Flag",
+    key: "statig_flag",
     type: "Feature",
     workspace_id: workspace.id,
     enabled: true,
     disabled_treatment: "disabled"
   })
 
-_enabled =
+enabled_treatment =
   Repo.insert!(%Flags.FlagTreatment{
-    name: "Enabled",
     key: "enabled",
     flag_id: feature_flag.id,
-    rank: 1,
-    condition_source: "is_beta",
-    condition_instructions: [["load", "is_beta"], ["to_bool"]]
+    rank: 1
   })
 
-beers_flag =
-  Repo.insert!(%Flags.Flag{
-    name: "Beers",
-    key: "beers",
-    type: "Feature",
-    workspace_id: workspace.id,
-    enabled: true,
-    include_source: "age > 18",
-    include_instructions: [["load", "age"], ["lit", 18], ["compare", "GT"]],
-    disabled_treatment: "disabled"
+_static_assigner =
+  Repo.insert!(%Flags.FlagAssigner{
+    flag_id: feature_flag.id,
+    rank: 1,
+    type: "Static",
+    enabled_treatment: enabled_treatment
   })
 
-_enabled =
-  Repo.insert!(%Flags.FlagTreatment{
-    name: "Enabled",
-    key: "enabled",
-    flag_id: beers_flag.id,
-    rank: 1,
-    condition_source: "is_beta",
-    condition_instructions: [["load", "is_beta"], ["to_bool"]]
-  })
+# _enabled =
+#   Repo.insert!(%Flags.FlagTreatment{
+#     name: "Enabled",
+#     key: "enabled",
+#     flag_id: feature_flag.id,
+#     rank: 1,
+#     condition_source: "is_beta",
+#     condition_instructions: [["load", "is_beta"], ["to_bool"]]
+#   })
+
+# beers_flag =
+#   Repo.insert!(%Flags.Flag{
+#     name: "Beers",
+#     key: "beers",
+#     type: "Feature",
+#     workspace_id: workspace.id,
+#     enabled: true,
+#     include_source: "age > 18",
+#     include_instructions: [["load", "age"], ["lit", 18], ["compare", "GT"]],
+#     disabled_treatment: "disabled"
+#   })
+
+# _enabled =
+#   Repo.insert!(%Flags.FlagTreatment{
+#     name: "Enabled",
+#     key: "enabled",
+#     flag_id: beers_flag.id,
+#     rank: 1,
+#     condition_source: "is_beta",
+#     condition_instructions: [["load", "is_beta"], ["to_bool"]]
+#   })
 
 # rollout_flag =
 #   Repo.insert!(%Flags.Flag{
