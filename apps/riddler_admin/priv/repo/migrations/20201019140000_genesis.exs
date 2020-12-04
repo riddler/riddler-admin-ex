@@ -139,9 +139,9 @@ defmodule RiddlerAdmin.Repo.Migrations.Genesis do
       add :rank, :integer, null: false
       add :type, :text, null: false
 
-      # add :unit, :text
-      # add :custom_salt, :text
-      # add :percentage, :integer
+      add :subject, :text
+      add :custom_salt, :text
+      add :percentage, :integer
 
       add :enabled_treatment_id, references(:flag_treatments, on_delete: :delete_all)
 

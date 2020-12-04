@@ -71,6 +71,8 @@ _condition =
 
 Logger.info("+++ Seeding Flags")
 
+# Static Assigner flag
+
 feature_flag =
   Repo.insert!(%Flags.Flag{
     name: "Static Flag",
@@ -96,15 +98,36 @@ _static_assigner =
     enabled_treatment: feature_enabled_treatment
   })
 
-# _enabled =
-#   Repo.insert!(%Flags.FlagTreatment{
-#     name: "Enabled",
-#     key: "enabled",
-#     flag_id: feature_flag.id,
-#     rank: 1,
-#     condition_source: "is_beta",
-#     condition_instructions: [["load", "is_beta"], ["to_bool"]]
-#   })
+# Rollout Assigner flag
+
+rollout_flag =
+  Repo.insert!(%Flags.Flag{
+    name: "Rollout Flag",
+    key: "rollout_flag",
+    type: "Feature",
+    workspace_id: workspace.id,
+    enabled: true,
+    disabled_treatment: "disabled"
+  })
+
+rollout_enabled_treatment =
+  Repo.insert!(%Flags.FlagTreatment{
+    key: "enabled",
+    flag_id: rollout_flag.id,
+    rank: 1
+  })
+
+_rollout_assigner =
+  Repo.insert!(%Flags.FlagAssigner{
+    flag_id: rollout_flag.id,
+    rank: 1,
+    type: "Rollout",
+    enabled_treatment: rollout_enabled_treatment,
+    percentage: 50,
+    subject: "user_id"
+  })
+
+# Beers flag
 
 beers_flag =
   Repo.insert!(%Flags.Flag{
@@ -132,42 +155,6 @@ _static_assigner =
     type: "Static",
     enabled_treatment: beers_enabled_treatment
   })
-
-# _enabled =
-#   Repo.insert!(%Flags.FlagTreatment{
-#     name: "Enabled",
-#     key: "enabled",
-#     flag_id: beers_flag.id,
-#     rank: 1,
-#     condition_source: "is_beta",
-#     condition_instructions: [["load", "is_beta"], ["to_bool"]]
-#   })
-
-# rollout_flag =
-#   Repo.insert!(%Flags.Flag{
-#     name: "Rollout",
-#     key: "rollout",
-#     type: "Percentage",
-#     workspace_id: workspace.id,
-#   })
-
-# _enabled =
-#   Repo.insert!(%Flags.FlagTreatment{
-#     name: "Enabled",
-#     key: "enabled",
-#     flag_id: feature_flag.id,
-#     rank: 1,
-#     percentage: 0.1
-#   })
-
-# _disabled =
-#   Repo.insert!(%Flags.FlagTreatment{
-#     name: "Disabled",
-#     key: "disabled",
-#     flag_id: feature_flag.id,
-#     rank: 2,
-#     percentage: 0.9
-#   })
 
 Logger.info("+++ Creating Previews (and PreviewContexts)")
 
