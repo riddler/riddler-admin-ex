@@ -65,6 +65,7 @@ defmodule RiddlerAdminWeb.Router do
       end
 
       resources "/flags", FlagController do
+        resources "/assigners", FlagAssignerController
         resources "/treatments", FlagTreatmentController
       end
 
