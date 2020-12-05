@@ -64,7 +64,9 @@ defmodule RiddlerAdminWeb.Router do
         resources "/agents", AgentController
       end
 
-      resources "/flags", FlagController
+      resources "/flags", FlagController do
+        resources "/treatments", FlagTreatmentController
+      end
 
       resources "/preview_contexts", PreviewContextController
 
