@@ -76,7 +76,7 @@ Logger.info("+++ Seeding Flags")
 feature_flag =
   Repo.insert!(%Flags.Flag{
     name: "Static Flag",
-    key: "statig_flag",
+    key: "static_flag",
     type: "Feature",
     workspace_id: workspace.id,
     enabled: true,
@@ -86,8 +86,7 @@ feature_flag =
 feature_enabled_treatment =
   Repo.insert!(%Flags.FlagTreatment{
     key: "enabled",
-    flag_id: feature_flag.id,
-    rank: 1
+    flag_id: feature_flag.id
   })
 
 _static_assigner =
@@ -113,8 +112,7 @@ rollout_flag =
 rollout_enabled_treatment =
   Repo.insert!(%Flags.FlagTreatment{
     key: "enabled",
-    flag_id: rollout_flag.id,
-    rank: 1
+    flag_id: rollout_flag.id
   })
 
 _rollout_assigner =
@@ -144,8 +142,7 @@ beers_flag =
 beers_enabled_treatment =
   Repo.insert!(%Flags.FlagTreatment{
     key: "enabled",
-    flag_id: beers_flag.id,
-    rank: 1
+    flag_id: beers_flag.id
   })
 
 _static_assigner =

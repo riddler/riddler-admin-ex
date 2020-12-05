@@ -122,14 +122,12 @@ defmodule RiddlerAdmin.Repo.Migrations.Genesis do
       add :id, :text, primary_key: true
       timestamps()
       add :flag_id, references(:flags, on_delete: :delete_all), null: false
-      add :rank, :integer, null: false
 
       add :key, :text, null: false
       add :description, :text
     end
 
     create index(:flag_treatments, [:flag_id])
-    create unique_index(:flag_treatments, [:flag_id, :rank])
     create unique_index(:flag_treatments, [:flag_id, :key])
 
     create table(:flag_assigners) do

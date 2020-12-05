@@ -32,6 +32,10 @@
     <%= @flag.include_source %>
   </li>
 
+  <li>
+    <%= link "Treatments", to: Routes.workspace_flag_flag_treatment_path(@conn, :index, @workspace_id, @flag) %>
+  </li>
+
 </ul>
 
 <span><%= link "Edit", to: Routes.workspace_flag_path(@conn, :edit, @workspace_id, @flag) %></span>
