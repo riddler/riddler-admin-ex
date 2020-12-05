@@ -7,6 +7,7 @@ defmodule RiddlerAdmin.Flags do
   alias RiddlerAdmin.Repo
 
   alias RiddlerAdmin.Flags.Flag
+  alias RiddlerAdmin.Flags.FlagAssigner
   alias RiddlerAdmin.Flags.FlagTreatment
 
   def list_workspace_flags(workspace_id) do
@@ -18,6 +19,13 @@ defmodule RiddlerAdmin.Flags do
   def list_flag_treatments(flag_id) do
     FlagTreatment
     |> where(flag_id: ^flag_id)
+    |> Repo.all()
+  end
+
+  def list_flag_assigners(flag_id) do
+    FlagAssigner
+    |> where(flag_id: ^flag_id)
+    |> order_by(:rank)
     |> Repo.all()
   end
 
@@ -113,6 +121,47 @@ defmodule RiddlerAdmin.Flags do
   """
   def change_flag(%Flag{} = flag, attrs \\ %{}) do
     Flag.changeset(flag, attrs)
+  end
+
+  ### Flag Assigners ###
+
+  @doc """
+  Creates a flag tretment.
+  """
+  def create_flag_assigner(attrs, flag_id) do
+    %FlagAssigner{}
+    |> FlagAssigner.create_changeset(attrs, flag_id)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking flag assigner changes.
+  """
+  def change_flag_assigner(%FlagAssigner{} = flag_assigner, attrs \\ %{}) do
+    FlagAssigner.changeset(flag_assigner, attrs)
+  end
+
+  @doc """
+  Gets a single flag assigner.
+
+  Raises `Ecto.NoResultsError` if the FlagAssigner does not exist.
+  """
+  def get_flag_assigner!(id), do: Repo.get!(FlagAssigner, id)
+
+  @doc """
+  Updates a flag assigner.
+  """
+  def update_flag_assigner(%FlagAssigner{} = flag_assigner, attrs) do
+    flag_assigner
+    |> FlagAssigner.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a flag assigner.
+  """
+  def delete_flag_assigner(%FlagAssigner{} = flag_assigner) do
+    Repo.delete(flag_assigner)
   end
 
   ### Flag Treatments ###
