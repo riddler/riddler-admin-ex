@@ -6,6 +6,24 @@ defmodule RiddlerAgent.Guide do
 
   alias __MODULE__.FlagEvaluator
 
+  @doc """
+  Returns the treatment to be used for the flag key.
+  """
+  def treatment(definition, flag_key, context, default_treatment \\ "disabled") do
+    item_by_type_and_key(definition, :flags, flag_key)
+    |> case do
+      flag when is_map(flag) ->
+        {_key, treatment} = evaluate_flag(flag, context)
+        treatment
+      nil ->
+        default_treatment
+    end
+
+  rescue
+    _ ->
+    default_treatment
+  end
+
   def evaluate(definition, type, key, context \\ %{})
       when is_map(definition) and is_atom(type) and is_binary(key) do
     definition
@@ -41,5 +59,12 @@ defmodule RiddlerAgent.Guide do
     end
   rescue
     _ -> false
+  end
+
+  defp item_by_type_and_key(definition, type, key)
+      when is_map(definition) and is_atom(type) and is_binary(key) do
+    definition
+    |> Map.get(type)
+    |> Enum.find(fn item -> item.key == key end)
   end
 end
