@@ -9,17 +9,19 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
+
 alias RiddlerAdmin.{
-  Repo,
-  Identities,
   Accounts,
-  Workspaces,
-  Environments,
-  Conditions,
-  Flags,
   Agents,
+  Conditions,
+  ContentBlocks,
   Definitions,
-  Previews
+  Environments,
+  Flags,
+  Identities,
+  Previews,
+  Repo,
+  Workspaces
 }
 
 require Logger
@@ -184,3 +186,13 @@ Logger.info("+++ Creating Definition")
     },
     workspace.id
   )
+
+Logger.info("+++ Creating ContentBlocks")
+
+_welcome_message =
+  Repo.insert!(%ContentBlocks.ContentBlock{
+    id: "cbl_WELCOME",
+    workspace_id: "wsp_SEED",
+    name: "Welcome Message",
+    key: "welcome_message"
+  })
