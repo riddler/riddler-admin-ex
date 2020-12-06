@@ -12,6 +12,10 @@
     <%= @content_block.name %>
   </li>
 
+  <li>
+    <%= link "Elements", to: Routes.workspace_content_block_element_path(@conn, :index, @workspace_id, @content_block) %>
+  </li>
+
 </ul>
 
 <span><%= link "Edit", to: Routes.workspace_content_block_path(@conn, :edit, @workspace_id, @content_block) %></span>

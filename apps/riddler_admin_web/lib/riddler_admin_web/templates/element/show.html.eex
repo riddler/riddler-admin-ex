@@ -1,0 +1,28 @@
+<h1>Show Element</h1>
+
+<ul>
+
+  <li>
+    <strong>Type:</strong>
+    <%= @element.type %>
+  </li>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @element.name %>
+  </li>
+
+  <li>
+    <strong>Key:</strong>
+    <%= @element.key %>
+  </li>
+
+  <li>
+    <strong>Text:</strong>
+    <%= @element.text %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.workspace_content_block_element_path(@conn, :edit, @workspace_id, @content_block_id, @element) %></span>
+<span><%= link "Back", to: Routes.workspace_content_block_element_path(@conn, :index, @workspace_id, @content_block_id) %></span>

@@ -57,7 +57,11 @@ defmodule RiddlerAdminWeb.Router do
 
     resources "/workspaces", WorkspaceController do
       resources "/conditions", ConditionController
-      resources "/content_blocks", ContentBlockController
+
+      resources "/content_blocks", ContentBlockController do
+        resources "/elements", ElementController
+      end
+
       resources "/definitions", DefinitionController
 
       resources "/environments", EnvironmentController do

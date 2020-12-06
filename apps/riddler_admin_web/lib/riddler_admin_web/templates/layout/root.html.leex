@@ -51,6 +51,9 @@
                 <%= link "Conditions", to: Routes.workspace_condition_path(@conn, :index, workspace_id), class: "nav-link" %>
               </li>
               <li class="nav-item">
+                <%= link "Content Blocks", to: Routes.workspace_content_block_path(@conn, :index, workspace_id), class: "nav-link" %>
+              </li>
+              <li class="nav-item">
                 <%= link "Definitions", to: Routes.workspace_definition_path(@conn, :index, workspace_id), class: "nav-link" %>
               </li>
               <li class="nav-item">

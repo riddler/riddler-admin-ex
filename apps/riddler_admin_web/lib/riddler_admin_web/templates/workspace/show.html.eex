@@ -12,6 +12,10 @@
   </li>
 
   <li>
+    <%= link "Content Blocks", to: Routes.workspace_content_block_path(@conn, :index, @workspace) %>
+  </li>
+
+  <li>
     <%= link "Definitions", to: Routes.workspace_definition_path(@conn, :index, @workspace) %>
   </li>
 
