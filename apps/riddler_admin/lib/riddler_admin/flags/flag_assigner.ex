@@ -4,7 +4,7 @@ defmodule RiddlerAdmin.Flags.FlagAssigner do
   alias RiddlerAdmin.Flags.Flag
   alias RiddlerAdmin.Flags.FlagTreatment
 
-  @id_opts [prefix: "flas", size: :small]
+  @id_opts [prefix: "flgasn", size: :small]
 
   @derive {Jason.Encoder,
            only: [
