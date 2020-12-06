@@ -82,74 +82,6 @@ defmodule RiddlerAdmin.Repo.Migrations.Genesis do
     create index(:publish_requests, [:approved_by_id])
     create index(:publish_requests, [:published_by_id])
 
-    # === Content
-
-    create table(:conditions) do
-      add :id, :text, primary_key: true
-      timestamps()
-      add :workspace_id, references(:workspaces, on_delete: :delete_all), null: false
-
-      add :name, :text, null: false
-      add :key, :text, null: false
-      add :source, :text, null: false
-      add :instructions, :jsonb, null: false
-    end
-
-    create index(:conditions, [:workspace_id])
-    create unique_index(:conditions, [:workspace_id, :key])
-
-    create table(:flags) do
-      add :id, :text, primary_key: true
-      timestamps()
-      add :workspace_id, references(:workspaces, on_delete: :delete_all), null: false
-
-      add :type, :text, null: false
-      add :name, :text, null: false
-      add :key, :text, null: false
-
-      add :enabled, :boolean, null: false
-
-      add :include_source, :text
-      add :include_instructions, :jsonb
-
-      add :disabled_treatment, :text
-    end
-
-    create index(:flags, [:workspace_id])
-    create unique_index(:flags, [:workspace_id, :key])
-
-    create table(:flag_treatments) do
-      add :id, :text, primary_key: true
-      timestamps()
-      add :flag_id, references(:flags, on_delete: :delete_all), null: false
-
-      add :key, :text, null: false
-      add :description, :text
-    end
-
-    create index(:flag_treatments, [:flag_id])
-    create unique_index(:flag_treatments, [:flag_id, :key])
-
-    create table(:flag_assigners) do
-      add :id, :text, primary_key: true
-      timestamps()
-      add :flag_id, references(:flags, on_delete: :delete_all), null: false
-      add :rank, :integer, null: false
-      add :type, :text, null: false
-
-      add :subject, :text
-      add :custom_salt, :text
-      add :percentage, :integer
-
-      add :enabled_treatment_id, references(:flag_treatments, on_delete: :delete_all)
-
-      add :condition_source, :text
-      add :condition_instructions, :jsonb
-    end
-
-    create index(:flag_assigners, [:flag_id])
-    create unique_index(:flag_assigners, [:flag_id, :rank])
-
     create table(:agents) do
       add :id, :text, primary_key: true
       timestamps()
@@ -189,5 +121,21 @@ defmodule RiddlerAdmin.Repo.Migrations.Genesis do
     end
 
     create index(:previews, [:workspace_id])
+
+    # === Content
+
+    create table(:conditions) do
+      add :id, :text, primary_key: true
+      timestamps()
+      add :workspace_id, references(:workspaces, on_delete: :delete_all), null: false
+
+      add :name, :text, null: false
+      add :key, :text, null: false
+      add :source, :text, null: false
+      add :instructions, :jsonb, null: false
+    end
+
+    create index(:conditions, [:workspace_id])
+    create unique_index(:conditions, [:workspace_id, :key])
   end
 end
