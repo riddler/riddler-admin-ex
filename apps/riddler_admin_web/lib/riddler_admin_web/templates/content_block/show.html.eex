@@ -1,0 +1,18 @@
+<h1>Show Content Block</h1>
+
+<ul>
+
+  <li>
+    <strong>Key:</strong>
+    <%= @content_block.key %>
+  </li>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @content_block.name %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.workspace_content_block_path(@conn, :edit, @workspace_id, @content_block) %></span>
+<span><%= link "Back", to: Routes.workspace_content_block_path(@conn, :index, @workspace_id) %></span>
