@@ -13,6 +13,7 @@ defmodule RiddlerAgent.MixProject do
     # Required
     {:confex, "~> 3.4"},
     {:jason, "~> 1.0"},
+    {:liquid, "~> 0.9"},
     {:murmur, "~> 1.0"},
     {:predicator, "~> 0.9"},
     {:tesla, "~> 1.3"},
@@ -22,7 +23,7 @@ defmodule RiddlerAgent.MixProject do
   def application do
     [
       mod: {RiddlerAgent.Application, []},
-      extra_applications: [:logger]
+      extra_applications: [:liquid, :logger]
     ]
   end
 
