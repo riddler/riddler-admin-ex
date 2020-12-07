@@ -4,7 +4,25 @@ defmodule RiddlerAgent.Guide do
   and lead participants through their journeys along dynamic paths
   """
 
+  alias __MODULE__.ContentBlockGenerator
   alias __MODULE__.FlagEvaluator
+
+  defdelegate evaluate_flag(flag, context), to: FlagEvaluator, as: :process
+
+  defdelegate generate_block(content_block, context), to: ContentBlockGenerator, as: :process
+
+  @doc """
+  Returns the generated content for a Content Block.
+  """
+  def generate_content(definition, content_block_key, context) do
+    item_by_type_and_key(definition, :content_blocks, content_block_key)
+    |> case do
+      content_block when is_map(content_block) ->
+        generate_block(content_block, context)
+      nil ->
+        nil
+    end
+  end
 
   @doc """
   Returns the treatment to be used for the flag key.
@@ -47,8 +65,6 @@ defmodule RiddlerAgent.Guide do
     |> Enum.map(&evaluate_flag(&1, context))
     |> Enum.into(%{})
   end
-
-  defdelegate evaluate_flag(flag, context), to: FlagEvaluator, as: :process
 
   def condition_value(nil, _context), do: true
 

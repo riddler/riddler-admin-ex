@@ -9,6 +9,11 @@ defmodule RiddlerAgent do
 
   require Logger
 
+  def generate_content(content_block_key, context) do
+    definition()
+    |> Guide.generate_content(content_block_key, context)
+  end
+
   def treatment(flag_key, context, default_treatment \\ "disabled") do
     definition()
     |> Guide.treatment(flag_key, context, default_treatment)
