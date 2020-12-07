@@ -4,7 +4,43 @@ defmodule RiddlerAgent.Guide do
   and lead participants through their journeys along dynamic paths
   """
 
+  alias __MODULE__.ContentBlockGenerator
   alias __MODULE__.FlagEvaluator
+
+  defdelegate evaluate_flag(flag, context), to: FlagEvaluator, as: :process
+
+  defdelegate generate_block(content_block, context), to: ContentBlockGenerator, as: :process
+
+  @doc """
+  Returns the generated content for a Content Block.
+  """
+  def generate_content(definition, content_block_key, context) do
+    item_by_type_and_key(definition, :content_blocks, content_block_key)
+    |> case do
+      content_block when is_map(content_block) ->
+        generate_block(content_block, context)
+      nil ->
+        nil
+    end
+  end
+
+  @doc """
+  Returns the treatment to be used for the flag key.
+  """
+  def treatment(definition, flag_key, context, default_treatment \\ "disabled") do
+    item_by_type_and_key(definition, :flags, flag_key)
+    |> case do
+      flag when is_map(flag) ->
+        {_key, treatment} = evaluate_flag(flag, context)
+        treatment
+      nil ->
+        default_treatment
+    end
+
+  rescue
+    _ ->
+    default_treatment
+  end
 
   def evaluate(definition, type, key, context \\ %{})
       when is_map(definition) and is_atom(type) and is_binary(key) do
@@ -30,8 +66,6 @@ defmodule RiddlerAgent.Guide do
     |> Enum.into(%{})
   end
 
-  defdelegate evaluate_flag(flag, context), to: FlagEvaluator, as: :process
-
   def condition_value(nil, _context), do: true
 
   def condition_value(instructions, context) do
@@ -41,5 +75,12 @@ defmodule RiddlerAgent.Guide do
     end
   rescue
     _ -> false
+  end
+
+  defp item_by_type_and_key(definition, type, key)
+      when is_map(definition) and is_atom(type) and is_binary(key) do
+    definition
+    |> Map.get(type)
+    |> Enum.find(fn item -> item.key == key end)
   end
 end

@@ -9,14 +9,22 @@ defmodule RiddlerAgent do
 
   require Logger
 
+  def generate_content(content_block_key, context) do
+    definition()
+    |> Guide.generate_content(content_block_key, context)
+  end
+
+  def treatment(flag_key, context, default_treatment \\ "disabled") do
+    definition()
+    |> Guide.treatment(flag_key, context, default_treatment)
+  end
+
   def evaluate(type, key, context \\ %{}) when is_atom(type) and is_binary(key) do
     definition()
     |> Guide.evaluate(type, key, context)
   end
 
   def all_flags(context \\ %{}) do
-    Logger.info("[AGT] Generating all flags")
-
     definition()
     |> Guide.all_flags(context)
   end

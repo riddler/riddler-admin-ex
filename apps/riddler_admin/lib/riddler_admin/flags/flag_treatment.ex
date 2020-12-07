@@ -3,7 +3,7 @@ defmodule RiddlerAdmin.Flags.FlagTreatment do
 
   alias RiddlerAdmin.Flags.Flag
 
-  @id_opts [prefix: "fltr", size: :small]
+  @id_opts [prefix: "flgtr", size: :small]
 
   @derive {Jason.Encoder, only: [:id, :description, :key]}
   schema "flag_treatments" do

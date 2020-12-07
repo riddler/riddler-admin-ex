@@ -5,7 +5,7 @@ defmodule RiddlerAdmin.Flags.Flag do
   alias RiddlerAdmin.Flags.FlagTreatment
   alias RiddlerAdmin.Workspaces.Workspace
 
-  @id_opts [prefix: "fl", size: :small]
+  @id_opts [prefix: "flg", size: :small]
 
   @derive {Jason.Encoder,
            only: [

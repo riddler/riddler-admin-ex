@@ -1,0 +1,29 @@
+<h1>Listing Elements</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Name</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for element <- @elements do %>
+    <tr>
+      <td><%= element.type %></td>
+      <td><%= element.name %></td>
+
+      <td>
+        <span><%= link "Show", to: Routes.workspace_content_block_element_path(@conn, :show, @workspace_id, @content_block_id, element) %></span>
+        <span><%= link "Edit", to: Routes.workspace_content_block_element_path(@conn, :edit, @workspace_id, @content_block_id, element) %></span>
+        <span><%= link "Delete", to: Routes.workspace_content_block_element_path(@conn, :delete, @workspace_id, @content_block_id, element), method: :delete, data: [confirm: "Are you sure?"] %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Element", to: Routes.workspace_content_block_element_path(@conn, :new, @workspace_id, @content_block_id) %></span>
+<span><%= link "Back", to: Routes.workspace_content_block_path(@conn, :show, @workspace_id, @content_block_id) %></span>

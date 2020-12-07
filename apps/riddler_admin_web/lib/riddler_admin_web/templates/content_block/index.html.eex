@@ -1,0 +1,29 @@
+<h1>Listing Content Blocks</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Key</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for content_block <- @content_blocks do %>
+    <tr>
+      <td><%= content_block.name %></td>
+      <td><%= content_block.key %></td>
+
+      <td>
+        <span><%= link "Show", to: Routes.workspace_content_block_path(@conn, :show, @workspace_id, content_block) %></span>
+        <span><%= link "Edit", to: Routes.workspace_content_block_path(@conn, :edit, @workspace_id, content_block) %></span>
+        <span><%= link "Delete", to: Routes.workspace_content_block_path(@conn, :delete, @workspace_id, content_block), method: :delete, data: [confirm: "Are you sure?"] %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Content Block", to: Routes.workspace_content_block_path(@conn, :new, @workspace_id) %></span>
+<span><%= link "Back", to: Routes.workspace_path(@conn, :show, @workspace_id) %></span>

@@ -1,0 +1,5 @@
+<h1>Edit Content Block</h1>
+
+<%= render "form.html", Map.put(assigns, :action, Routes.workspace_content_block_path(@conn, :update, @workspace_id, @content_block)) %>
+
+<span><%= link "Back", to: Routes.workspace_content_block_path(@conn, :index, @workspace_id) %></span>
