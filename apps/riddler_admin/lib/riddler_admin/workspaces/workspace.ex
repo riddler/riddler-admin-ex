@@ -2,9 +2,10 @@ defmodule RiddlerAdmin.Workspaces.Workspace do
   use RiddlerAdmin.Schema
 
   alias RiddlerAdmin.Conditions.Condition
+  alias RiddlerAdmin.ContentBlocks.ContentBlock
   alias RiddlerAdmin.Flags.Flag
 
-  @derive {Jason.Encoder, only: [:id, :name, :conditions, :flags]}
+  @derive {Jason.Encoder, only: [:id, :name, :conditions, :content_blocks, :flags]}
   schema "workspaces" do
     field :id, UXID, primary_key: true, autogenerate: true, prefix: "wsp", size: :small
     field :name, :string
@@ -13,6 +14,7 @@ defmodule RiddlerAdmin.Workspaces.Workspace do
     field :owner_identity_id, UXID
 
     has_many :conditions, Condition, references: :id
+    has_many :content_blocks, ContentBlock, references: :id
     has_many :flags, Flag, references: :id
 
     timestamps()

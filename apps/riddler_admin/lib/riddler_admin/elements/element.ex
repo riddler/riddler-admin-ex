@@ -3,7 +3,7 @@ defmodule RiddlerAdmin.Elements.Element do
 
   @id_opts [prefix: "el", size: :medium]
 
-  @derive {Jason.Encoder, only: [:id, :name, :key]}
+  @derive {Jason.Encoder, only: [:id, :type, :name, :key, :include_source, :include_instructions, :text]}
   schema "elements" do
     field :id, UXID, @id_opts ++ [primary_key: true, autogenerate: true]
 

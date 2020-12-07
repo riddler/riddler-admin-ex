@@ -1,9 +1,11 @@
 defmodule RiddlerAdmin.ContentBlocks.ContentBlock do
   use RiddlerAdmin.Schema
 
+  alias RiddlerAdmin.Elements.Element
+
   @id_opts [prefix: "cbl", size: :small]
 
-  @derive {Jason.Encoder, only: [:id, :name, :key]}
+  @derive {Jason.Encoder, only: [:id, :name, :key, :elements]}
   schema "content_blocks" do
     field :id, UXID, @id_opts ++ [primary_key: true, autogenerate: true]
 
@@ -11,6 +13,8 @@ defmodule RiddlerAdmin.ContentBlocks.ContentBlock do
     field :key, :string
 
     belongs_to :workspace, RiddlerAdmin.Workspaces.Workspace
+
+    has_many :elements, Element, references: :id
 
     timestamps()
   end
