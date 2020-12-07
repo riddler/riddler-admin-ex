@@ -84,15 +84,13 @@ defmodule RiddlerAgent.Guide.FlagEvaluator do
         %Flag{key: key, disabled_treatment: disabled_treatment},
         context
       ) do
-    atom_subject_key = String.to_atom(subject_key)
-
     subject =
-      case Map.has_key?(context, atom_subject_key) do
+      case Map.has_key?(context, subject_key) do
         true ->
-          Map.get(context, atom_subject_key)
+          Map.get(context, subject_key)
 
         false ->
-          Logger.debug("[AGT] Subject key '#{subject_key}' not found in context")
+          Logger.warn("[AGT] Subject key '#{subject_key}' not found in context")
           "NEED_BETTER_DEFAULT_SUBJECT"
       end
 
