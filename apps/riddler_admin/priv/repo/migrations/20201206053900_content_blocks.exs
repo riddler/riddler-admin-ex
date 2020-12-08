@@ -16,12 +16,13 @@ defmodule RiddlerAdmin.Repo.Migrations.ContentBlocks do
     create table(:elements) do
       add :id, :text, primary_key: true
       timestamps()
-      add :content_block_id, references(:content_blocks, on_delete: :delete_all), null: false
+      add :content_block_id, references(:content_blocks, on_delete: :delete_all)
+      add :parent_id, references(:elements, on_delete: :delete_all)
       add :rank, :integer, null: false
 
       add :type, :text, null: false
-      add :name, :text, null: false
-      add :key, :text, null: false
+      add :name, :text
+      add :key, :text
 
       add :include_source, :text
       add :include_instructions, :jsonb
@@ -30,6 +31,6 @@ defmodule RiddlerAdmin.Repo.Migrations.ContentBlocks do
     end
 
     create index(:elements, [:content_block_id])
-    create unique_index(:elements, [:content_block_id, :rank])
+    create unique_index(:elements, [:content_block_id, :parent_id, :rank])
   end
 end

@@ -207,8 +207,6 @@ _welcome_message_user =
     parent_id: welcome_message_variant.id,
     include_source: "user_id",
     include_instructions: [["load", "user_id"], ["to_bool"]],
-    name: "Welcome Message",
-    key: "welcome_message",
     text: "Hi User {{ user_id }}. Welcome to this awesome sauce!"
   })
 
@@ -218,8 +216,6 @@ _welcome_message_visitor =
     type: "Text",
     rank: 2,
     parent_id: welcome_message_variant.id,
-    name: "Welcome Message",
-    key: "welcome_message",
     text: "Welcome to this awesome sauce!"
   })
 
