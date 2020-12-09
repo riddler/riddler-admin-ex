@@ -3,17 +3,7 @@ defmodule RiddlerAdmin.Elements.Element do
 
   @id_opts [prefix: "el", size: :medium]
 
-  @derive {Jason.Encoder,
-           only: [
-             :id,
-             :type,
-             :name,
-             :key,
-             :include_source,
-             :include_instructions,
-             :text,
-             :elements
-           ]}
+  # See Jason.Encoder below
   schema "elements" do
     field :id, UXID, @id_opts ++ [primary_key: true, autogenerate: true]
 
@@ -28,8 +18,8 @@ defmodule RiddlerAdmin.Elements.Element do
     field :text, :string
 
     belongs_to :content_block, RiddlerAdmin.ContentBlocks.ContentBlock
-    belongs_to :parent, __MODULE__
-    has_many :children, __MODULE__, references: :id
+    belongs_to :element, __MODULE__
+    has_many :elements, __MODULE__, references: :id
 
     timestamps()
   end
@@ -81,4 +71,42 @@ defmodule RiddlerAdmin.Elements.Element do
   end
 
   defp put_key_change(changeset), do: changeset
+end
+
+defimpl Jason.Encoder, for: RiddlerAdmin.Elements.Element do
+  alias RiddlerAdmin.Elements
+
+  def encode(%{type: "Variant"} = element, opts) do
+    children =
+      element.id
+      |> Elements.list_children_elements()
+
+    element = %{element | elements: children}
+
+    Jason.Encode.map(Map.take(element,
+      [
+        :id,
+        :type,
+        :name,
+        :key,
+        :include_source,
+        :include_instructions,
+        :elements
+      ]
+    ), opts)
+  end
+
+  def encode(element, opts) do
+    Jason.Encode.map(Map.take(element, 
+      [
+        :id,
+        :type,
+        :name,
+        :key,
+        :include_source,
+        :include_instructions,
+        :text
+      ]
+    ), opts)
+  end
 end

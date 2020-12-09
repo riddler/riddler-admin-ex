@@ -195,8 +195,7 @@ welcome_message_variant =
     rank: 1,
     content_block_id: welcome_message_cb.id,
     name: "Welcome Message",
-    key: "welcome_message",
-    text: "Welcome to this awesome sauce!"
+    key: "welcome_message"
   })
 
 _welcome_message_user =
@@ -204,7 +203,7 @@ _welcome_message_user =
     id: "el_WELCOME_USR",
     type: "Text",
     rank: 1,
-    parent_id: welcome_message_variant.id,
+    element_id: welcome_message_variant.id,
     include_source: "user_id",
     include_instructions: [["load", "user_id"], ["to_bool"]],
     text: "Hi User {{ user_id }}. Welcome to this awesome sauce!"
@@ -215,7 +214,7 @@ _welcome_message_visitor =
     id: "el_WELCOME_VIS",
     type: "Text",
     rank: 2,
-    parent_id: welcome_message_variant.id,
+    element_id: welcome_message_variant.id,
     text: "Welcome to this awesome sauce!"
   })
 

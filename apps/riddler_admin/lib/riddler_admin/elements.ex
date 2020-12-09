@@ -14,6 +14,13 @@ defmodule RiddlerAdmin.Elements do
     |> Repo.all()
   end
 
+  def list_children_elements(element_id) do
+    Element
+    |> where(element_id: ^element_id)
+    |> order_by(:rank)
+    |> Repo.all()
+  end
+
   @doc """
   Returns the list of elements.
 
