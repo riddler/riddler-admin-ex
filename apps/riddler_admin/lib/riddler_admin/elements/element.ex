@@ -3,7 +3,17 @@ defmodule RiddlerAdmin.Elements.Element do
 
   @id_opts [prefix: "el", size: :medium]
 
-  @derive {Jason.Encoder, only: [:id, :type, :name, :key, :include_source, :include_instructions, :text]}
+  @derive {Jason.Encoder,
+           only: [
+             :id,
+             :type,
+             :name,
+             :key,
+             :include_source,
+             :include_instructions,
+             :text,
+             :elements
+           ]}
   schema "elements" do
     field :id, UXID, @id_opts ++ [primary_key: true, autogenerate: true]
 
@@ -18,6 +28,8 @@ defmodule RiddlerAdmin.Elements.Element do
     field :text, :string
 
     belongs_to :content_block, RiddlerAdmin.ContentBlocks.ContentBlock
+    belongs_to :parent, __MODULE__
+    has_many :children, __MODULE__, references: :id
 
     timestamps()
   end
