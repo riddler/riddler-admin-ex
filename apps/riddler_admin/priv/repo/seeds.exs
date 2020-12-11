@@ -178,16 +178,6 @@ _preview =
     name: "Default Preview"
   })
 
-Logger.info("+++ Creating Definition")
-
-{:ok, _definition} =
-  Definitions.create_definition(
-    %{
-      label: "Seed definition"
-    },
-    workspace.id
-  )
-
 Logger.info("+++ Creating ContentBlocks")
 
 welcome_message_cb =
@@ -198,13 +188,42 @@ welcome_message_cb =
     key: "welcome_message"
   })
 
-_welcome_message_el =
+welcome_message_variant =
   Repo.insert!(%Elements.Element{
-    id: "el_WELCOME",
-    type: "Text",
+    id: "el_WELCOME_VAR",
+    type: "Variant",
     rank: 1,
     content_block_id: welcome_message_cb.id,
     name: "Welcome Message",
-    key: "welcome_message",
+    key: "welcome_message"
+  })
+
+_welcome_message_user =
+  Repo.insert!(%Elements.Element{
+    id: "el_WELCOME_USR",
+    type: "Text",
+    rank: 1,
+    element_id: welcome_message_variant.id,
+    include_source: "user_id",
+    include_instructions: [["load", "user_id"], ["to_bool"]],
+    text: "Hi User {{ user_id }}. Welcome to this awesome sauce!"
+  })
+
+_welcome_message_visitor =
+  Repo.insert!(%Elements.Element{
+    id: "el_WELCOME_VIS",
+    type: "Text",
+    rank: 2,
+    element_id: welcome_message_variant.id,
     text: "Welcome to this awesome sauce!"
   })
+
+Logger.info("+++ Creating Definition")
+
+{:ok, _definition} =
+  Definitions.create_definition(
+    %{
+      label: "Seed definition"
+    },
+    workspace.id
+  )
