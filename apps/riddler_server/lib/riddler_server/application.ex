@@ -7,7 +7,7 @@ defmodule RiddlerServer.Application do
 
   alias RiddlerServer.Infra.Consumers.DefinitionConsumer
 
-  @dev_base_url "http://lh:16180"
+  @dev_base_url "http://lh:2111"
 
   @seed_api_key "apikey_TESTSEED"
   @seed_api_secret "apisecret_TESTSEED"
