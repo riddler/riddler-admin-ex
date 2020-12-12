@@ -10,11 +10,11 @@ config :riddler_admin,
   database_username: "postgres"
 
 config :riddler_admin_web,
-  http_port: 16180,
+  http_port: 2111,
   secret_key_base: "this really should be a long secret string but for development ...",
   signing_salt: "it's a secret to everybody",
-  url_host: "lh",
-  url_port: 16180
+  url_host: "localhost",
+  url_port: 2111
 
 # For development, we disable any cache and enable
 # debugging and code reloading.
@@ -55,3 +55,29 @@ config :phoenix,
   # Set a higher stacktrace during development. Avoid configuring such
   # in production as building large stacktraces may be expensive.
   stacktrace_depth: 20
+
+#-----------------------------------------------------------------------------
+# RiddlerServer
+#-----------------------------------------------------------------------------
+
+# Configure your database
+config :riddler_server,
+  database_name: "riddler_server_dev",
+  database_host: "localhost",
+  database_password: "postgres",
+  database_pool_size: 10,
+  database_port: 5432,
+  database_username: "postgres"
+
+# For development, we disable any cache and enable
+# debugging and code reloading.
+#
+# The watchers configuration can be used to run external
+# watchers to your application. For example, we use it
+# with webpack to recompile .js and .css sources.
+config :riddler_server, RiddlerServerWeb.Endpoint,
+  http: [port: 2112],
+  debug_errors: true,
+  code_reloader: true,
+  check_origin: false,
+  watchers: []
