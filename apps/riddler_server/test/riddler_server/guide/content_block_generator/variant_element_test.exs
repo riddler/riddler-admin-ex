@@ -17,8 +17,8 @@ defmodule RiddlerServer.Guide.ContentBlockGenerator.VariantElementTest do
           elements: [
             %{
               id: "el_WELCOME_USR",
-              include_instructions: [["load", "user_id"], ["lit", 1], ["compare", "EQ"]],
-              include_source: "user_id",
+              include_source: "user_id = \"1\"",
+              include_instructions: [["load", "user_id"], ["lit", "1"], ["compare", "EQ"]],
               text: "Hi User {{ user_id }}",
               type: "Text"
             },
@@ -52,7 +52,7 @@ defmodule RiddlerServer.Guide.ContentBlockGenerator.VariantElementTest do
     end
 
     test "with correct context uses the first element", %{content_block: content_block} do
-      result = Generator.process(content_block, %{"user_id" => 1})
+      result = Generator.process(content_block, %{"user_id" => "1"})
 
       assert %{
                key: "welcome_message",

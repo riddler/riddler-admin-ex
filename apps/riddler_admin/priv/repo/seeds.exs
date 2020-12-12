@@ -204,8 +204,8 @@ _welcome_message_user =
     type: "Text",
     rank: 1,
     element_id: welcome_message_variant.id,
-    include_source: "user_id = 1",
-    include_instructions: [["load", "user_id"], ["lit", 1], ["compare", "EQ"]],
+    include_source: "user_id = \"1\"",
+    include_instructions: [["load", "user_id"], ["lit", "1"], ["compare", "EQ"]],
     text: "Hi User {{ user_id }}. Welcome to this awesome sauce!"
   })
 
