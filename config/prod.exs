@@ -15,3 +15,11 @@ config :riddler_admin_web, RiddlerAdminWeb.Endpoint,
 
 # Do not print debug messages in production
 config :logger, level: :info
+
+#-----------------------------------------------------------------------------
+# RiddlerServer
+#-----------------------------------------------------------------------------
+
+config :riddler_server, RiddlerServerWeb.Endpoint,
+  url: [host: "example.com", port: 80],
+  cache_static_manifest: "priv/static/cache_manifest.json"
