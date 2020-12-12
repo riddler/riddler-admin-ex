@@ -9,6 +9,9 @@ defmodule RiddlerServerWeb.Router do
     pipe_through :api
 
     get "/content/:key", ContentController, :show
+
+    get "/flags", FlagController, :index
+    get "/flags/:key", FlagController, :show
   end
 
   # Enables LiveDashboard only for development
