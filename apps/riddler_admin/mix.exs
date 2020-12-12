@@ -9,7 +9,7 @@ defmodule RiddlerAdmin.MixProject do
   @deps [
     # Umbrella
     {:messaging, in_umbrella: true},
-    {:riddler_agent, in_umbrella: true},
+    {:riddler_server, in_umbrella: true},
 
     # Required
     {:argon2_elixir, "~> 2.0"},
