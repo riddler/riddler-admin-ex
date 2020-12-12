@@ -36,7 +36,6 @@ defmodule RiddlerAdminWeb.ContentBlockController do
   def edit(conn, %{"id" => id, "workspace_id" => workspace_id}) do
     content_block = ContentBlocks.get_content_block!(id)
     changeset = ContentBlocks.change_content_block(content_block)
-                |> IO.inspect()
 
     render(conn, "edit.html",
       content_block: content_block,
