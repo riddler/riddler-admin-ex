@@ -54,7 +54,9 @@ defmodule RiddlerServer.MemoryStore do
           state
       ) do
     Logger.info(
-      "[AGT] Adding Definition #{definition_id} for Workspace #{workspace_id} in #{environment_id}"
+      "[RSRV] Adding Definition #{definition_id} for Workspace #{workspace_id} in #{
+        environment_id
+      }"
     )
 
     new_definitions =
@@ -84,7 +86,7 @@ defmodule RiddlerServer.MemoryStore do
         _from,
         %__MODULE__{workspaces: workspaces} = state
       ) do
-    Logger.debug("[AGT] Retrieving Definition for Workspace #{workspace_id}")
+    Logger.debug("[RSRV] Retrieving Definition for Workspace #{workspace_id}")
 
     {:reply, Map.get(workspaces, workspace_id), state}
   end
@@ -95,7 +97,7 @@ defmodule RiddlerServer.MemoryStore do
         _from,
         %__MODULE__{environments: environments} = state
       ) do
-    Logger.debug("[AGT] Retrieving Definition for Environment #{environment_id}")
+    Logger.debug("[RSRV] Retrieving Definition for Environment #{environment_id}")
 
     {:reply, Map.get(environments, environment_id), state}
   end

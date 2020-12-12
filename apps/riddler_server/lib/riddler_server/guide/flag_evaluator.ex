@@ -69,7 +69,7 @@ defmodule RiddlerServer.Guide.FlagEvaluator do
         _context
       )
       when is_nil(subject_key) do
-    Logger.debug("[AGT] Subject key is nil")
+    Logger.debug("[RSRV] Subject key is nil")
     {key, disabled_treatment}
   end
 
@@ -90,7 +90,7 @@ defmodule RiddlerServer.Guide.FlagEvaluator do
           Map.get(context, subject_key)
 
         false ->
-          Logger.warn("[AGT] Subject key '#{subject_key}' not found in context")
+          Logger.warn("[RSRV] Subject key '#{subject_key}' not found in context")
           "NEED_BETTER_DEFAULT_SUBJECT"
       end
 

@@ -10,7 +10,7 @@ defmodule RiddlerServer.Remote do
         {:ok, remote_config}
 
       {:ok, %{status: 401}} ->
-        Logger.error("[AGT] Unauthorized error fetching remote config. Check API credentials.")
+        Logger.error("[RSRV] Unauthorized error fetching remote config. Check API credentials.")
         {:error, :unauthorized}
     end
   end

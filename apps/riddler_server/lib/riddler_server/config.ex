@@ -59,7 +59,7 @@ defmodule RiddlerServer.Config do
 
   @impl GenServer
   def init(%{api_key: api_key, api_secret: api_secret, base_url: base_url} \\ []) do
-    Logger.info("[AGT] Starting #{__MODULE__}")
+    Logger.info("[RSRV] Starting #{__MODULE__}")
 
     Process.send_after(self(), :request_remote_config, @initial_delay_ms)
 
@@ -123,7 +123,7 @@ defmodule RiddlerServer.Config do
   end
 
   defp request_remote_config(remote_connection_opts) do
-    Logger.info("[AGT] Requesting remote configuration")
+    Logger.info("[RSRV] Requesting remote configuration")
 
     Remote.client(remote_connection_opts)
     |> Remote.config()
