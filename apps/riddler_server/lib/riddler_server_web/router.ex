@@ -7,6 +7,8 @@ defmodule RiddlerServerWeb.Router do
 
   scope "/api", RiddlerServerWeb do
     pipe_through :api
+
+    get "/content/:key", ContentController, :show
   end
 
   # Enables LiveDashboard only for development
