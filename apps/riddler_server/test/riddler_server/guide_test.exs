@@ -7,7 +7,7 @@ defmodule RiddlerServer.GuideTest do
     test "returns default_treatment for undefined flag" do
       definition = %{}
 
-      assert "disabled" == Guide.treatment(definition, "anything", %{})
+      assert "not_found" = Guide.treatment(definition, "anything", %{})
     end
 
     test "returns treatment for static flag" do

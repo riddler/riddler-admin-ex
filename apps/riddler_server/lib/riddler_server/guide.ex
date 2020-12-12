@@ -28,7 +28,7 @@ defmodule RiddlerServer.Guide do
   @doc """
   Returns the treatment to be used for the flag key.
   """
-  def treatment(definition, flag_key, context, default_treatment \\ "disabled") do
+  def treatment(definition, flag_key, context, default_treatment \\ "not_found") do
     item_by_type_and_key(definition, :flags, flag_key)
     |> case do
       flag when is_map(flag) ->
