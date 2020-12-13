@@ -17,10 +17,16 @@
     <%= @element.key %>
   </li>
 
+<%= if @element.type == "Variant" do %>
+  <li>
+    <%= link "Elements", to: Routes.workspace_content_block_element_path(@conn, :index, @workspace_id, @content_block_id) %>
+  </li>
+<% else %>
   <li>
     <strong>Text:</strong>
     <%= @element.text %>
   </li>
+<% end %>
 
 </ul>
 
