@@ -64,6 +64,8 @@ defmodule RiddlerAdminWeb.Router do
 
       resources "/definitions", DefinitionController
 
+      resources "/elements", ElementController
+
       resources "/environments", EnvironmentController do
         resources "/agents", AgentController
       end
