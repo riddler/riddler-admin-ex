@@ -79,7 +79,7 @@ Logger.info("+++ Seeding Flags")
 feature_flag =
   Repo.insert!(%Flags.Flag{
     name: "Static Flag",
-    key: "static_flag",
+    key: "static",
     type: "Feature",
     workspace_id: workspace.id,
     enabled: true,
@@ -105,7 +105,7 @@ _static_assigner =
 rollout_flag =
   Repo.insert!(%Flags.Flag{
     name: "Rollout Flag",
-    key: "rollout_flag",
+    key: "rollout",
     type: "Feature",
     workspace_id: workspace.id,
     enabled: true,
@@ -185,7 +185,7 @@ welcome_message_cb =
     id: "cbl_WELCOME",
     workspace_id: "wsp_SEED",
     name: "Welcome Message",
-    key: "welcome_message"
+    key: "welcome"
   })
 
 welcome_message_variant =
@@ -195,7 +195,7 @@ welcome_message_variant =
     rank: 1,
     content_block_id: welcome_message_cb.id,
     name: "Welcome Message",
-    key: "welcome_message"
+    key: "welcome"
   })
 
 _welcome_message_user =
