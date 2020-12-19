@@ -6,7 +6,7 @@
   <% end %>
 
   <%= label f, :type %>
-  <%= select f, :type, [{"Text", "Text"}] %>
+  <%= select f, :type, [{"Text", "Text"},{"Variant","Variant"}] %>
   <%= error_tag f, :type %>
   <br />
 
