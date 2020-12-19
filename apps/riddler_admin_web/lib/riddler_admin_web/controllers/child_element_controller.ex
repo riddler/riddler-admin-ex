@@ -1,58 +1,46 @@
-defmodule RiddlerAdminWeb.ElementController do
+defmodule RiddlerAdminWeb.ChildElementController do
   use RiddlerAdminWeb, :controller
 
   alias RiddlerAdmin.Elements
   alias RiddlerAdmin.Elements.Element
 
-  # Showing ContentBlock elements
-  def index(conn, %{"workspace_id" => workspace_id, "content_block_id" => content_block_id}) do
-    elements = Elements.list_content_block_elements(content_block_id)
+  def index(conn, %{"workspace_id" => workspace_id, "parent_element_id" => parent_element_id}) do
+    elements = Elements.list_children_elements(parent_element_id)
 
     render(conn, "index.html",
       elements: elements,
       workspace_id: workspace_id,
-      content_block_id: content_block_id
+      parent_element_id: parent_element_id
     )
   end
 
-  # Showing Variant elements
-  def index(conn, %{"workspace_id" => workspace_id, "element_id" => element_id}) do
-    elements = Elements.list_children_elements(element_id)
-
-    render(conn, "index.html",
-      elements: elements,
-      workspace_id: workspace_id,
-      element_id: element_id
-    )
-  end
-
-  def new(conn, %{"workspace_id" => workspace_id, "content_block_id" => content_block_id}) do
+  def new(conn, %{"workspace_id" => workspace_id, "parent_element_id" => parent_element_id}) do
     changeset = Elements.change_element(%Element{})
 
     render(conn, "new.html",
       changeset: changeset,
       workspace_id: workspace_id,
-      content_block_id: content_block_id
+      parent_element_id: parent_element_id
     )
   end
 
   def create(conn, %{
         "element" => element_params,
         "workspace_id" => workspace_id,
-        "content_block_id" => content_block_id
+        "parent_element_id" => parent_element_id
       }) do
-    case Elements.create_element(element_params, content_block_id) do
+    case Elements.create_child_element(element_params, parent_element_id) do
       {:ok, element} ->
         conn
         |> put_flash(:info, "Element created successfully.")
         |> redirect(
           to:
-            Routes.workspace_content_block_element_path(
+            Routes.workspace_child_element_path(
               conn,
               :show,
               workspace_id,
-              content_block_id,
-              element
+              element,
+              parent_element_id: parent_element_id
             )
         )
 
@@ -60,7 +48,7 @@ defmodule RiddlerAdminWeb.ElementController do
         render(conn, "new.html",
           changeset: changeset,
           workspace_id: workspace_id,
-          content_block_id: content_block_id
+          parent_element_id: parent_element_id
         )
     end
   end
@@ -68,30 +56,30 @@ defmodule RiddlerAdminWeb.ElementController do
   def show(conn, %{
         "id" => id,
         "workspace_id" => workspace_id,
-        "content_block_id" => content_block_id
+        "parent_element_id" => parent_element_id
       }) do
     element = Elements.get_element!(id)
 
     render(conn, "show.html",
       element: element,
       workspace_id: workspace_id,
-      content_block_id: content_block_id
+      parent_element_id: parent_element_id
     )
   end
 
   def edit(conn, %{
         "id" => id,
         "workspace_id" => workspace_id,
-        "content_block_id" => content_block_id
+        "parent_element_id" => parent_element_id
       }) do
     element = Elements.get_element!(id)
-    changeset = Elements.change_element(element)
+    changeset = Elements.change_child_element(element)
 
     render(conn, "edit.html",
       element: element,
       changeset: changeset,
       workspace_id: workspace_id,
-      content_block_id: content_block_id
+      parent_element_id: parent_element_id
     )
   end
 
@@ -99,22 +87,22 @@ defmodule RiddlerAdminWeb.ElementController do
         "id" => id,
         "element" => element_params,
         "workspace_id" => workspace_id,
-        "content_block_id" => content_block_id
+        "parent_element_id" => parent_element_id
       }) do
     element = Elements.get_element!(id)
 
-    case Elements.update_element(element, element_params) do
+    case Elements.update_child_element(element, element_params) do
       {:ok, element} ->
         conn
         |> put_flash(:info, "Element updated successfully.")
         |> redirect(
           to:
-            Routes.workspace_content_block_element_path(
+            Routes.workspace_child_element_path(
               conn,
               :show,
               workspace_id,
-              content_block_id,
-              element
+              element,
+              parent_element_id: parent_element_id
             )
         )
 
@@ -123,7 +111,7 @@ defmodule RiddlerAdminWeb.ElementController do
           element: element,
           changeset: changeset,
           workspace_id: workspace_id,
-          content_block_id: content_block_id
+          parent_element_id: parent_element_id
         )
     end
   end
@@ -131,7 +119,7 @@ defmodule RiddlerAdminWeb.ElementController do
   def delete(conn, %{
         "id" => id,
         "workspace_id" => workspace_id,
-        "content_block_id" => content_block_id
+        "parent_element_id" => parent_element_id
       }) do
     element = Elements.get_element!(id)
     {:ok, _element} = Elements.delete_element(element)
@@ -140,7 +128,12 @@ defmodule RiddlerAdminWeb.ElementController do
     |> put_flash(:info, "Element deleted successfully.")
     |> redirect(
       to:
-        Routes.workspace_content_block_element_path(conn, :index, workspace_id, content_block_id)
+        Routes.workspace_child_element_path(
+          conn,
+          :index,
+          workspace_id,
+          parent_element_id: parent_element_id
+        )
     )
   end
 end

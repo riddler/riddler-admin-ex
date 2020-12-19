@@ -16,15 +16,6 @@
     <strong>Include Condition:</strong>
     <%= @element.include_source %>
   </li>
-  <li>
-    <strong>Name:</strong>
-    <%= @element.name %>
-  </li>
-
-  <li>
-    <strong>Key:</strong>
-    <%= @element.key %>
-  </li>
 
 <%= if @element.type == "Variant" do %>
   <li>
@@ -39,5 +30,5 @@
 
 </ul>
 
-<span><%= link "Edit", to: Routes.workspace_content_block_element_path(@conn, :edit, @workspace_id, @content_block_id, @element) %></span>
-<span><%= link "Back", to: Routes.workspace_content_block_element_path(@conn, :index, @workspace_id, @content_block_id) %></span>
+<span><%= link "Edit", to: Routes.workspace_child_element_path(@conn, :edit, @workspace_id, @element, parent_element_id: @parent_element_id) %></span>
+<span><%= link "Back", to: Routes.workspace_child_element_path(@conn, :index, @workspace_id, parent_element_id: @parent_element_id) %></span>

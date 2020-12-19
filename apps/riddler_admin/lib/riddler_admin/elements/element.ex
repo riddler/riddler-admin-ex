@@ -35,12 +35,29 @@ defmodule RiddlerAdmin.Elements.Element do
   end
 
   @doc false
+  def create_child_changeset(element, attrs, parent_element_id) do
+    element
+    |> child_changeset(attrs)
+    |> put_change(:element_id, parent_element_id)
+    |> validate_required([:element_id])
+  end
+
+  @doc false
   def changeset(element, attrs) do
     element
-    |> cast(attrs, [:type, :rank, :name, :key, :text])
+    |> cast(attrs, [:type, :rank, :name, :key, :text, :include_source])
     |> put_key_change()
-    |> validate_required([:type, :rank, :name, :key, :text])
+    |> validate_required([:type, :rank, :name, :key])
     |> validate_format(:key, ~r/^[a-z][a-z0-9_]+$/)
+    |> compile()
+  end
+
+  @doc false
+  def child_changeset(element, attrs) do
+    element
+    |> cast(attrs, [:type, :rank, :text, :include_source])
+    |> put_key_change()
+    |> validate_required([:type, :rank, :text])
     |> compile()
   end
 
@@ -83,30 +100,38 @@ defimpl Jason.Encoder, for: RiddlerAdmin.Elements.Element do
 
     element = %{element | elements: children}
 
-    Jason.Encode.map(Map.take(element,
-      [
-        :id,
-        :type,
-        :name,
-        :key,
-        :include_source,
-        :include_instructions,
-        :elements
-      ]
-    ), opts)
+    Jason.Encode.map(
+      Map.take(
+        element,
+        [
+          :id,
+          :type,
+          :name,
+          :key,
+          :include_source,
+          :include_instructions,
+          :elements
+        ]
+      ),
+      opts
+    )
   end
 
   def encode(element, opts) do
-    Jason.Encode.map(Map.take(element, 
-      [
-        :id,
-        :type,
-        :name,
-        :key,
-        :include_source,
-        :include_instructions,
-        :text
-      ]
-    ), opts)
+    Jason.Encode.map(
+      Map.take(
+        element,
+        [
+          :id,
+          :type,
+          :name,
+          :key,
+          :include_source,
+          :include_instructions,
+          :text
+        ]
+      ),
+      opts
+    )
   end
 end
