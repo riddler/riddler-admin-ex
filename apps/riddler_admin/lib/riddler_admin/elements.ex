@@ -60,6 +60,15 @@ defmodule RiddlerAdmin.Elements do
   end
 
   @doc """
+  Creates a child element.
+  """
+  def create_child_element(attrs, parent_element_id) do
+    %Element{}
+    |> Element.create_child_changeset(attrs, parent_element_id)
+    |> Repo.insert()
+  end
+
+  @doc """
   Updates a element.
 
   ## Examples
@@ -74,6 +83,15 @@ defmodule RiddlerAdmin.Elements do
   def update_element(%Element{} = element, attrs) do
     element
     |> Element.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Updates a child element.
+  """
+  def update_child_element(%Element{} = element, attrs) do
+    element
+    |> Element.child_changeset(attrs)
     |> Repo.update()
   end
 
@@ -104,5 +122,9 @@ defmodule RiddlerAdmin.Elements do
   """
   def change_element(%Element{} = element, attrs \\ %{}) do
     Element.changeset(element, attrs)
+  end
+
+  def change_child_element(%Element{} = element, attrs \\ %{}) do
+    Element.child_changeset(element, attrs)
   end
 end
