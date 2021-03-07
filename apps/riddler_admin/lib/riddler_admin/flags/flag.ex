@@ -1,11 +1,9 @@
 defmodule RiddlerAdmin.Flags.Flag do
-  use RiddlerAdmin.Schema
+  use RiddlerAdmin.Schema, id_prefix: "flg"
 
   alias RiddlerAdmin.Flags.FlagAssigner
   alias RiddlerAdmin.Flags.FlagTreatment
   alias RiddlerAdmin.Workspaces.Workspace
-
-  @id_opts [prefix: "flg", size: :small]
 
   @derive {Jason.Encoder,
            only: [
@@ -20,8 +18,6 @@ defmodule RiddlerAdmin.Flags.Flag do
              :assigners
            ]}
   schema "flags" do
-    field :id, UXID, @id_opts ++ [primary_key: true, autogenerate: true]
-
     field :name, :string
     field :key, :string
     field :type, :string
@@ -38,8 +34,6 @@ defmodule RiddlerAdmin.Flags.Flag do
 
     timestamps()
   end
-
-  def id_opts(), do: @id_opts
 
   def create_changeset(agent, attrs, workspace_id) do
     agent

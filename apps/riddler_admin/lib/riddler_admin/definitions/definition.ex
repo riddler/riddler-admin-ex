@@ -1,5 +1,5 @@
 defmodule RiddlerAdmin.Definitions.Definition do
-  use RiddlerAdmin.Schema
+  use RiddlerAdmin.Schema, id_prefix: "def"
 
   alias RiddlerAdmin.Definitions
   alias RiddlerAdmin.Workspaces
@@ -7,12 +7,8 @@ defmodule RiddlerAdmin.Definitions.Definition do
 
   @current_schema_version 1
 
-  @id_opts [prefix: "def", size: :small]
-
   @derive {Jason.Encoder, only: [:id, :schema_version, :version, :workspace_id]}
   schema "definitions" do
-    field :id, UXID, @id_opts ++ [primary_key: true, autogenerate: true]
-
     field :schema_version, :integer, null: false
     field :version, :integer, null: false
     field :label, :string, null: false
@@ -25,8 +21,6 @@ defmodule RiddlerAdmin.Definitions.Definition do
     timestamps()
   end
 
-  def id_opts(), do: @id_opts
-
   @doc false
   def changeset(definition, attrs) do
     definition
@@ -36,7 +30,6 @@ defmodule RiddlerAdmin.Definitions.Definition do
 
   @doc false
   def create_changeset(definition, attrs, workspace_id) do
-    definition_id = UXID.generate!(@id_opts)
     workspace_definition = Workspaces.generate_definition!(workspace_id)
     next_version = Definitions.next_version(workspace_id)
 
@@ -51,7 +44,6 @@ defmodule RiddlerAdmin.Definitions.Definition do
       workspace_definition
       |> Map.merge(%{
         schema_version: @current_schema_version,
-        id: definition_id,
         workspace_id: workspace_id,
         version: next_version,
         version_label: version_label
@@ -60,7 +52,6 @@ defmodule RiddlerAdmin.Definitions.Definition do
     yaml = Ymlr.document!(full_definition)
 
     changes
-    |> put_change(:id, definition_id)
     |> put_change(:workspace_id, workspace_id)
     |> put_change(:data, workspace_definition)
     |> put_change(:schema_version, @current_schema_version)

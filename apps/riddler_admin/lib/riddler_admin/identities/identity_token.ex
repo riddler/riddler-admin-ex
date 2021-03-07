@@ -1,5 +1,5 @@
 defmodule RiddlerAdmin.Identities.IdentityToken do
-  use RiddlerAdmin.Schema
+  use RiddlerAdmin.Schema, id_prefix: "idt", id_size: :medium
   import Ecto.Query
 
   @hash_algorithm :sha256
@@ -13,7 +13,6 @@ defmodule RiddlerAdmin.Identities.IdentityToken do
   @session_validity_in_days 60
 
   schema "identities_tokens" do
-    field :id, UXID, primary_key: true, autogenerate: true, prefix: "idt", size: :medium
     field :token, :binary
     field :context, :string
     field :sent_to, :string

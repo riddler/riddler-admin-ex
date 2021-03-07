@@ -1,15 +1,11 @@
 defmodule RiddlerAdmin.Environments.Environment do
-  use RiddlerAdmin.Schema
+  use RiddlerAdmin.Schema, id_prefix: "env"
 
   alias RiddlerAdmin.Definitions.Definition
   alias RiddlerAdmin.Workspaces.Workspace
 
-  @id_opts [prefix: "env", size: :small]
-
   @derive {Jason.Encoder, only: [:id, :name, :key]}
   schema "environments" do
-    field :id, UXID, @id_opts ++ [primary_key: true, autogenerate: true]
-
     field :name, :string
     field :key, :string
 
@@ -18,8 +14,6 @@ defmodule RiddlerAdmin.Environments.Environment do
 
     timestamps()
   end
-
-  def id_opts(), do: @id_opts
 
   def create_changeset(agent, attrs, workspace_id) do
     agent

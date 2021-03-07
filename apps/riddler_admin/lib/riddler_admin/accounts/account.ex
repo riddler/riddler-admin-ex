@@ -1,8 +1,7 @@
 defmodule RiddlerAdmin.Accounts.Account do
-  use RiddlerAdmin.Schema
+  use RiddlerAdmin.Schema, id_prefix: "acc"
 
   schema "accounts" do
-    field :id, UXID, primary_key: true, autogenerate: true, prefix: "acc", size: :small
     field :name, :string
     field :owner_identity_id, UXID
 

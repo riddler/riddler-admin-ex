@@ -1,5 +1,5 @@
 defmodule RiddlerAdmin.Workspaces.Workspace do
-  use RiddlerAdmin.Schema
+  use RiddlerAdmin.Schema, id_prefix: "wsp"
 
   alias RiddlerAdmin.Conditions.Condition
   alias RiddlerAdmin.ContentBlocks.ContentBlock
@@ -7,7 +7,6 @@ defmodule RiddlerAdmin.Workspaces.Workspace do
 
   @derive {Jason.Encoder, only: [:id, :name, :conditions, :content_blocks, :flags]}
   schema "workspaces" do
-    field :id, UXID, primary_key: true, autogenerate: true, prefix: "wsp", size: :small
     field :name, :string
     field :key, :string
     field :account_id, UXID

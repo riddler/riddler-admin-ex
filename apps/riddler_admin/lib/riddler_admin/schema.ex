@@ -8,13 +8,15 @@ defmodule RiddlerAdmin.Schema do
     * Timestamps are :utc_datetime_usec
   """
 
-  defmacro __using__(_opts) do
+  defmacro __using__(opts) do
+    prefix = Keyword.get(opts, :id_prefix)
+    size = Keyword.get(opts, :id_size, :small)
     quote do
       use Ecto.Schema
 
       import Ecto.Changeset
 
-      @primary_key false
+      @primary_key {:id, UXID, autogenerate: true, prefix: unquote(prefix), size: unquote(size)}
       @foreign_key_type UXID
 
       @timestamps_opts [type: :utc_datetime_usec]

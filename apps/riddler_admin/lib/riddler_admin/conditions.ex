@@ -7,11 +7,6 @@ defmodule RiddlerAdmin.Conditions do
   alias RiddlerAdmin.Repo
   alias RiddlerAdmin.Conditions.Condition
 
-  def generate_id(_model \\ :condition) do
-    Condition.id_opts()
-    |> UXID.generate!()
-  end
-
   @doc """
   Creates a condition with the provided workspace.
   """

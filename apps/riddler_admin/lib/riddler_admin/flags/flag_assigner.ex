@@ -1,10 +1,8 @@
 defmodule RiddlerAdmin.Flags.FlagAssigner do
-  use RiddlerAdmin.Schema
+  use RiddlerAdmin.Schema, id_prefix: "flgasn"
 
   alias RiddlerAdmin.Flags.Flag
   alias RiddlerAdmin.Flags.FlagTreatment
-
-  @id_opts [prefix: "flgasn", size: :small]
 
   @derive {Jason.Encoder,
            only: [
@@ -18,7 +16,6 @@ defmodule RiddlerAdmin.Flags.FlagAssigner do
              :percentage
            ]}
   schema "flag_assigners" do
-    field :id, UXID, @id_opts ++ [primary_key: true, autogenerate: true]
     field :rank, :integer
     field :type, :string
 

@@ -1,9 +1,8 @@
 defmodule RiddlerAdmin.Identities.Identity do
-  use RiddlerAdmin.Schema
+  use RiddlerAdmin.Schema, id_prefix: "id", id_size: :medium
 
   @derive {Inspect, except: [:password]}
   schema "identities" do
-    field :id, UXID, primary_key: true, autogenerate: true, prefix: "id", size: :medium
     field :email, :string
     field :password, :string, virtual: true
     field :hashed_password, :string

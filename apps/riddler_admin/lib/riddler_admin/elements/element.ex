@@ -1,12 +1,8 @@
 defmodule RiddlerAdmin.Elements.Element do
-  use RiddlerAdmin.Schema
-
-  @id_opts [prefix: "el", size: :medium]
+  use RiddlerAdmin.Schema, id_prefix: "el", id_size: :medium
 
   # See Jason.Encoder below
   schema "elements" do
-    field :id, UXID, @id_opts ++ [primary_key: true, autogenerate: true]
-
     field :type, :string, null: false
     field :rank, :integer, null: false
     field :name, :string, null: false
@@ -23,8 +19,6 @@ defmodule RiddlerAdmin.Elements.Element do
 
     timestamps()
   end
-
-  def id_opts(), do: @id_opts
 
   @doc false
   def create_changeset(element, attrs, content_block_id) do

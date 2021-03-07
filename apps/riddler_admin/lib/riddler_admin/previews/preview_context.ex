@@ -1,11 +1,7 @@
 defmodule RiddlerAdmin.Previews.PreviewContext do
-  use RiddlerAdmin.Schema
-
-  @id_opts [prefix: "prectx", size: :small]
+  use RiddlerAdmin.Schema, id_prefix: "prectx"
 
   schema "preview_contexts" do
-    field :id, UXID, @id_opts ++ [primary_key: true, autogenerate: true]
-
     field :name, :string
     field :data, :map
 
@@ -13,8 +9,6 @@ defmodule RiddlerAdmin.Previews.PreviewContext do
 
     timestamps()
   end
-
-  def id_opts(), do: @id_opts
 
   def create_changeset(preview_context, attrs, workspace_id) do
     preview_context

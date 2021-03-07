@@ -1,17 +1,13 @@
 defmodule RiddlerAdmin.PublishRequests.PublishRequest do
-  use RiddlerAdmin.Schema
+  use RiddlerAdmin.Schema, id_prefix: "pr"
 
   alias RiddlerAdmin.Environments.Environment
   alias RiddlerAdmin.Definitions.Definition
   alias RiddlerAdmin.Identities.Identity
   alias RiddlerAdmin.Workspaces.Workspace
 
-  @id_opts [prefix: "pr", size: :small]
-
   @derive {Jason.Encoder, only: [:id, :data, :workspace_id, :subject]}
   schema "publish_requests" do
-    field :id, UXID, @id_opts ++ [primary_key: true, autogenerate: true]
-
     field :status, :string, null: false, default: "Pending Approval"
     field :subject, :string, null: false
     field :message, :string
@@ -28,8 +24,6 @@ defmodule RiddlerAdmin.PublishRequests.PublishRequest do
 
     timestamps()
   end
-
-  def id_opts(), do: @id_opts
 
   def create_changeset(publish_request, attrs, workspace_id, author_id) do
     publish_request

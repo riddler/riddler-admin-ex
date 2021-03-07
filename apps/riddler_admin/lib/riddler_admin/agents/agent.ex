@@ -1,11 +1,7 @@
 defmodule RiddlerAdmin.Agents.Agent do
-  use RiddlerAdmin.Schema
-
-  @id_opts [prefix: "ag", size: :small]
+  use RiddlerAdmin.Schema, id_prefix: "ag"
 
   schema "agents" do
-    field :id, UXID, @id_opts ++ [primary_key: true, autogenerate: true]
-
     field :name, :string
     field :key, :string
     field :api_key, :string
@@ -15,8 +11,6 @@ defmodule RiddlerAdmin.Agents.Agent do
 
     timestamps()
   end
-
-  def id_opts(), do: @id_opts
 
   @doc false
   def create_changeset(agent, attrs, environment_id) do

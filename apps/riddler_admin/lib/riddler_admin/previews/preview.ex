@@ -1,11 +1,7 @@
 defmodule RiddlerAdmin.Previews.Preview do
-  use RiddlerAdmin.Schema
-
-  @id_opts [prefix: "prectx", size: :small]
+  use RiddlerAdmin.Schema, id_prefix: "prectx"
 
   schema "previews" do
-    field :id, UXID, @id_opts ++ [primary_key: true, autogenerate: true]
-
     field :name, :string
     field :context_overrides, :map
 

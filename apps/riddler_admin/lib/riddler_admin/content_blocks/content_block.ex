@@ -1,14 +1,10 @@
 defmodule RiddlerAdmin.ContentBlocks.ContentBlock do
-  use RiddlerAdmin.Schema
+  use RiddlerAdmin.Schema, id_prefix: "cbl"
 
   alias RiddlerAdmin.Elements.Element
 
-  @id_opts [prefix: "cbl", size: :small]
-
   @derive {Jason.Encoder, only: [:id, :name, :key, :elements]}
   schema "content_blocks" do
-    field :id, UXID, @id_opts ++ [primary_key: true, autogenerate: true]
-
     field :name, :string
     field :key, :string
 
@@ -18,8 +14,6 @@ defmodule RiddlerAdmin.ContentBlocks.ContentBlock do
 
     timestamps()
   end
-
-  def id_opts(), do: @id_opts
 
   @doc false
   def create_changeset(content_block, attrs, workspace_id) do

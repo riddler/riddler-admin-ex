@@ -1,13 +1,10 @@
 defmodule RiddlerAdmin.Conditions.Condition do
-  use RiddlerAdmin.Schema
+  use RiddlerAdmin.Schema, id_prefix: "cnd"
 
   alias RiddlerAdmin.Workspaces.Workspace
 
-  @id_opts [prefix: "cnd", size: :small]
-
   @derive {Jason.Encoder, only: [:id, :key, :source, :instructions]}
   schema "conditions" do
-    field :id, UXID, @id_opts ++ [primary_key: true, autogenerate: true]
     belongs_to :workspace, Workspace
 
     field :name, :string
@@ -17,8 +14,6 @@ defmodule RiddlerAdmin.Conditions.Condition do
 
     timestamps()
   end
-
-  def id_opts(), do: @id_opts
 
   @doc false
   def changeset(condition, attrs) do
