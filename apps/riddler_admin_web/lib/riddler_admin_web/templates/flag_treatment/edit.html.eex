@@ -1,5 +1,0 @@
-<h1>Edit Treatment</h1>
-
-<%= render "form.html", Map.put(assigns, :action, Routes.workspace_flag_flag_treatment_path(@conn, :update, @workspace_id, @flag_id, @flag_treatment)) %>
-
-<span><%= link "Back", to: Routes.workspace_flag_flag_treatment_path(@conn, :index, @workspace_id, @flag_id) %></span>
