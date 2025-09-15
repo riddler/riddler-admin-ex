@@ -1,5 +1,0 @@
-<h1>Edit Preview context</h1>
-
-<%= render "form.html", Map.put(assigns, :action, Routes.workspace_preview_context_path(@conn, :update, @workspace_id, @preview_context)) %>
-
-<span><%= link "Back", to: Routes.workspace_preview_context_path(@conn, :index, @workspace_id) %></span>

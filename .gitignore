@@ -21,3 +21,6 @@ erl_crash.dump
 
 # NSQ files
 *.dat
+
+# Ignore /old folder as we migrate to new Phoenix app
+/old/

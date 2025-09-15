@@ -1,5 +1,0 @@
-<h1>New Agent</h1>
-
-<%= render "form.html", Map.put(assigns, :action, Routes.workspace_environment_agent_path(@conn, :create, @workspace_id, @environment_id)) %>
-
-<span><%= link "Back", to: Routes.workspace_environment_agent_path(@conn, :index, @workspace_id, @environment_id) %></span>

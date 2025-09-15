@@ -1,5 +1,0 @@
-<h1>Edit Condition</h1>
-
-<%= render "form.html", Map.put(assigns, :action, Routes.workspace_condition_path(@conn, :update, @workspace_id, @condition)) %>
-
-<span><%= link "Back", to: Routes.workspace_condition_path(@conn, @workspace_id, :index) %></span>
