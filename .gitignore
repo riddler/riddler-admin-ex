@@ -38,5 +38,10 @@ npm-debug.log
 # Ignore /old folder as we migrate to new Phoenix app
 /old/
 
-# Ignore local claude code settings
-.claude/*.local.*
+# Dialyzer PLT files
+/priv/plts/
+
+# Keep granted permissions local to the person
+.claude/*.local.json
+
+.env

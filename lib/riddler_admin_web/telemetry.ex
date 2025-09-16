@@ -20,7 +20,7 @@ defmodule RiddlerAdminWeb.Telemetry do
     Supervisor.init(children, strategy: :one_for_one)
   end
 
-  @spec metrics() :: [Telemetry.Metrics.metric()]
+  @spec metrics() :: [struct()]
   def metrics do
     [
       # Phoenix Metrics

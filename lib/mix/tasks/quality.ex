@@ -8,7 +8,7 @@ defmodule Mix.Tasks.Quality do
   - Code formatting check (and auto-fix if needed)
   - Trailing whitespace check (and auto-fix if needed)
   - Markdown linting (and auto-fix if needed, if markdownlint-cli2 is available)
-  - Test coverage check (requires >90% coverage)
+  - Test coverage check
   - Static code analysis with Credo (strict mode)
   - Type checking with Dialyzer
 
@@ -276,7 +276,7 @@ defmodule Mix.Tasks.Quality do
 
     case System.cmd("env", ["MIX_ENV=test", "mix", "coveralls"], stderr_to_stdout: true) do
       {_output, 0} ->
-        Mix.shell().info("✅ Coverage check passed (>90% required)")
+        Mix.shell().info("✅ Coverage check passed")
 
       {output, _exit_code} ->
         # Extract the coverage percentage from the output
@@ -294,7 +294,11 @@ defmodule Mix.Tasks.Quality do
         end
 
         Mix.shell().info("💡 Run 'MIX_ENV=test mix coveralls.detail' to see uncovered lines")
-        Mix.shell().info("💡 Add more tests to increase coverage above 90%")
+
+        Mix.shell().info(
+          "💡 Add more tests to increase coverage above threshold set in coveralls.json"
+        )
+
         Mix.raise("Coverage check failed")
     end
   end
