@@ -34,7 +34,7 @@ custom classes must fully style the input
 - Out of the box **only the app.js and app.css bundles are supported**
   - You cannot reference an external vendor'd script `src` or link `href` in the layouts
   - You must import the vendor deps into app.js and app.css to use them
-  - **Never write inline <script>custom js</script> tags within templates**
+  - **Never write inline script tags within templates**
 
 ### UI/UX & design guidelines
 
