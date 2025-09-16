@@ -5,7 +5,9 @@ defmodule RiddlerAdmin.Application do
 
   use Application
 
-  @impl true
+  alias RiddlerAdminWeb.Endpoint
+
+  @impl Application
   def start(_type, _args) do
     children = [
       RiddlerAdminWeb.Telemetry,
@@ -26,9 +28,9 @@ defmodule RiddlerAdmin.Application do
 
   # Tell Phoenix to update the endpoint configuration
   # whenever the application is updated.
-  @impl true
+  @impl Application
   def config_change(changed, _new, removed) do
-    RiddlerAdminWeb.Endpoint.config_change(changed, removed)
+    Endpoint.config_change(changed, removed)
     :ok
   end
 end

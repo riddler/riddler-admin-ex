@@ -1,21 +1,8 @@
-alias RiddlerAdmin.{
-  Accounts,
-  Accounts.Account,
-  Agents,
-  Agents.Agent,
-  Conditions,
-  Conditions.Condition,
-  Workspaces,
-  Workspaces.Workspace
-}
-
 defmodule I do
   @doc "Clears the terminal. So fresh and so clean."
   def c(), do: IEx.Helpers.clear()
   @doc "Dummy, but not dumb data."
   def dd(k), do: dummy_data(k)
-  @doc "Starts the observer."
-  def o(), do: :observer.start()
   @doc "Recompiles."
   def r(), do: IEx.Helpers.recompile()
   @doc "Yank words. Not chains"
@@ -48,3 +35,5 @@ defmodule I do
     _ -> inspect(text, limit: :infinity, pretty: true)
   end
 end
+
+import I

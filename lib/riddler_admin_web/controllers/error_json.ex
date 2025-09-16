@@ -5,6 +5,8 @@ defmodule RiddlerAdminWeb.ErrorJSON do
   See config/config.exs.
   """
 
+  alias Phoenix.Controller
+
   # If you want to customize a particular status code,
   # you may add your own clauses, such as:
   #
@@ -15,7 +17,8 @@ defmodule RiddlerAdminWeb.ErrorJSON do
   # By default, Phoenix returns the status message from
   # the template name. For example, "404.json" becomes
   # "Not Found".
+  @spec render(String.t(), map()) :: map()
   def render(template, _assigns) do
-    %{errors: %{detail: Phoenix.Controller.status_message_from_template(template)}}
+    %{errors: %{detail: Controller.status_message_from_template(template)}}
   end
 end

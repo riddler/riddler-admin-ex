@@ -17,6 +17,9 @@ defmodule RiddlerAdminWeb.ConnCase do
 
   use ExUnit.CaseTemplate
 
+  alias Phoenix.ConnTest
+  alias RiddlerAdmin.DataCase
+
   using do
     quote do
       # The default endpoint for testing
@@ -32,7 +35,7 @@ defmodule RiddlerAdminWeb.ConnCase do
   end
 
   setup tags do
-    RiddlerAdmin.DataCase.setup_sandbox(tags)
-    {:ok, conn: Phoenix.ConnTest.build_conn()}
+    DataCase.setup_sandbox(tags)
+    {:ok, conn: ConnTest.build_conn()}
   end
 end

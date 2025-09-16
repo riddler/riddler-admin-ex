@@ -37,3 +37,11 @@ npm-debug.log
 
 # Ignore /old folder as we migrate to new Phoenix app
 /old/
+
+# Dialyzer PLT files
+/priv/plts/
+
+# Keep granted permissions local to the person
+.claude/*.local.json
+
+.env
