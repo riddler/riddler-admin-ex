@@ -9,7 +9,11 @@ import Config
 
 config :riddler_admin,
   ecto_repos: [RiddlerAdmin.Repo],
-  generators: [timestamp_type: :utc_datetime]
+  generators: [timestamp_type: :utc_datetime_usec]
+
+config :riddler_admin, RiddlerAdmin.Repo,
+  migration_primary_key: [type: :string],
+  migration_foreign_key: [type: :string]
 
 # Configures the endpoint
 config :riddler_admin, RiddlerAdminWeb.Endpoint,
