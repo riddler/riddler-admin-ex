@@ -1,4 +1,7 @@
 defmodule RiddlerAdmin.Accounts.UserToken do
+  @moduledoc """
+  User token schema and functions for managing session tokens and email verification tokens.
+  """
   use RiddlerAdmin.Schema, prefix: "utok", size: :medium
   import Ecto.Query
   alias RiddlerAdmin.Accounts.UserToken
@@ -41,6 +44,7 @@ defmodule RiddlerAdmin.Accounts.UserToken do
   and devices in the UI and allow users to explicitly expire any
   session they deem invalid.
   """
+  @spec build_session_token(RiddlerAdmin.Accounts.User.t()) :: {binary(), t()}
   def build_session_token(user) do
     token = :crypto.strong_rand_bytes(@rand_size)
     dt = user.authenticated_at || DateTime.utc_now()
@@ -55,6 +59,7 @@ defmodule RiddlerAdmin.Accounts.UserToken do
   The token is valid if it matches the value in the database and it has
   not expired (after @session_validity_in_days).
   """
+  @spec verify_session_token_query(binary()) :: {:ok, Ecto.Query.t()}
   def verify_session_token_query(token) do
     query =
       from token in by_token_and_context_query(token, "session"),
@@ -78,6 +83,7 @@ defmodule RiddlerAdmin.Accounts.UserToken do
   Users can easily adapt the existing code to provide other types of delivery methods,
   for example, by phone numbers.
   """
+  @spec build_email_token(RiddlerAdmin.Accounts.User.t(), String.t()) :: {String.t(), t()}
   def build_email_token(user, context) do
     build_hashed_token(user, context, user.email)
   end
@@ -104,6 +110,7 @@ defmodule RiddlerAdmin.Accounts.UserToken do
   database. This function also checks if the token is being used within
   15 minutes. The context of a magic link token is always "login".
   """
+  @spec verify_magic_link_token_query(String.t()) :: {:ok, Ecto.Query.t()} | :error
   def verify_magic_link_token_query(token) do
     case Base.url_decode64(token, padding: false) do
       {:ok, decoded_token} ->
@@ -134,7 +141,8 @@ defmodule RiddlerAdmin.Accounts.UserToken do
   database and if it has not expired (after @change_email_validity_in_days).
   The context must always start with "change:".
   """
-  def verify_change_email_token_query(token, "change:" <> _ = context) do
+  @spec verify_change_email_token_query(String.t(), String.t()) :: {:ok, Ecto.Query.t()} | :error
+  def verify_change_email_token_query(token, "change:" <> _suffix = context) do
     case Base.url_decode64(token, padding: false) do
       {:ok, decoded_token} ->
         hashed_token = :crypto.hash(@hash_algorithm, decoded_token)

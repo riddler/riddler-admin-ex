@@ -1,11 +1,17 @@
 defmodule RiddlerAdminWeb.UserAuth do
+  @moduledoc """
+  Authentication and session management for users.
+  """
   use RiddlerAdminWeb, :verified_routes
 
   import Plug.Conn
   import Phoenix.Controller
 
+  alias Phoenix.Component
+  alias Phoenix.LiveView
   alias RiddlerAdmin.Accounts
   alias RiddlerAdmin.Accounts.Scope
+  alias RiddlerAdminWeb.Endpoint
 
   # Make the remember me cookie valid for 14 days. This should match
   # the session validity setting in UserToken.
@@ -32,6 +38,7 @@ defmodule RiddlerAdminWeb.UserAuth do
   Redirects to the session's `:user_return_to` path
   or falls back to the `signed_in_path/1`.
   """
+  @spec log_in_user(Plug.Conn.t(), Accounts.User.t(), map()) :: Plug.Conn.t()
   def log_in_user(conn, user, params \\ %{}) do
     user_return_to = get_session(conn, :user_return_to)
 
@@ -45,12 +52,13 @@ defmodule RiddlerAdminWeb.UserAuth do
 
   It clears all session data for safety. See renew_session.
   """
+  @spec log_out_user(Plug.Conn.t()) :: Plug.Conn.t()
   def log_out_user(conn) do
     user_token = get_session(conn, :user_token)
     user_token && Accounts.delete_user_session_token(user_token)
 
     if live_socket_id = get_session(conn, :live_socket_id) do
-      RiddlerAdminWeb.Endpoint.broadcast(live_socket_id, "disconnect", %{})
+      Endpoint.broadcast(live_socket_id, "disconnect", %{})
     end
 
     conn
@@ -64,6 +72,7 @@ defmodule RiddlerAdminWeb.UserAuth do
 
   Will reissue the session token if it is older than the configured age.
   """
+  @spec fetch_current_scope_for_user(Plug.Conn.t(), keyword()) :: Plug.Conn.t()
   def fetch_current_scope_for_user(conn, _opts) do
     with {token, conn} <- ensure_user_token(conn),
          {user, token_inserted_at} <- Accounts.get_user_by_session_token(token) do
@@ -148,13 +157,13 @@ defmodule RiddlerAdminWeb.UserAuth do
     |> clear_session()
   end
 
-  defp maybe_write_remember_me_cookie(conn, token, %{"remember_me" => "true"}, _),
+  defp maybe_write_remember_me_cookie(conn, token, %{"remember_me" => "true"}, _remember_me),
     do: write_remember_me_cookie(conn, token)
 
   defp maybe_write_remember_me_cookie(conn, token, _params, true),
     do: write_remember_me_cookie(conn, token)
 
-  defp maybe_write_remember_me_cookie(conn, _token, _params, _), do: conn
+  defp maybe_write_remember_me_cookie(conn, _token, _params, _remember_me), do: conn
 
   defp write_remember_me_cookie(conn, token) do
     conn
@@ -171,9 +180,10 @@ defmodule RiddlerAdminWeb.UserAuth do
   @doc """
   Disconnects existing sockets for the given tokens.
   """
+  @spec disconnect_sessions([map()]) :: :ok
   def disconnect_sessions(tokens) do
     Enum.each(tokens, fn %{token: token} ->
-      RiddlerAdminWeb.Endpoint.broadcast(user_session_topic(token), "disconnect", %{})
+      Endpoint.broadcast(user_session_topic(token), "disconnect", %{})
     end)
   end
 
@@ -211,10 +221,14 @@ defmodule RiddlerAdminWeb.UserAuth do
         live "/profile", ProfileLive, :index
       end
   """
+  @spec on_mount(atom(), map(), map(), Phoenix.LiveView.Socket.t()) ::
+          {:cont | :halt, Phoenix.LiveView.Socket.t()}
   def on_mount(:mount_current_scope, _params, session, socket) do
     {:cont, mount_current_scope(socket, session)}
   end
 
+  @spec on_mount(:require_authenticated, map(), map(), Phoenix.LiveView.Socket.t()) ::
+          {:cont | :halt, Phoenix.LiveView.Socket.t()}
   def on_mount(:require_authenticated, _params, session, socket) do
     socket = mount_current_scope(socket, session)
 
@@ -223,13 +237,15 @@ defmodule RiddlerAdminWeb.UserAuth do
     else
       socket =
         socket
-        |> Phoenix.LiveView.put_flash(:error, "You must log in to access this page.")
-        |> Phoenix.LiveView.redirect(to: ~p"/users/log-in")
+        |> LiveView.put_flash(:error, "You must log in to access this page.")
+        |> LiveView.redirect(to: ~p"/users/log-in")
 
       {:halt, socket}
     end
   end
 
+  @spec on_mount(:require_sudo_mode, map(), map(), Phoenix.LiveView.Socket.t()) ::
+          {:cont | :halt, Phoenix.LiveView.Socket.t()}
   def on_mount(:require_sudo_mode, _params, session, socket) do
     socket = mount_current_scope(socket, session)
 
@@ -238,16 +254,16 @@ defmodule RiddlerAdminWeb.UserAuth do
     else
       socket =
         socket
-        |> Phoenix.LiveView.put_flash(:error, "You must re-authenticate to access this page.")
-        |> Phoenix.LiveView.redirect(to: ~p"/users/log-in")
+        |> LiveView.put_flash(:error, "You must re-authenticate to access this page.")
+        |> LiveView.redirect(to: ~p"/users/log-in")
 
       {:halt, socket}
     end
   end
 
   defp mount_current_scope(socket, session) do
-    Phoenix.Component.assign_new(socket, :current_scope, fn ->
-      {user, _} =
+    Component.assign_new(socket, :current_scope, fn ->
+      {user, _token_inserted_at} =
         if user_token = session["user_token"] do
           Accounts.get_user_by_session_token(user_token)
         end || {nil, nil}
@@ -258,15 +274,18 @@ defmodule RiddlerAdminWeb.UserAuth do
 
   @doc "Returns the path to redirect to after log in."
   # the user was already logged in, redirect to settings
+  @spec signed_in_path(Plug.Conn.t()) :: String.t()
   def signed_in_path(%Plug.Conn{assigns: %{current_scope: %Scope{user: %Accounts.User{}}}}) do
     ~p"/users/settings"
   end
 
-  def signed_in_path(_), do: ~p"/"
+  @spec signed_in_path(any()) :: String.t()
+  def signed_in_path(_conn), do: ~p"/"
 
   @doc """
   Plug for routes that require the user to be authenticated.
   """
+  @spec require_authenticated_user(Plug.Conn.t(), keyword()) :: Plug.Conn.t()
   def require_authenticated_user(conn, _opts) do
     if conn.assigns.current_scope && conn.assigns.current_scope.user do
       conn

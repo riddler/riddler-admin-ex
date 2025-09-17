@@ -4,6 +4,7 @@ defmodule RiddlerAdminWeb.UserLive.ConfirmationTest do
   import Phoenix.LiveViewTest
   import RiddlerAdmin.AccountsFixtures
 
+  alias Phoenix.Flash
   alias RiddlerAdmin.Accounts
 
   setup do
@@ -45,7 +46,7 @@ defmodule RiddlerAdminWeb.UserLive.ConfirmationTest do
 
       conn = follow_trigger_action(form, conn)
 
-      assert Phoenix.Flash.get(conn.assigns.flash, :info) =~
+      assert Flash.get(conn.assigns.flash, :info) =~
                "User confirmed successfully"
 
       assert Accounts.get_user!(user.id).confirmed_at
@@ -79,7 +80,7 @@ defmodule RiddlerAdminWeb.UserLive.ConfirmationTest do
 
       conn = follow_trigger_action(form, conn)
 
-      assert Phoenix.Flash.get(conn.assigns.flash, :info) =~
+      assert Flash.get(conn.assigns.flash, :info) =~
                "Welcome back!"
 
       assert Accounts.get_user!(user.id).confirmed_at == user.confirmed_at

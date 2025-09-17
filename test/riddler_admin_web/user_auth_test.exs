@@ -1,12 +1,12 @@
 defmodule RiddlerAdminWeb.UserAuthTest do
   use RiddlerAdminWeb.ConnCase, async: true
 
-  alias Phoenix.LiveView
+  import RiddlerAdmin.AccountsFixtures
+
+  alias Phoenix.{Flash, LiveView}
   alias RiddlerAdmin.Accounts
   alias RiddlerAdmin.Accounts.Scope
-  alias RiddlerAdminWeb.UserAuth
-
-  import RiddlerAdmin.AccountsFixtures
+  alias RiddlerAdminWeb.{Endpoint, UserAuth}
 
   @remember_me_cookie "_riddler_admin_web_user_remember_me"
   @remember_me_cookie_max_age 60 * 60 * 24 * 14
@@ -14,7 +14,7 @@ defmodule RiddlerAdminWeb.UserAuthTest do
   setup %{conn: conn} do
     conn =
       conn
-      |> Map.replace!(:secret_key_base, RiddlerAdminWeb.Endpoint.config(:secret_key_base))
+      |> Map.replace!(:secret_key_base, Endpoint.config(:secret_key_base))
       |> init_test_session(%{})
 
     %{user: %{user_fixture() | authenticated_at: DateTime.utc_now()}, conn: conn}
@@ -91,7 +91,7 @@ defmodule RiddlerAdminWeb.UserAuthTest do
       conn =
         conn
         |> recycle()
-        |> Map.replace!(:secret_key_base, RiddlerAdminWeb.Endpoint.config(:secret_key_base))
+        |> Map.replace!(:secret_key_base, Endpoint.config(:secret_key_base))
         |> fetch_cookies()
         |> init_test_session(%{user_remember_me: true})
 
@@ -126,7 +126,7 @@ defmodule RiddlerAdminWeb.UserAuthTest do
 
     test "broadcasts to the given live_socket_id", %{conn: conn} do
       live_socket_id = "users_sessions:abcdef-token"
-      RiddlerAdminWeb.Endpoint.subscribe(live_socket_id)
+      Endpoint.subscribe(live_socket_id)
 
       conn
       |> put_session(:live_socket_id, live_socket_id)
@@ -177,7 +177,7 @@ defmodule RiddlerAdminWeb.UserAuthTest do
     end
 
     test "does not authenticate if data is missing", %{conn: conn, user: user} do
-      _ = Accounts.generate_user_session_token(user)
+      _token = Accounts.generate_user_session_token(user)
       conn = UserAuth.fetch_current_scope_for_user(conn, [])
       refute get_session(conn, :user_token)
       refute conn.assigns.current_scope
@@ -191,7 +191,7 @@ defmodule RiddlerAdminWeb.UserAuthTest do
       %{value: signed_token} = logged_in_conn.resp_cookies[@remember_me_cookie]
 
       offset_user_token(token, -10, :day)
-      {user, _} = Accounts.get_user_by_session_token(token)
+      {user, _token_inserted_at} = Accounts.get_user_by_session_token(token)
 
       conn =
         conn
@@ -261,7 +261,7 @@ defmodule RiddlerAdminWeb.UserAuthTest do
       session = conn |> put_session(:user_token, user_token) |> get_session()
 
       socket = %LiveView.Socket{
-        endpoint: RiddlerAdminWeb.Endpoint,
+        endpoint: Endpoint,
         assigns: %{__changed__: %{}, flash: %{}}
       }
 
@@ -273,7 +273,7 @@ defmodule RiddlerAdminWeb.UserAuthTest do
       session = conn |> get_session()
 
       socket = %LiveView.Socket{
-        endpoint: RiddlerAdminWeb.Endpoint,
+        endpoint: Endpoint,
         assigns: %{__changed__: %{}, flash: %{}}
       }
 
@@ -288,11 +288,11 @@ defmodule RiddlerAdminWeb.UserAuthTest do
       session = conn |> put_session(:user_token, user_token) |> get_session()
 
       socket = %LiveView.Socket{
-        endpoint: RiddlerAdminWeb.Endpoint,
+        endpoint: Endpoint,
         assigns: %{__changed__: %{}, flash: %{}}
       }
 
-      assert {:cont, _updated_socket} =
+      assert {:cont, _socket} =
                UserAuth.on_mount(:require_sudo_mode, %{}, session, socket)
     end
 
@@ -305,11 +305,11 @@ defmodule RiddlerAdminWeb.UserAuthTest do
       session = conn |> put_session(:user_token, user_token) |> get_session()
 
       socket = %LiveView.Socket{
-        endpoint: RiddlerAdminWeb.Endpoint,
+        endpoint: Endpoint,
         assigns: %{__changed__: %{}, flash: %{}}
       }
 
-      assert {:halt, _updated_socket} =
+      assert {:halt, _socket} =
                UserAuth.on_mount(:require_sudo_mode, %{}, session, socket)
     end
   end
@@ -325,7 +325,7 @@ defmodule RiddlerAdminWeb.UserAuthTest do
 
       assert redirected_to(conn) == ~p"/users/log-in"
 
-      assert Phoenix.Flash.get(conn.assigns.flash, :error) ==
+      assert Flash.get(conn.assigns.flash, :error) ==
                "You must log in to access this page."
     end
 
@@ -371,7 +371,7 @@ defmodule RiddlerAdminWeb.UserAuthTest do
       tokens = [%{token: "token1"}, %{token: "token2"}]
 
       for %{token: token} <- tokens do
-        RiddlerAdminWeb.Endpoint.subscribe("users_sessions:#{Base.url_encode64(token)}")
+        Endpoint.subscribe("users_sessions:#{Base.url_encode64(token)}")
       end
 
       UserAuth.disconnect_sessions(tokens)

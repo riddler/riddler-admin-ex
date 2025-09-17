@@ -1,9 +1,9 @@
 defmodule RiddlerAdmin.AccountsTest do
   use RiddlerAdmin.DataCase
 
-  alias RiddlerAdmin.Accounts
-
   import RiddlerAdmin.AccountsFixtures
+
+  alias RiddlerAdmin.Accounts
   alias RiddlerAdmin.Accounts.{User, UserToken}
 
   describe "get_user_by_email/1" do
@@ -38,7 +38,7 @@ defmodule RiddlerAdmin.AccountsTest do
   describe "get_user!/1" do
     test "raises if id is invalid" do
       assert_raise Ecto.NoResultsError, fn ->
-        Accounts.get_user!(-1)
+        Accounts.get_user!("!@#$%^&*()")
       end
     end
 
@@ -241,9 +241,9 @@ defmodule RiddlerAdmin.AccountsTest do
     end
 
     test "deletes all tokens for the given user", %{user: user} do
-      _ = Accounts.generate_user_session_token(user)
+      _token = Accounts.generate_user_session_token(user)
 
-      {:ok, {_, _}} =
+      {:ok, {_updated_user, _expired_tokens}} =
         Accounts.update_user_password(user, %{
           password: "new valid password"
         })

@@ -1,9 +1,11 @@
 defmodule RiddlerAdminWeb.UserLive.SettingsTest do
   use RiddlerAdminWeb.ConnCase, async: true
 
-  alias RiddlerAdmin.Accounts
   import Phoenix.LiveViewTest
   import RiddlerAdmin.AccountsFixtures
+
+  alias Phoenix.Flash
+  alias RiddlerAdmin.Accounts
 
   describe "Settings page" do
     test "renders settings page", %{conn: conn} do
@@ -117,7 +119,7 @@ defmodule RiddlerAdminWeb.UserLive.SettingsTest do
 
       assert get_session(new_password_conn, :user_token) != get_session(conn, :user_token)
 
-      assert Phoenix.Flash.get(new_password_conn.assigns.flash, :info) =~
+      assert Flash.get(new_password_conn.assigns.flash, :info) =~
                "Password updated successfully"
 
       assert Accounts.get_user_by_email_and_password(user.email, new_password)

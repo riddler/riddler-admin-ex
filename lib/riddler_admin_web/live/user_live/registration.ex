@@ -3,8 +3,9 @@ defmodule RiddlerAdminWeb.UserLive.Registration do
 
   alias RiddlerAdmin.Accounts
   alias RiddlerAdmin.Accounts.User
+  alias RiddlerAdminWeb.UserAuth
 
-  @impl true
+  @impl Phoenix.LiveView
   def render(assigns) do
     ~H"""
     <Layouts.app flash={@flash} current_scope={@current_scope}>
@@ -41,10 +42,10 @@ defmodule RiddlerAdminWeb.UserLive.Registration do
     """
   end
 
-  @impl true
+  @impl Phoenix.LiveView
   def mount(_params, _session, %{assigns: %{current_scope: %{user: user}}} = socket)
       when not is_nil(user) do
-    {:ok, redirect(socket, to: RiddlerAdminWeb.UserAuth.signed_in_path(socket))}
+    {:ok, redirect(socket, to: UserAuth.signed_in_path(socket))}
   end
 
   def mount(_params, _session, socket) do
@@ -53,11 +54,11 @@ defmodule RiddlerAdminWeb.UserLive.Registration do
     {:ok, assign_form(socket, changeset), temporary_assigns: [form: nil]}
   end
 
-  @impl true
+  @impl Phoenix.LiveView
   def handle_event("save", %{"user" => user_params}, socket) do
     case Accounts.register_user(user_params) do
       {:ok, user} ->
-        {:ok, _} =
+        {:ok, _captured_email} =
           Accounts.deliver_login_instructions(
             user,
             &url(~p"/users/log-in/#{&1}")

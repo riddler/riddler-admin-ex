@@ -4,10 +4,12 @@ defmodule RiddlerAdminWeb.UserSessionController do
   alias RiddlerAdmin.Accounts
   alias RiddlerAdminWeb.UserAuth
 
+  @spec create(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def create(conn, %{"_action" => "confirmed"} = params) do
     create(conn, params, "User confirmed successfully.")
   end
 
+  @spec create(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def create(conn, params) do
     create(conn, params, "Welcome back!")
   end
@@ -22,7 +24,7 @@ defmodule RiddlerAdminWeb.UserSessionController do
         |> put_flash(:info, info)
         |> UserAuth.log_in_user(user, user_params)
 
-      _ ->
+      _error ->
         conn
         |> put_flash(:error, "The link is invalid or it has expired.")
         |> redirect(to: ~p"/users/log-in")
@@ -46,6 +48,7 @@ defmodule RiddlerAdminWeb.UserSessionController do
     end
   end
 
+  @spec update_password(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def update_password(conn, %{"user" => user_params} = params) do
     user = conn.assigns.current_scope.user
     true = Accounts.sudo_mode?(user)
@@ -59,6 +62,7 @@ defmodule RiddlerAdminWeb.UserSessionController do
     |> create(params, "Password updated successfully!")
   end
 
+  @spec delete(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def delete(conn, _params) do
     conn
     |> put_flash(:info, "Logged out successfully.")

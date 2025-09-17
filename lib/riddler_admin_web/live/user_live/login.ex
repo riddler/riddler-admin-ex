@@ -1,9 +1,10 @@
 defmodule RiddlerAdminWeb.UserLive.Login do
   use RiddlerAdminWeb, :live_view
 
+  alias Phoenix.Flash
   alias RiddlerAdmin.Accounts
 
-  @impl true
+  @impl Phoenix.LiveView
   def render(assigns) do
     ~H"""
     <Layouts.app flash={@flash} current_scope={@current_scope}>
@@ -92,10 +93,10 @@ defmodule RiddlerAdminWeb.UserLive.Login do
     """
   end
 
-  @impl true
+  @impl Phoenix.LiveView
   def mount(_params, _session, socket) do
     email =
-      Phoenix.Flash.get(socket.assigns.flash, :email) ||
+      Flash.get(socket.assigns.flash, :email) ||
         get_in(socket.assigns, [:current_scope, Access.key(:user), Access.key(:email)])
 
     form = to_form(%{"email" => email}, as: "user")
@@ -103,7 +104,7 @@ defmodule RiddlerAdminWeb.UserLive.Login do
     {:ok, assign(socket, form: form, trigger_submit: false)}
   end
 
-  @impl true
+  @impl Phoenix.LiveView
   def handle_event("submit_password", _params, socket) do
     {:noreply, assign(socket, :trigger_submit, true)}
   end

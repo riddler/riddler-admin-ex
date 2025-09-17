@@ -20,14 +20,18 @@ defmodule RiddlerAdmin.Accounts.Scope do
 
   defstruct user: nil
 
+  @type t :: %__MODULE__{user: User.t() | nil}
+
   @doc """
   Creates a scope for the given user.
 
   Returns nil if no user is given.
   """
+  @spec for_user(User.t()) :: t()
   def for_user(%User{} = user) do
     %__MODULE__{user: user}
   end
 
+  @spec for_user(nil) :: nil
   def for_user(nil), do: nil
 end

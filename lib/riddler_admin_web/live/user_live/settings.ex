@@ -3,9 +3,10 @@ defmodule RiddlerAdminWeb.UserLive.Settings do
 
   on_mount {RiddlerAdminWeb.UserAuth, :require_sudo_mode}
 
+  alias Ecto.Changeset
   alias RiddlerAdmin.Accounts
 
-  @impl true
+  @impl Phoenix.LiveView
   def render(assigns) do
     ~H"""
     <Layouts.app flash={@flash} current_scope={@current_scope}>
@@ -66,14 +67,14 @@ defmodule RiddlerAdminWeb.UserLive.Settings do
     """
   end
 
-  @impl true
+  @impl Phoenix.LiveView
   def mount(%{"token" => token}, _session, socket) do
     socket =
       case Accounts.update_user_email(socket.assigns.current_scope.user, token) do
         {:ok, _user} ->
           put_flash(socket, :info, "Email changed successfully.")
 
-        {:error, _} ->
+        {:error, _changeset} ->
           put_flash(socket, :error, "Email change link is invalid or it has expired.")
       end
 
@@ -95,7 +96,7 @@ defmodule RiddlerAdminWeb.UserLive.Settings do
     {:ok, socket}
   end
 
-  @impl true
+  @impl Phoenix.LiveView
   def handle_event("validate_email", params, socket) do
     %{"user" => user_params} = params
 
@@ -116,7 +117,7 @@ defmodule RiddlerAdminWeb.UserLive.Settings do
     case Accounts.change_user_email(user, user_params) do
       %{valid?: true} = changeset ->
         Accounts.deliver_user_update_email_instructions(
-          Ecto.Changeset.apply_action!(changeset, :insert),
+          Changeset.apply_action!(changeset, :insert),
           user.email,
           &url(~p"/users/settings/confirm-email/#{&1}")
         )
