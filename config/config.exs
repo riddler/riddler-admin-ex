@@ -7,6 +7,19 @@
 # General application configuration
 import Config
 
+config :riddler_admin, :scopes,
+  user: [
+    default: true,
+    module: RiddlerAdmin.Accounts.Scope,
+    assign_key: :current_scope,
+    access_path: [:user, :id],
+    schema_key: :user_id,
+    schema_type: :id,
+    schema_table: :users,
+    test_data_fixture: RiddlerAdmin.AccountsFixtures,
+    test_setup_helper: :register_and_log_in_user
+  ]
+
 config :riddler_admin,
   ecto_repos: [RiddlerAdmin.Repo],
   generators: [timestamp_type: :utc_datetime_usec]

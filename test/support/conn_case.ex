@@ -18,7 +18,9 @@ defmodule RiddlerAdminWeb.ConnCase do
   use ExUnit.CaseTemplate
 
   alias Phoenix.ConnTest
-  alias RiddlerAdmin.DataCase
+  alias Plug.Conn
+  alias RiddlerAdmin.{Accounts, AccountsFixtures, DataCase}
+  alias RiddlerAdmin.Accounts.Scope
 
   using do
     quote do
@@ -37,5 +39,50 @@ defmodule RiddlerAdminWeb.ConnCase do
   setup tags do
     DataCase.setup_sandbox(tags)
     {:ok, conn: ConnTest.build_conn()}
+  end
+
+  @doc """
+  Setup helper that registers and logs in users.
+
+      setup :register_and_log_in_user
+
+  It stores an updated connection and a registered user in the
+  test context.
+  """
+  @spec register_and_log_in_user(map()) :: map()
+  def register_and_log_in_user(%{conn: conn} = context) do
+    user = AccountsFixtures.user_fixture()
+    scope = Scope.for_user(user)
+
+    opts =
+      context
+      |> Map.take([:token_authenticated_at])
+      |> Enum.into([])
+
+    %{conn: log_in_user(conn, user, opts), user: user, scope: scope}
+  end
+
+  @doc """
+  Logs the given `user` into the `conn`.
+
+  It returns an updated `conn`.
+  """
+  @spec log_in_user(Conn.t(), struct(), keyword()) :: Conn.t()
+  def log_in_user(conn, user, opts \\ []) do
+    token = Accounts.generate_user_session_token(user)
+
+    maybe_set_token_authenticated_at(token, opts[:token_authenticated_at])
+
+    conn
+    |> ConnTest.init_test_session(%{})
+    |> Conn.put_session(:user_token, token)
+  end
+
+  @spec maybe_set_token_authenticated_at(String.t(), nil) :: nil
+  defp maybe_set_token_authenticated_at(_token, nil), do: nil
+
+  @spec maybe_set_token_authenticated_at(String.t(), DateTime.t()) :: :ok
+  defp maybe_set_token_authenticated_at(token, authenticated_at) do
+    AccountsFixtures.override_token_authenticated_at(token, authenticated_at)
   end
 end
