@@ -1,8 +1,6 @@
 defmodule RiddlerAdmin.AccountsTest do
   use RiddlerAdmin.DataCase
 
-  import RiddlerAdmin.AccountsFixtures
-
   alias RiddlerAdmin.Accounts
   alias RiddlerAdmin.Accounts.{User, UserToken}
 
@@ -12,7 +10,7 @@ defmodule RiddlerAdmin.AccountsTest do
     end
 
     test "returns the user if the email exists" do
-      %{id: id} = user = user_fixture()
+      %{id: id} = user = insert(:confirmed_user)
       assert %User{id: ^id} = Accounts.get_user_by_email(user.email)
     end
   end
@@ -23,12 +21,12 @@ defmodule RiddlerAdmin.AccountsTest do
     end
 
     test "does not return the user if the password is not valid" do
-      user = user_fixture() |> set_password()
+      user = insert(:user_with_password)
       refute Accounts.get_user_by_email_and_password(user.email, "invalid")
     end
 
     test "returns the user if the email and password are valid" do
-      %{id: id} = user = user_fixture() |> set_password()
+      %{id: id} = user = insert(:user_with_password)
 
       assert %User{id: ^id} =
                Accounts.get_user_by_email_and_password(user.email, valid_user_password())
@@ -43,7 +41,7 @@ defmodule RiddlerAdmin.AccountsTest do
     end
 
     test "returns the user with the given id" do
-      %{id: id} = user = user_fixture()
+      %{id: id} = user = insert(:confirmed_user)
       assert %User{id: ^id} = Accounts.get_user!(user.id)
     end
   end
@@ -68,7 +66,7 @@ defmodule RiddlerAdmin.AccountsTest do
     end
 
     test "validates email uniqueness" do
-      %{email: email} = user_fixture()
+      %{email: email} = insert(:confirmed_user)
       {:error, changeset} = Accounts.register_user(%{email: email})
       assert "has already been taken" in errors_on(changeset).email
 
@@ -78,8 +76,8 @@ defmodule RiddlerAdmin.AccountsTest do
     end
 
     test "registers users without password" do
-      email = unique_user_email()
-      {:ok, user} = Accounts.register_user(valid_user_attributes(email: email))
+      email = "user#{System.unique_integer()}@example.com"
+      {:ok, user} = Accounts.register_user(%{email: email})
       assert user.email == email
       assert is_nil(user.hashed_password)
       assert is_nil(user.confirmed_at)
@@ -115,7 +113,7 @@ defmodule RiddlerAdmin.AccountsTest do
 
   describe "deliver_user_update_email_instructions/3" do
     setup do
-      %{user: user_fixture()}
+      %{user: insert(:confirmed_user)}
     end
 
     test "sends token through notification", %{user: user} do
@@ -134,8 +132,8 @@ defmodule RiddlerAdmin.AccountsTest do
 
   describe "update_user_email/2" do
     setup do
-      user = unconfirmed_user_fixture()
-      email = unique_user_email()
+      user = insert(:unconfirmed_user)
+      email = "user#{System.unique_integer()}@example.com"
 
       token =
         extract_user_token(fn url ->
@@ -204,7 +202,7 @@ defmodule RiddlerAdmin.AccountsTest do
 
   describe "update_user_password/2" do
     setup do
-      %{user: user_fixture()}
+      %{user: insert(:confirmed_user)}
     end
 
     test "validates password", %{user: user} do
@@ -254,7 +252,7 @@ defmodule RiddlerAdmin.AccountsTest do
 
   describe "generate_user_session_token/1" do
     setup do
-      %{user: user_fixture()}
+      %{user: insert(:confirmed_user)}
     end
 
     test "generates a token", %{user: user} do
@@ -267,7 +265,7 @@ defmodule RiddlerAdmin.AccountsTest do
       assert_raise Ecto.ConstraintError, fn ->
         Repo.insert!(%UserToken{
           token: user_token.token,
-          user_id: user_fixture().id,
+          user_id: insert(:confirmed_user).id,
           context: "session"
         })
       end
@@ -284,7 +282,7 @@ defmodule RiddlerAdmin.AccountsTest do
 
   describe "get_user_by_session_token/1" do
     setup do
-      user = user_fixture()
+      user = insert(:confirmed_user)
       token = Accounts.generate_user_session_token(user)
       %{user: user, token: token}
     end
@@ -309,7 +307,7 @@ defmodule RiddlerAdmin.AccountsTest do
 
   describe "get_user_by_magic_link_token/1" do
     setup do
-      user = user_fixture()
+      user = insert(:confirmed_user)
       {encoded_token, _hashed_token} = generate_user_magic_link_token(user)
       %{user: user, token: encoded_token}
     end
@@ -331,7 +329,7 @@ defmodule RiddlerAdmin.AccountsTest do
 
   describe "login_user_by_magic_link/1" do
     test "confirms user and expires tokens" do
-      user = unconfirmed_user_fixture()
+      user = insert(:unconfirmed_user)
       refute user.confirmed_at
       {encoded_token, hashed_token} = generate_user_magic_link_token(user)
 
@@ -342,7 +340,7 @@ defmodule RiddlerAdmin.AccountsTest do
     end
 
     test "returns user and (deleted) token for confirmed user" do
-      user = user_fixture()
+      user = insert(:confirmed_user)
       assert user.confirmed_at
       {encoded_token, _hashed_token} = generate_user_magic_link_token(user)
       assert {:ok, {^user, []}} = Accounts.login_user_by_magic_link(encoded_token)
@@ -351,7 +349,7 @@ defmodule RiddlerAdmin.AccountsTest do
     end
 
     test "raises when unconfirmed user has password set" do
-      user = unconfirmed_user_fixture()
+      user = insert(:unconfirmed_user)
       {1, nil} = Repo.update_all(User, set: [hashed_password: "hashed"])
       {encoded_token, _hashed_token} = generate_user_magic_link_token(user)
 
@@ -363,7 +361,7 @@ defmodule RiddlerAdmin.AccountsTest do
 
   describe "delete_user_session_token/1" do
     test "deletes the token" do
-      user = user_fixture()
+      user = insert(:confirmed_user)
       token = Accounts.generate_user_session_token(user)
       assert Accounts.delete_user_session_token(token) == :ok
       refute Accounts.get_user_by_session_token(token)
@@ -372,7 +370,7 @@ defmodule RiddlerAdmin.AccountsTest do
 
   describe "deliver_login_instructions/2" do
     setup do
-      %{user: unconfirmed_user_fixture()}
+      %{user: insert(:unconfirmed_user)}
     end
 
     test "sends token through notification", %{user: user} do

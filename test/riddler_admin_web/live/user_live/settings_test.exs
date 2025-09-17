@@ -2,7 +2,6 @@ defmodule RiddlerAdminWeb.UserLive.SettingsTest do
   use RiddlerAdminWeb.ConnCase, async: true
 
   import Phoenix.LiveViewTest
-  import RiddlerAdmin.AccountsFixtures
 
   alias Phoenix.Flash
   alias RiddlerAdmin.Accounts
@@ -11,7 +10,7 @@ defmodule RiddlerAdminWeb.UserLive.SettingsTest do
     test "renders settings page", %{conn: conn} do
       {:ok, _lv, html} =
         conn
-        |> log_in_user(user_fixture())
+        |> log_in_user(insert(:confirmed_user))
         |> live(~p"/users/settings")
 
       assert html =~ "Change Email"
@@ -29,7 +28,7 @@ defmodule RiddlerAdminWeb.UserLive.SettingsTest do
     test "redirects if user is not in sudo mode", %{conn: conn} do
       {:ok, conn} =
         conn
-        |> log_in_user(user_fixture(),
+        |> log_in_user(insert(:confirmed_user),
           token_authenticated_at: DateTime.add(DateTime.utc_now(), -11, :minute)
         )
         |> live(~p"/users/settings")
@@ -41,7 +40,7 @@ defmodule RiddlerAdminWeb.UserLive.SettingsTest do
 
   describe "update email form" do
     setup %{conn: conn} do
-      user = user_fixture()
+      user = insert(:confirmed_user)
       %{conn: log_in_user(conn, user), user: user}
     end
 
@@ -93,7 +92,7 @@ defmodule RiddlerAdminWeb.UserLive.SettingsTest do
 
   describe "update password form" do
     setup %{conn: conn} do
-      user = user_fixture()
+      user = insert(:confirmed_user)
       %{conn: log_in_user(conn, user), user: user}
     end
 
@@ -164,7 +163,7 @@ defmodule RiddlerAdminWeb.UserLive.SettingsTest do
 
   describe "confirm email" do
     setup %{conn: conn} do
-      user = user_fixture()
+      user = insert(:confirmed_user)
       email = unique_user_email()
 
       token =

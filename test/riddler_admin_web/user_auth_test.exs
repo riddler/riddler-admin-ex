@@ -1,8 +1,6 @@
 defmodule RiddlerAdminWeb.UserAuthTest do
   use RiddlerAdminWeb.ConnCase, async: true
 
-  import RiddlerAdmin.AccountsFixtures
-
   alias Phoenix.{Flash, LiveView}
   alias RiddlerAdmin.Accounts
   alias RiddlerAdmin.Accounts.Scope
@@ -17,7 +15,7 @@ defmodule RiddlerAdminWeb.UserAuthTest do
       |> Map.replace!(:secret_key_base, Endpoint.config(:secret_key_base))
       |> init_test_session(%{})
 
-    %{user: %{user_fixture() | authenticated_at: DateTime.utc_now()}, conn: conn}
+    %{user: %{insert(:confirmed_user) | authenticated_at: DateTime.utc_now()}, conn: conn}
   end
 
   describe "log_in_user/3" do
@@ -48,7 +46,7 @@ defmodule RiddlerAdminWeb.UserAuthTest do
       conn: conn,
       user: user
     } do
-      other_user = user_fixture()
+      other_user = insert(:confirmed_user)
 
       conn =
         conn

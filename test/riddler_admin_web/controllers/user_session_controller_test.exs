@@ -1,13 +1,11 @@
 defmodule RiddlerAdminWeb.UserSessionControllerTest do
   use RiddlerAdminWeb.ConnCase, async: true
 
-  import RiddlerAdmin.AccountsFixtures
-
   alias Phoenix.Flash
   alias RiddlerAdmin.Accounts
 
   setup do
-    %{unconfirmed_user: unconfirmed_user_fixture(), user: user_fixture()}
+    %{unconfirmed_user: insert(:unconfirmed_user), user: insert(:confirmed_user)}
   end
 
   describe "POST /users/log-in - email and password" do

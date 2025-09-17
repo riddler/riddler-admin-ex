@@ -17,9 +17,11 @@ defmodule RiddlerAdminWeb.ConnCase do
 
   use ExUnit.CaseTemplate
 
+  import RiddlerAdmin.Factory
+
   alias Phoenix.ConnTest
   alias Plug.Conn
-  alias RiddlerAdmin.{Accounts, AccountsFixtures, DataCase}
+  alias RiddlerAdmin.{Accounts, DataCase}
   alias RiddlerAdmin.Accounts.Scope
 
   using do
@@ -33,6 +35,7 @@ defmodule RiddlerAdminWeb.ConnCase do
       import Plug.Conn
       import Phoenix.ConnTest
       import RiddlerAdminWeb.ConnCase
+      import RiddlerAdmin.Factory
     end
   end
 
@@ -51,7 +54,7 @@ defmodule RiddlerAdminWeb.ConnCase do
   """
   @spec register_and_log_in_user(map()) :: map()
   def register_and_log_in_user(%{conn: conn} = context) do
-    user = AccountsFixtures.user_fixture()
+    user = insert(:confirmed_user)
     scope = Scope.for_user(user)
 
     opts =
@@ -83,6 +86,6 @@ defmodule RiddlerAdminWeb.ConnCase do
 
   @spec maybe_set_token_authenticated_at(String.t(), DateTime.t()) :: :ok
   defp maybe_set_token_authenticated_at(token, authenticated_at) do
-    AccountsFixtures.override_token_authenticated_at(token, authenticated_at)
+    override_token_authenticated_at(token, authenticated_at)
   end
 end

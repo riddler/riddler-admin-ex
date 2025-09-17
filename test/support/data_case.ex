@@ -27,6 +27,7 @@ defmodule RiddlerAdmin.DataCase do
       import Ecto.Changeset
       import Ecto.Query
       import RiddlerAdmin.DataCase
+      import RiddlerAdmin.Factory
     end
   end
 
