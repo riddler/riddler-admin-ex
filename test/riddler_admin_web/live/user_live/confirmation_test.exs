@@ -2,13 +2,12 @@ defmodule RiddlerAdminWeb.UserLive.ConfirmationTest do
   use RiddlerAdminWeb.ConnCase, async: true
 
   import Phoenix.LiveViewTest
-  import RiddlerAdmin.AccountsFixtures
 
   alias Phoenix.Flash
   alias RiddlerAdmin.Accounts
 
   setup do
-    %{unconfirmed_user: unconfirmed_user_fixture(), confirmed_user: user_fixture()}
+    %{unconfirmed_user: insert(:unconfirmed_user), confirmed_user: insert(:confirmed_user)}
   end
 
   describe "Confirm user" do

@@ -2,7 +2,6 @@ defmodule RiddlerAdminWeb.UserLive.LoginTest do
   use RiddlerAdminWeb.ConnCase, async: true
 
   import Phoenix.LiveViewTest
-  import RiddlerAdmin.AccountsFixtures
 
   alias Phoenix.Flash
   alias RiddlerAdmin.Accounts.UserToken
@@ -20,7 +19,7 @@ defmodule RiddlerAdminWeb.UserLive.LoginTest do
 
   describe "user login - magic link" do
     test "sends magic link email when user exists", %{conn: conn} do
-      user = user_fixture()
+      user = insert(:confirmed_user)
 
       {:ok, lv, _html} = live(conn, ~p"/users/log-in")
 
@@ -49,7 +48,7 @@ defmodule RiddlerAdminWeb.UserLive.LoginTest do
 
   describe "user login - password" do
     test "redirects if user logs in with valid credentials", %{conn: conn} do
-      user = user_fixture() |> set_password()
+      user = insert(:user_with_password)
 
       {:ok, lv, _html} = live(conn, ~p"/users/log-in")
 
@@ -95,7 +94,7 @@ defmodule RiddlerAdminWeb.UserLive.LoginTest do
 
   describe "re-authentication (sudo mode)" do
     setup %{conn: conn} do
-      user = user_fixture()
+      user = insert(:confirmed_user)
       %{user: user, conn: log_in_user(conn, user)}
     end
 
