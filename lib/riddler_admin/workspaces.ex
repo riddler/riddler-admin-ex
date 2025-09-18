@@ -6,7 +6,8 @@ defmodule RiddlerAdmin.Workspaces do
   import Ecto.Query, warn: false
 
   alias Ecto.Multi
-  alias RiddlerAdmin.Accounts.User
+  alias RiddlerAdmin.Accounts.{Scope, User}
+  alias RiddlerAdmin.Authorization
   alias RiddlerAdmin.Repo
   alias RiddlerAdmin.Workspaces.{Membership, Workspace}
 
@@ -65,40 +66,62 @@ defmodule RiddlerAdmin.Workspaces do
   @doc """
   Creates a workspace and adds the creator as an admin.
   """
-  @spec create_workspace(User.t(), map()) :: {:ok, Workspace.t()} | {:error, Ecto.Changeset.t()}
-  def create_workspace(%User{} = user, attrs \\ %{}) do
-    workspace_changeset = Workspace.changeset(%Workspace{}, attrs)
+  @spec create_workspace(Scope.t(), map()) ::
+          {:ok, Workspace.t()} | {:error, Ecto.Changeset.t()} | {:error, :unauthorized}
+  def create_workspace(%Scope{user: user}, attrs \\ %{}) do
+    workspace = %Workspace{}
 
-    Multi.new()
-    |> Multi.insert(:workspace, workspace_changeset)
-    |> Multi.run(:membership, fn _repo, %{workspace: workspace} ->
-      create_membership(user, workspace, :admin)
-    end)
-    |> Repo.transaction()
-    |> case do
-      {:ok, %{workspace: workspace}} -> {:ok, workspace}
-      {:error, :workspace, changeset, _changes} -> {:error, changeset}
-      {:error, :membership, changeset, _changes} -> {:error, changeset}
+    case Bodyguard.permit(Authorization, :create_workspace, user, workspace) do
+      :ok ->
+        workspace_changeset = Workspace.changeset(workspace, attrs)
+
+        Multi.new()
+        |> Multi.insert(:workspace, workspace_changeset)
+        |> Multi.run(:membership, fn _repo, %{workspace: workspace} ->
+          create_membership_internal(user, workspace, :admin)
+        end)
+        |> Repo.transaction()
+        |> case do
+          {:ok, %{workspace: workspace}} -> {:ok, workspace}
+          {:error, :workspace, changeset, _changes} -> {:error, changeset}
+          {:error, :membership, changeset, _changes} -> {:error, changeset}
+        end
+
+      {:error, :unauthorized} ->
+        {:error, :unauthorized}
     end
   end
 
   @doc """
   Updates a workspace.
   """
-  @spec update_workspace(Workspace.t(), map()) ::
-          {:ok, Workspace.t()} | {:error, Ecto.Changeset.t()}
-  def update_workspace(%Workspace{} = workspace, attrs) do
-    workspace
-    |> Workspace.changeset(attrs)
-    |> Repo.update()
+  @spec update_workspace(Scope.t(), Workspace.t(), map()) ::
+          {:ok, Workspace.t()} | {:error, Ecto.Changeset.t()} | {:error, :unauthorized}
+  def update_workspace(%Scope{user: user}, %Workspace{} = workspace, attrs) do
+    case Bodyguard.permit(Authorization, :update_workspace, user, workspace) do
+      :ok ->
+        workspace
+        |> Workspace.changeset(attrs)
+        |> Repo.update()
+
+      {:error, :unauthorized} ->
+        {:error, :unauthorized}
+    end
   end
 
   @doc """
   Deletes a workspace.
   """
-  @spec delete_workspace(Workspace.t()) :: {:ok, Workspace.t()} | {:error, Ecto.Changeset.t()}
-  def delete_workspace(%Workspace{} = workspace) do
-    Repo.delete(workspace)
+  @spec delete_workspace(Scope.t(), Workspace.t()) ::
+          {:ok, Workspace.t()} | {:error, Ecto.Changeset.t()} | {:error, :unauthorized}
+  def delete_workspace(%Scope{user: user}, %Workspace{} = workspace) do
+    case Bodyguard.permit(Authorization, :delete_workspace, user, workspace) do
+      :ok ->
+        Repo.delete(workspace)
+
+      {:error, :unauthorized} ->
+        {:error, :unauthorized}
+    end
   end
 
   @doc """
@@ -114,13 +137,23 @@ defmodule RiddlerAdmin.Workspaces do
   @doc """
   Returns the list of memberships for a workspace.
   """
-  @spec list_memberships(Workspace.t()) :: [Membership.t()]
-  def list_memberships(%Workspace{} = workspace) do
-    from(m in Membership,
-      where: m.workspace_id == ^workspace.id,
-      preload: [:user]
-    )
-    |> Repo.all()
+  @spec list_memberships(Scope.t(), Workspace.t()) ::
+          {:ok, [Membership.t()]} | {:error, :unauthorized}
+  def list_memberships(%Scope{user: user}, %Workspace{} = workspace) do
+    case Bodyguard.permit(Authorization, :list_memberships, user, workspace) do
+      :ok ->
+        memberships =
+          from(m in Membership,
+            where: m.workspace_id == ^workspace.id,
+            preload: [:user]
+          )
+          |> Repo.all()
+
+        {:ok, memberships}
+
+      {:error, :unauthorized} ->
+        {:error, :unauthorized}
+    end
   end
 
   @doc """
@@ -148,10 +181,24 @@ defmodule RiddlerAdmin.Workspaces do
   @doc """
   Creates a membership.
   """
-  @spec create_membership(User.t(), Workspace.t(), atom()) ::
-          {:ok, Membership.t()} | {:error, Ecto.Changeset.t()}
-  def create_membership(%User{} = user, %Workspace{} = workspace, role)
+  @spec create_membership(Scope.t(), User.t(), Workspace.t(), atom()) ::
+          {:ok, Membership.t()} | {:error, Ecto.Changeset.t()} | {:error, :unauthorized}
+  def create_membership(%Scope{user: scope_user}, %User{} = user, %Workspace{} = workspace, role)
       when role in [:admin, :member] do
+    case Bodyguard.permit(Authorization, :create_membership, scope_user, workspace) do
+      :ok ->
+        create_membership_internal(user, workspace, role)
+
+      {:error, :unauthorized} ->
+        {:error, :unauthorized}
+    end
+  end
+
+  # Internal function for creating memberships without authorization checks
+  @spec create_membership_internal(User.t(), Workspace.t(), atom()) ::
+          {:ok, Membership.t()} | {:error, Ecto.Changeset.t()}
+  defp create_membership_internal(%User{} = user, %Workspace{} = workspace, role)
+       when role in [:admin, :member] do
     %Membership{}
     |> Membership.changeset(%{
       user_id: user.id,
@@ -164,21 +211,33 @@ defmodule RiddlerAdmin.Workspaces do
   @doc """
   Updates a membership.
   """
-  @spec update_membership(Membership.t(), map()) ::
-          {:ok, Membership.t()} | {:error, Ecto.Changeset.t()}
-  def update_membership(%Membership{} = membership, attrs) do
-    membership
-    |> Membership.changeset(attrs)
-    |> Repo.update()
+  @spec update_membership(Scope.t(), Membership.t(), map()) ::
+          {:ok, Membership.t()} | {:error, Ecto.Changeset.t()} | {:error, :unauthorized}
+  def update_membership(%Scope{user: user}, %Membership{} = membership, attrs) do
+    case Bodyguard.permit(Authorization, :update_membership, user, membership) do
+      :ok ->
+        membership
+        |> Membership.changeset(attrs)
+        |> Repo.update()
+
+      {:error, :unauthorized} ->
+        {:error, :unauthorized}
+    end
   end
 
   @doc """
   Deletes a membership.
   """
-  @spec delete_membership(Membership.t()) ::
-          {:ok, Membership.t()} | {:error, Ecto.Changeset.t()}
-  def delete_membership(%Membership{} = membership) do
-    Repo.delete(membership)
+  @spec delete_membership(Scope.t(), Membership.t()) ::
+          {:ok, Membership.t()} | {:error, Ecto.Changeset.t()} | {:error, :unauthorized}
+  def delete_membership(%Scope{user: user}, %Membership{} = membership) do
+    case Bodyguard.permit(Authorization, :delete_membership, user, membership) do
+      :ok ->
+        Repo.delete(membership)
+
+      {:error, :unauthorized} ->
+        {:error, :unauthorized}
+    end
   end
 
   @doc """

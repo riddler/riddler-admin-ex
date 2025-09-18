@@ -9,6 +9,7 @@ defmodule RiddlerAdmin.Factory do
   alias RiddlerAdmin.Accounts
   alias RiddlerAdmin.Accounts.{Scope, User, UserToken}
   alias RiddlerAdmin.Repo
+  alias RiddlerAdmin.Workspaces.{Membership, Workspace}
 
   @valid_user_password "hello world!"
 
@@ -54,6 +55,25 @@ defmodule RiddlerAdmin.Factory do
   def user_scope_factory do
     %Scope{
       user: build(:user)
+    }
+  end
+
+  @spec workspace_factory() :: Workspace.t()
+  def workspace_factory do
+    name = sequence(:workspace_name, &"Workspace #{&1}")
+
+    %Workspace{
+      name: name,
+      slug: String.downcase(String.replace(name, " ", "-"))
+    }
+  end
+
+  @spec membership_factory() :: Membership.t()
+  def membership_factory do
+    %Membership{
+      user: build(:user),
+      workspace: build(:workspace),
+      role: :member
     }
   end
 
