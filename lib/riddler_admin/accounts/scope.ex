@@ -17,10 +17,11 @@ defmodule RiddlerAdmin.Accounts.Scope do
   """
 
   alias RiddlerAdmin.Accounts.User
+  alias RiddlerAdmin.Workspaces.Workspace
 
-  defstruct user: nil
+  defstruct user: nil, workspace: nil
 
-  @type t :: %__MODULE__{user: User.t() | nil}
+  @type t :: %__MODULE__{user: User.t() | nil, workspace: Workspace.t() | nil}
 
   @doc """
   Creates a scope for the given user.
@@ -34,4 +35,34 @@ defmodule RiddlerAdmin.Accounts.Scope do
 
   @spec for_user(nil) :: nil
   def for_user(nil), do: nil
+
+  @doc """
+  Creates a scope for the given user and workspace.
+  """
+  @spec for_user_and_workspace(User.t(), Workspace.t()) :: t()
+  def for_user_and_workspace(%User{} = user, %Workspace{} = workspace) do
+    %__MODULE__{user: user, workspace: workspace}
+  end
+
+  @doc """
+  Adds a workspace to an existing scope.
+  """
+  @spec with_workspace(t(), Workspace.t()) :: t()
+  def with_workspace(%__MODULE__{} = scope, %Workspace{} = workspace) do
+    %{scope | workspace: workspace}
+  end
+
+  @doc """
+  Checks if the scope has a sysadmin user.
+  """
+  @spec sysadmin?(t()) :: boolean()
+  def sysadmin?(%__MODULE__{user: %User{sysadmin: true}}), do: true
+  def sysadmin?(%__MODULE__{}), do: false
+
+  @doc """
+  Checks if the scope has a workspace.
+  """
+  @spec has_workspace?(t()) :: boolean()
+  def has_workspace?(%__MODULE__{workspace: %Workspace{}}), do: true
+  def has_workspace?(%__MODULE__{}), do: false
 end
