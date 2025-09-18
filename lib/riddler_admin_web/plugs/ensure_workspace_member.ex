@@ -25,7 +25,8 @@ defmodule RiddlerAdminWeb.Plugs.EnsureWorkspaceMember do
   @spec call(Plug.Conn.t(), keyword()) :: Plug.Conn.t()
   def call(conn, _opts) do
     with %Workspace{} = workspace <- conn.assigns[:workspace],
-         current_user when not is_nil(current_user) <- conn.assigns[:current_user] do
+         current_scope when not is_nil(current_scope) <- conn.assigns[:current_scope],
+         current_user when not is_nil(current_user) <- current_scope.user do
       if Authorization.can_access_workspace?(current_user, workspace) do
         conn
       else

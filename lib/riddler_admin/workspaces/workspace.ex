@@ -2,7 +2,7 @@ defmodule RiddlerAdmin.Workspaces.Workspace do
   @moduledoc """
   Workspace schema representing a tenant in the multi-workspace system.
   """
-  use RiddlerAdmin.Schema, prefix: "wks", size: :small
+  use RiddlerAdmin.Schema, prefix: "wks", rand_size: 1
   import Ecto.Changeset
 
   alias RiddlerAdmin.Workspaces.Membership

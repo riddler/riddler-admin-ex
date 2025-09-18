@@ -9,6 +9,7 @@ defmodule RiddlerAdminWeb.Plugs.LoadWorkspace do
   import Plug.Conn
 
   alias Phoenix.Controller
+  alias RiddlerAdmin.Accounts.Scope
   alias RiddlerAdmin.Workspaces
   alias RiddlerAdminWeb.ErrorHTML
 
@@ -27,9 +28,20 @@ defmodule RiddlerAdminWeb.Plugs.LoadWorkspace do
       %{"workspace_slug" => workspace_slug} when is_binary(workspace_slug) ->
         case Workspaces.get_workspace_by_slug(workspace_slug) do
           %Workspaces.Workspace{} = workspace ->
+            # Update current_scope with workspace
+            updated_scope =
+              case conn.assigns[:current_scope] do
+                %Scope{} = scope ->
+                  %{scope | workspace: workspace}
+
+                nil ->
+                  %Scope{workspace: workspace}
+              end
+
             conn
             |> assign(:workspace, workspace)
             |> assign(:workspace_slug, workspace_slug)
+            |> assign(:current_scope, updated_scope)
 
           nil ->
             conn

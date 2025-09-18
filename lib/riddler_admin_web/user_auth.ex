@@ -227,22 +227,38 @@ defmodule RiddlerAdminWeb.UserAuth do
     {:cont, mount_current_scope(socket, session)}
   end
 
-  @spec on_mount(:require_authenticated, map(), map(), Phoenix.LiveView.Socket.t()) ::
-          {:cont | :halt, Phoenix.LiveView.Socket.t()}
-  def on_mount(:require_authenticated, _params, session, socket) do
+  def on_mount(:require_authenticated, params, session, socket) do
     socket = mount_current_scope(socket, session)
 
     if socket.assigns.current_scope && socket.assigns.current_scope.user do
+      # If this is a workspace route, load the workspace into current_scope
+      socket =
+        case params do
+          %{"workspace_slug" => workspace_slug} ->
+            case RiddlerAdmin.Workspaces.get_workspace_by_slug(workspace_slug) do
+              %RiddlerAdmin.Workspaces.Workspace{} = workspace ->
+                updated_scope = %{socket.assigns.current_scope | workspace: workspace}
+                socket
+                |> Phoenix.Component.assign(:current_scope, updated_scope)
+                |> Phoenix.Component.assign(:workspace, workspace)
+              nil ->
+                socket
+            end
+          _ ->
+            socket
+        end
+
       {:cont, socket}
     else
       socket =
         socket
-        |> LiveView.put_flash(:error, "You must log in to access this page.")
-        |> LiveView.redirect(to: ~p"/users/log-in")
+        |> Phoenix.LiveView.put_flash(:error, "You must log in to access this page.")
+        |> Phoenix.LiveView.redirect(to: ~p"/users/log-in")
 
       {:halt, socket}
     end
   end
+
 
   @spec on_mount(:require_sudo_mode, map(), map(), Phoenix.LiveView.Socket.t()) ::
           {:cont | :halt, Phoenix.LiveView.Socket.t()}
