@@ -100,7 +100,7 @@ defmodule Mix.Tasks.Quality do
   defp find_elixir_files do
     case System.cmd(
            "find",
-           ~w[ . -path ./_build -prune -o -path ./deps -prune -o -name *.ex -print -o -name *.exs -print ],
+           ~w[ . -path ./_build -prune -o -path ./deps -prune -o -path ./old -prune -o -name *.ex -print -o -name *.exs -print ],
            stderr_to_stdout: true
          ) do
       {output, 0} ->
