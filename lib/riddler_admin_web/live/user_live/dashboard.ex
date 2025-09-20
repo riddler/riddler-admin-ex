@@ -21,7 +21,7 @@ defmodule RiddlerAdminWeb.UserLive.Dashboard do
         # If user has only one workspace, redirect to it
         {:ok,
          socket
-         |> push_navigate(to: ~p"/workspaces/#{workspace.slug}")}
+         |> push_navigate(to: ~p"/workspaces/#{workspace}")}
 
       _multiple_workspaces ->
         # If user has multiple workspaces, show selection page

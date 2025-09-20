@@ -60,7 +60,7 @@ defmodule RiddlerAdminWeb.WorkspaceLive.Settings do
         {:noreply,
          socket
          |> put_flash(:error, "Unable to delete workspace.")
-         |> push_patch(to: ~p"/workspaces/#{workspace.slug}/settings")}
+         |> push_patch(to: ~p"/workspaces/#{workspace}/settings")}
     end
   end
 
@@ -77,7 +77,7 @@ defmodule RiddlerAdminWeb.WorkspaceLive.Settings do
             </.header>
           </div>
           <.link
-            navigate={~p"/workspaces/#{@workspace.slug}"}
+            navigate={~p"/workspaces/#{@workspace}"}
             class="btn btn-outline"
           >
             <.icon name="hero-arrow-left" class="w-4 h-4 mr-2" /> Back to Dashboard
@@ -132,7 +132,7 @@ defmodule RiddlerAdminWeb.WorkspaceLive.Settings do
               <p class="text-sm">Manage workspace members and permissions.</p>
               <div class="card-actions justify-end">
                 <.link
-                  navigate={~p"/workspaces/#{@workspace.slug}/settings/members"}
+                  navigate={~p"/workspaces/#{@workspace}/settings/members"}
                   class="btn btn-primary"
                 >
                   Manage Members

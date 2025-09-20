@@ -32,7 +32,7 @@ defmodule RiddlerAdminWeb.WorkspaceLive.New do
         {:noreply,
          socket
          |> put_flash(:info, "Workspace created successfully!")
-         |> push_navigate(to: ~p"/workspaces/#{workspace.slug}")}
+         |> push_navigate(to: ~p"/workspaces/#{workspace}")}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign_form(socket, changeset)}

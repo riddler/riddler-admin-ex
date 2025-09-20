@@ -1,6 +1,8 @@
 defmodule RiddlerAdminWeb.Plugs.RequireSysadminTest do
   use RiddlerAdminWeb.ConnCase, async: true
 
+  import Plug.Conn
+
   alias RiddlerAdminWeb.Plugs.RequireSysadmin
 
   describe "RequireSysadmin plug" do
@@ -20,6 +22,8 @@ defmodule RiddlerAdminWeb.Plugs.RequireSysadminTest do
 
       conn =
         conn
+        |> fetch_query_params()
+        |> put_private(:phoenix_format, "html")
         |> assign(:current_user, user)
         |> RequireSysadmin.call([])
 

@@ -47,7 +47,7 @@ defmodule RiddlerAdminWeb.WorkspaceLive.Members do
       nil ->
         socket
         |> put_flash(:error, "Member not found.")
-        |> push_navigate(to: ~p"/workspaces/#{workspace.slug}/settings/members")
+        |> push_navigate(to: ~p"/workspaces/#{workspace}/settings/members")
     end
   end
 
@@ -74,7 +74,7 @@ defmodule RiddlerAdminWeb.WorkspaceLive.Members do
         {:noreply,
          socket
          |> put_flash(:info, "Member updated successfully!")
-         |> push_navigate(to: ~p"/workspaces/#{workspace.slug}/settings/members")
+         |> push_navigate(to: ~p"/workspaces/#{workspace}/settings/members")
          |> refresh_memberships()}
 
       {:error, changeset} ->
@@ -128,7 +128,7 @@ defmodule RiddlerAdminWeb.WorkspaceLive.Members do
           </div>
           <div class="flex gap-2">
             <.link
-              navigate={~p"/workspaces/#{@workspace.slug}/settings"}
+              navigate={~p"/workspaces/#{@workspace}/settings"}
               class="btn btn-outline"
             >
               <.icon name="hero-arrow-left" class="w-4 h-4 mr-2" /> Back to Settings
@@ -172,7 +172,7 @@ defmodule RiddlerAdminWeb.WorkspaceLive.Members do
 
               <div class="card-actions justify-end mt-6">
                 <.link
-                  navigate={~p"/workspaces/#{@workspace.slug}/settings/members"}
+                  navigate={~p"/workspaces/#{@workspace}/settings/members"}
                   class="btn btn-outline"
                 >
                   Cancel
@@ -233,7 +233,7 @@ defmodule RiddlerAdminWeb.WorkspaceLive.Members do
                     <td>
                       <div class="flex gap-2">
                         <.link
-                          navigate={~p"/workspaces/#{@workspace.slug}/members/#{membership.id}/edit"}
+                          navigate={~p"/workspaces/#{@workspace}/members/#{membership.id}/edit"}
                           class="btn btn-sm btn-outline"
                         >
                           <.icon name="hero-pencil" class="w-3 h-3" />

@@ -32,7 +32,7 @@ defmodule RiddlerAdminWeb.WorkspaceLive.Dashboard do
           </div>
           <div class="flex gap-2">
             <.link
-              navigate={~p"/workspaces/#{@workspace.slug}/settings"}
+              navigate={~p"/workspaces/#{@workspace}/settings"}
               class="btn btn-outline"
             >
               <.icon name="hero-cog-6-tooth" class="w-4 h-4 mr-2" /> Settings
@@ -50,7 +50,7 @@ defmodule RiddlerAdminWeb.WorkspaceLive.Dashboard do
               </.header>
             </div>
             <.link
-              navigate={~p"/workspaces/#{@workspace.slug}/settings/members"}
+              navigate={~p"/workspaces/#{@workspace}/settings/members"}
               class="btn btn-primary"
             >
               <.icon name="hero-users" class="w-4 h-4 mr-2" /> View all

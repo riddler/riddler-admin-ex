@@ -19,21 +19,21 @@ defmodule RiddlerAdminWeb.WorkspaceLive.SettingsTest do
       {:ok, lv, html} =
         conn
         |> log_in_user(user)
-        |> live(~p"/workspaces/#{workspace.slug}/settings")
+        |> live(~p"/workspaces/#{workspace}/settings")
 
       assert html =~ "Test Workspace Settings"
       assert html =~ "Manage your workspace configuration"
       assert has_element?(lv, "#workspace-settings-form")
       assert has_element?(lv, ~s{input[name="workspace[name]"]})
       assert has_element?(lv, ~s{input[name="workspace[slug]"]})
-      assert has_element?(lv, ~s{a[href="/workspaces/#{workspace.slug}"]})
+      assert has_element?(lv, ~s{a[href="/workspaces/#{workspace.id}"]})
     end
 
     test "updates workspace with valid data", %{conn: conn, user: user, workspace: workspace} do
       {:ok, lv, _html} =
         conn
         |> log_in_user(user)
-        |> live(~p"/workspaces/#{workspace.slug}/settings")
+        |> live(~p"/workspaces/#{workspace}/settings")
 
       result =
         lv
@@ -62,7 +62,7 @@ defmodule RiddlerAdminWeb.WorkspaceLive.SettingsTest do
       {:ok, lv, _html} =
         conn
         |> log_in_user(user)
-        |> live(~p"/workspaces/#{workspace.slug}/settings")
+        |> live(~p"/workspaces/#{workspace}/settings")
 
       result =
         lv
@@ -86,7 +86,7 @@ defmodule RiddlerAdminWeb.WorkspaceLive.SettingsTest do
       {:ok, lv, _html} =
         conn
         |> log_in_user(user)
-        |> live(~p"/workspaces/#{workspace.slug}/settings")
+        |> live(~p"/workspaces/#{workspace}/settings")
 
       result =
         lv
@@ -106,7 +106,7 @@ defmodule RiddlerAdminWeb.WorkspaceLive.SettingsTest do
       {:ok, lv, _html} =
         conn
         |> log_in_user(user)
-        |> live(~p"/workspaces/#{workspace.slug}/settings")
+        |> live(~p"/workspaces/#{workspace}/settings")
 
       # Click delete button
       assert render_click(lv, "delete")
@@ -120,7 +120,7 @@ defmodule RiddlerAdminWeb.WorkspaceLive.SettingsTest do
     test "redirects if user is not logged in", %{workspace: workspace} do
       conn = build_conn()
 
-      assert {:error, redirect} = live(conn, ~p"/workspaces/#{workspace.slug}/settings")
+      assert {:error, redirect} = live(conn, ~p"/workspaces/#{workspace}/settings")
 
       assert {:redirect, %{to: path, flash: flash}} = redirect
       assert path == ~p"/users/log-in"

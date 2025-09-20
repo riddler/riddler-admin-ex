@@ -68,7 +68,7 @@ defmodule RiddlerAdminWeb.WorkspaceLive.Index do
                 <div class="flex-1">
                   <h3 class="card-title">
                     <.link
-                      navigate={~p"/workspaces/#{workspace.slug}"}
+                      navigate={~p"/workspaces/#{workspace}"}
                       class="link link-hover"
                     >
                       {workspace.name}

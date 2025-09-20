@@ -20,13 +20,13 @@ defmodule RiddlerAdminWeb.WorkspaceLive.DashboardTest do
       {:ok, lv, html} =
         conn
         |> log_in_user(user)
-        |> live(~p"/workspaces/#{workspace.slug}")
+        |> live(~p"/workspaces/#{workspace}")
 
       assert html =~ "Test Workspace"
       assert html =~ "Workspace Dashboard"
       assert html =~ "Recent Members"
-      assert has_element?(lv, ~s{a[href="/workspaces/#{workspace.slug}/settings"]})
-      assert has_element?(lv, ~s{a[href="/workspaces/#{workspace.slug}/settings/members"]})
+      assert has_element?(lv, ~s{a[href="/workspaces/#{workspace.id}/settings"]})
+      assert has_element?(lv, ~s{a[href="/workspaces/#{workspace.id}/settings/members"]})
     end
 
     test "shows recent members in the dashboard", %{conn: conn, user: user, workspace: workspace} do
@@ -39,7 +39,7 @@ defmodule RiddlerAdminWeb.WorkspaceLive.DashboardTest do
       {:ok, _lv, html} =
         conn
         |> log_in_user(user)
-        |> live(~p"/workspaces/#{workspace.slug}")
+        |> live(~p"/workspaces/#{workspace}")
 
       # Should show up to 5 recent members
       assert html =~ user.email
@@ -61,10 +61,10 @@ defmodule RiddlerAdminWeb.WorkspaceLive.DashboardTest do
       {:ok, lv, _html} =
         conn
         |> log_in_user(user)
-        |> live(~p"/workspaces/#{workspace.slug}")
+        |> live(~p"/workspaces/#{workspace}")
 
       # Should show "View all" link
-      assert has_element?(lv, ~s{a[href="/workspaces/#{workspace.slug}/settings/members"]})
+      assert has_element?(lv, ~s{a[href="/workspaces/#{workspace.id}/settings/members"]})
       assert has_element?(lv, "a", "View all")
     end
 
@@ -78,7 +78,7 @@ defmodule RiddlerAdminWeb.WorkspaceLive.DashboardTest do
       {:ok, _lv, html} =
         conn
         |> log_in_user(user)
-        |> live(~p"/workspaces/#{workspace.slug}")
+        |> live(~p"/workspaces/#{workspace}")
 
       # Should show total member count (3 total: user + member1 + member2)
       assert html =~ "Recent Members"
@@ -92,7 +92,7 @@ defmodule RiddlerAdminWeb.WorkspaceLive.DashboardTest do
       {:ok, _lv, html} =
         conn
         |> log_in_user(user)
-        |> live(~p"/workspaces/#{workspace.slug}")
+        |> live(~p"/workspaces/#{workspace}")
 
       # Should show user email
       assert html =~ user.email
@@ -105,7 +105,7 @@ defmodule RiddlerAdminWeb.WorkspaceLive.DashboardTest do
     test "redirects if user is not logged in", %{workspace: workspace} do
       conn = build_conn()
 
-      assert {:error, redirect} = live(conn, ~p"/workspaces/#{workspace.slug}")
+      assert {:error, redirect} = live(conn, ~p"/workspaces/#{workspace}")
 
       assert {:redirect, %{to: path, flash: flash}} = redirect
       assert path == ~p"/users/log-in"

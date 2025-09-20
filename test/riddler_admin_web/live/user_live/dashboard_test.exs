@@ -29,7 +29,7 @@ defmodule RiddlerAdminWeb.UserLive.DashboardTest do
         |> live(~p"/dashboard")
 
       assert {:live_redirect, %{to: path}} = redirect
-      assert path == ~p"/workspaces/#{workspace.slug}"
+      assert path == ~p"/workspaces/#{workspace}"
     end
 
     test "redirects to workspace selection when user has multiple workspaces", %{conn: conn} do

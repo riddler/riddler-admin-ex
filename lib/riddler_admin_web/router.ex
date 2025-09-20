@@ -51,7 +51,7 @@ defmodule RiddlerAdminWeb.Router do
   end
 
   ## Workspace routes
-  scope "/workspaces/:workspace_slug", RiddlerAdminWeb do
+  scope "/workspaces/:workspace_id", RiddlerAdminWeb do
     pipe_through [:browser, :require_authenticated_user, :workspace]
 
     live_session :workspace_required,

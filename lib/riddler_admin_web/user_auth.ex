@@ -304,18 +304,16 @@ defmodule RiddlerAdminWeb.UserAuth do
 
   defp maybe_store_return_to(conn), do: conn
 
-  defp maybe_load_workspace(socket, %{"workspace_slug" => workspace_slug}) do
-    case Workspaces.get_workspace_by_slug(workspace_slug) do
-      %Workspaces.Workspace{} = workspace ->
-        updated_scope = %{socket.assigns.current_scope | workspace: workspace}
+  defp maybe_load_workspace(socket, %{"workspace_id" => workspace_id}) do
+    workspace = Workspaces.get_workspace!(workspace_id)
+    updated_scope = %{socket.assigns.current_scope | workspace: workspace}
 
-        socket
-        |> Component.assign(:current_scope, updated_scope)
-        |> Component.assign(:workspace, workspace)
-
-      nil ->
-        socket
-    end
+    socket
+    |> Component.assign(:current_scope, updated_scope)
+    |> Component.assign(:workspace, workspace)
+  rescue
+    Ecto.NoResultsError ->
+      socket
   end
 
   defp maybe_load_workspace(socket, _params), do: socket

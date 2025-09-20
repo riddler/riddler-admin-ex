@@ -38,8 +38,8 @@ defmodule RiddlerAdminWeb.WorkspaceLive.IndexTest do
       assert html =~ "/test-2"
       refute html =~ "No workspaces yet"
 
-      assert has_element?(lv, ~s{a[href="/workspaces/test-1"]})
-      assert has_element?(lv, ~s{a[href="/workspaces/test-2"]})
+      assert has_element?(lv, ~s{a[href="/workspaces/#{workspace1.id}"]})
+      assert has_element?(lv, ~s{a[href="/workspaces/#{workspace2.id}"]})
       assert has_element?(lv, ~s{a[href="/workspaces/new"]})
     end
 

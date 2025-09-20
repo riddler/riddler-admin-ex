@@ -27,7 +27,7 @@ config :riddler_admin, :scopes,
     schema_key: :workspace_id,
     schema_type: :id,
     schema_table: :workspaces,
-    routes: ["/workspaces/:workspace_slug"],
+    routes: ["/workspaces/:workspace_id"],
     test_data_fixture: RiddlerAdmin.Factory,
     test_setup_helper: :register_and_log_in_user_with_workspace
   ]

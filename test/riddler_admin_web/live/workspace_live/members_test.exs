@@ -24,7 +24,7 @@ defmodule RiddlerAdminWeb.WorkspaceLive.MembersTest do
       {:ok, lv, html} =
         conn
         |> log_in_user(admin_user)
-        |> live(~p"/workspaces/#{workspace.slug}/settings/members")
+        |> live(~p"/workspaces/#{workspace}/settings/members")
 
       assert html =~ "Test Workspace Members"
       assert html =~ "Manage workspace members and permissions"
@@ -38,7 +38,7 @@ defmodule RiddlerAdminWeb.WorkspaceLive.MembersTest do
       assert html =~ "Member"
 
       # Check for action buttons
-      assert has_element?(lv, ~s{a[href="/workspaces/#{workspace.slug}/settings"]})
+      assert has_element?(lv, ~s{a[href="/workspaces/#{workspace.id}/settings"]})
       assert has_element?(lv, "button[phx-click=\"remove_member\"]")
     end
 
@@ -46,7 +46,7 @@ defmodule RiddlerAdminWeb.WorkspaceLive.MembersTest do
       {:ok, _lv, html} =
         conn
         |> log_in_user(admin_user)
-        |> live(~p"/workspaces/#{workspace.slug}/settings/members")
+        |> live(~p"/workspaces/#{workspace}/settings/members")
 
       assert html =~ "Members (1)"
     end
@@ -59,7 +59,7 @@ defmodule RiddlerAdminWeb.WorkspaceLive.MembersTest do
       {:ok, _lv, html} =
         conn
         |> log_in_user(admin_user)
-        |> live(~p"/workspaces/#{workspace.slug}/settings/members")
+        |> live(~p"/workspaces/#{workspace}/settings/members")
 
       # Should show user avatar initial
       assert html =~ String.upcase(String.first(admin_user.email))
@@ -98,7 +98,7 @@ defmodule RiddlerAdminWeb.WorkspaceLive.MembersTest do
       {:ok, lv, html} =
         conn
         |> log_in_user(admin_user)
-        |> live(~p"/workspaces/#{workspace.slug}/members/#{member_membership.id}/edit")
+        |> live(~p"/workspaces/#{workspace}/members/#{member_membership.id}/edit")
 
       assert html =~ "Edit Member: member@example.com"
       assert has_element?(lv, "#member-form")
@@ -116,7 +116,7 @@ defmodule RiddlerAdminWeb.WorkspaceLive.MembersTest do
       {:ok, lv, _html} =
         conn
         |> log_in_user(admin_user)
-        |> live(~p"/workspaces/#{workspace.slug}/members/#{member_membership.id}/edit")
+        |> live(~p"/workspaces/#{workspace}/members/#{member_membership.id}/edit")
 
       result =
         lv
@@ -137,7 +137,7 @@ defmodule RiddlerAdminWeb.WorkspaceLive.MembersTest do
       {:ok, lv, _html} =
         conn
         |> log_in_user(admin_user)
-        |> live(~p"/workspaces/#{workspace.slug}/members/#{member_membership.id}/edit")
+        |> live(~p"/workspaces/#{workspace}/members/#{member_membership.id}/edit")
 
       assert render_submit(lv, :update_member, %{
                "membership" => %{"role" => "admin"}
@@ -159,7 +159,7 @@ defmodule RiddlerAdminWeb.WorkspaceLive.MembersTest do
       {:ok, lv, _html} =
         conn
         |> log_in_user(admin_user)
-        |> live(~p"/workspaces/#{workspace.slug}/members/#{member_membership.id}/edit")
+        |> live(~p"/workspaces/#{workspace}/members/#{member_membership.id}/edit")
 
       # Try to submit with invalid role (this would normally be prevented by the form, but let's test error handling)
       result =
@@ -180,9 +180,9 @@ defmodule RiddlerAdminWeb.WorkspaceLive.MembersTest do
       assert {:error, {:live_redirect, %{to: to_path, flash: flash}}} =
                conn
                |> log_in_user(admin_user)
-               |> live(~p"/workspaces/#{workspace.slug}/members/nonexistent-id/edit")
+               |> live(~p"/workspaces/#{workspace}/members/nonexistent-id/edit")
 
-      assert to_path == ~p"/workspaces/#{workspace.slug}/settings/members"
+      assert to_path == ~p"/workspaces/#{workspace}/settings/members"
       assert %{"error" => "Member not found."} = flash
     end
   end
@@ -214,7 +214,7 @@ defmodule RiddlerAdminWeb.WorkspaceLive.MembersTest do
       {:ok, lv, _html} =
         conn
         |> log_in_user(admin_user)
-        |> live(~p"/workspaces/#{workspace.slug}/settings/members")
+        |> live(~p"/workspaces/#{workspace}/settings/members")
 
       result = render_click(lv, :remove_member, %{"membership-id" => member_membership.id})
 
@@ -232,7 +232,7 @@ defmodule RiddlerAdminWeb.WorkspaceLive.MembersTest do
       {:ok, lv, _html} =
         conn
         |> log_in_user(admin_user)
-        |> live(~p"/workspaces/#{workspace.slug}/settings/members")
+        |> live(~p"/workspaces/#{workspace}/settings/members")
 
       result = render_click(lv, :remove_member, %{"membership-id" => "nonexistent-id"})
 
@@ -266,7 +266,7 @@ defmodule RiddlerAdminWeb.WorkspaceLive.MembersTest do
       {:ok, _lv, html} =
         conn
         |> log_in_user(admin_user)
-        |> live(~p"/workspaces/#{workspace.slug}/settings/members")
+        |> live(~p"/workspaces/#{workspace}/settings/members")
 
       assert html =~ "Members"
     end
@@ -279,7 +279,7 @@ defmodule RiddlerAdminWeb.WorkspaceLive.MembersTest do
       {:ok, _lv, html} =
         conn
         |> log_in_user(member_user)
-        |> live(~p"/workspaces/#{workspace.slug}/settings/members")
+        |> live(~p"/workspaces/#{workspace}/settings/members")
 
       assert html =~ "Members"
     end
@@ -287,7 +287,7 @@ defmodule RiddlerAdminWeb.WorkspaceLive.MembersTest do
     test "redirects if user is not logged in", %{workspace: workspace} do
       conn = build_conn()
 
-      assert {:error, redirect} = live(conn, ~p"/workspaces/#{workspace.slug}/settings/members")
+      assert {:error, redirect} = live(conn, ~p"/workspaces/#{workspace}/settings/members")
 
       assert {:redirect, %{to: path, flash: flash}} = redirect
       assert path == ~p"/users/log-in"
@@ -312,9 +312,9 @@ defmodule RiddlerAdminWeb.WorkspaceLive.MembersTest do
       {:ok, lv, _html} =
         conn
         |> log_in_user(admin_user)
-        |> live(~p"/workspaces/#{workspace.slug}/settings/members")
+        |> live(~p"/workspaces/#{workspace}/settings/members")
 
-      assert has_element?(lv, ~s{a[href="/workspaces/#{workspace.slug}/settings"]})
+      assert has_element?(lv, ~s{a[href="/workspaces/#{workspace.id}/settings"]})
     end
 
     test "provides edit links for each member", %{
@@ -330,11 +330,11 @@ defmodule RiddlerAdminWeb.WorkspaceLive.MembersTest do
       {:ok, lv, _html} =
         conn
         |> log_in_user(admin_user)
-        |> live(~p"/workspaces/#{workspace.slug}/settings/members")
+        |> live(~p"/workspaces/#{workspace}/settings/members")
 
       assert has_element?(
                lv,
-               ~s{a[href="/workspaces/#{workspace.slug}/members/#{member_membership.id}/edit"]}
+               ~s{a[href="/workspaces/#{workspace.id}/members/#{member_membership.id}/edit"]}
              )
     end
   end

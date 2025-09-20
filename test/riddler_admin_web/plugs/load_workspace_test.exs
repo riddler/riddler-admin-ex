@@ -13,11 +13,11 @@ defmodule RiddlerAdminWeb.Plugs.LoadWorkspaceTest do
       conn =
         conn
         |> assign(:current_scope, scope)
-        |> Map.put(:path_params, %{"workspace_slug" => "test-workspace"})
+        |> Map.put(:path_params, %{"workspace_id" => workspace.id})
         |> LoadWorkspace.call([])
 
       assert conn.assigns.workspace.id == workspace.id
-      assert conn.assigns.workspace_slug == "test-workspace"
+      assert conn.assigns.workspace_id == workspace.id
       assert conn.assigns.current_scope.workspace.id == workspace.id
     end
 
@@ -26,16 +26,16 @@ defmodule RiddlerAdminWeb.Plugs.LoadWorkspaceTest do
 
       conn =
         conn
-        |> Map.put(:path_params, %{"workspace_slug" => "test-workspace"})
+        |> Map.put(:path_params, %{"workspace_id" => workspace.id})
         |> LoadWorkspace.call([])
 
       assert conn.assigns.workspace.id == workspace.id
-      assert conn.assigns.workspace_slug == "test-workspace"
+      assert conn.assigns.workspace_id == workspace.id
       assert conn.assigns.current_scope.workspace.id == workspace.id
       assert is_nil(conn.assigns.current_scope.user)
     end
 
-    test "continues without workspace when no workspace_slug in path", %{conn: conn} do
+    test "continues without workspace when no workspace_id in path", %{conn: conn} do
       user = insert(:user)
       scope = Scope.for_user(user)
 
@@ -46,7 +46,7 @@ defmodule RiddlerAdminWeb.Plugs.LoadWorkspaceTest do
         |> LoadWorkspace.call([])
 
       refute Map.has_key?(conn.assigns, :workspace)
-      refute Map.has_key?(conn.assigns, :workspace_slug)
+      refute Map.has_key?(conn.assigns, :workspace_id)
       assert conn.assigns.current_scope == scope
     end
   end

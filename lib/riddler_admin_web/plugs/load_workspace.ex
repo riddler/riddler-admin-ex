@@ -25,30 +25,28 @@ defmodule RiddlerAdminWeb.Plugs.LoadWorkspace do
   @spec call(Plug.Conn.t(), keyword()) :: Plug.Conn.t()
   def call(conn, _opts) do
     case conn.path_params do
-      %{"workspace_slug" => workspace_slug} when is_binary(workspace_slug) ->
-        handle_workspace_slug(conn, workspace_slug)
+      %{"workspace_id" => workspace_id} when is_binary(workspace_id) ->
+        handle_workspace_id(conn, workspace_id)
 
       _other ->
-        # No workspace_slug in path, continue without workspace
+        # No workspace_id in path, continue without workspace
         conn
     end
   end
 
-  defp handle_workspace_slug(conn, workspace_slug) do
-    case Workspaces.get_workspace_by_slug(workspace_slug) do
-      %Workspaces.Workspace{} = workspace ->
-        load_workspace_into_conn(conn, workspace, workspace_slug)
-
-      nil ->
-        conn
-        |> put_status(:not_found)
-        |> Controller.put_view(ErrorHTML)
-        |> Controller.render(:"404")
-        |> halt()
-    end
+  defp handle_workspace_id(conn, workspace_id) do
+    workspace = Workspaces.get_workspace!(workspace_id)
+    load_workspace_into_conn(conn, workspace, workspace_id)
+  rescue
+    Ecto.NoResultsError ->
+      conn
+      |> put_status(:not_found)
+      |> Controller.put_view(ErrorHTML)
+      |> Controller.render(:"404")
+      |> halt()
   end
 
-  defp load_workspace_into_conn(conn, workspace, workspace_slug) do
+  defp load_workspace_into_conn(conn, workspace, workspace_id) do
     updated_scope =
       case conn.assigns[:current_scope] do
         %Scope{} = scope ->
@@ -60,7 +58,7 @@ defmodule RiddlerAdminWeb.Plugs.LoadWorkspace do
 
     conn
     |> assign(:workspace, workspace)
-    |> assign(:workspace_slug, workspace_slug)
+    |> assign(:workspace_id, workspace_id)
     |> assign(:current_scope, updated_scope)
   end
 end
