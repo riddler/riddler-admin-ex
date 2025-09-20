@@ -11,6 +11,7 @@ defmodule RiddlerAdmin.Accounts.User do
     field :hashed_password, :string, redact: true
     field :confirmed_at, :utc_datetime_usec
     field :authenticated_at, :utc_datetime_usec, virtual: true
+    field :sysadmin, :boolean, default: false
 
     timestamps(type: :utc_datetime_usec)
   end

@@ -42,6 +42,7 @@ defmodule RiddlerAdmin.MixProject do
         "coveralls.cobertura": :test,
         "coveralls.github": :test,
         docs: :docs,
+        "ecto.reset_test": :test,
         precommit: :test,
         quality: :test
       ]
@@ -112,6 +113,7 @@ defmodule RiddlerAdmin.MixProject do
       setup: ["deps.get", "ecto.setup", "assets.setup", "assets.build"],
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
+      "ecto.reset_test": ~w[ecto.drop ecto.create ecto.migrate],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
       "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
       "assets.build": ["compile", "tailwind riddler_admin", "esbuild riddler_admin"],

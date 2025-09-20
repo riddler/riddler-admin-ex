@@ -11,6 +11,7 @@ defmodule RiddlerAdminWeb.UserAuth do
   alias Phoenix.LiveView
   alias RiddlerAdmin.Accounts
   alias RiddlerAdmin.Accounts.Scope
+  alias RiddlerAdmin.Workspaces
   alias RiddlerAdminWeb.Endpoint
 
   # Make the remember me cookie valid for 14 days. This should match
@@ -227,12 +228,11 @@ defmodule RiddlerAdminWeb.UserAuth do
     {:cont, mount_current_scope(socket, session)}
   end
 
-  @spec on_mount(:require_authenticated, map(), map(), Phoenix.LiveView.Socket.t()) ::
-          {:cont | :halt, Phoenix.LiveView.Socket.t()}
-  def on_mount(:require_authenticated, _params, session, socket) do
+  def on_mount(:require_authenticated, params, session, socket) do
     socket = mount_current_scope(socket, session)
 
     if socket.assigns.current_scope && socket.assigns.current_scope.user do
+      socket = maybe_load_workspace(socket, params)
       {:cont, socket}
     else
       socket =
@@ -303,4 +303,18 @@ defmodule RiddlerAdminWeb.UserAuth do
   end
 
   defp maybe_store_return_to(conn), do: conn
+
+  defp maybe_load_workspace(socket, %{"workspace_id" => workspace_id}) do
+    workspace = Workspaces.get_workspace!(workspace_id)
+    updated_scope = %{socket.assigns.current_scope | workspace: workspace}
+
+    socket
+    |> Component.assign(:current_scope, updated_scope)
+    |> Component.assign(:workspace, workspace)
+  rescue
+    Ecto.NoResultsError ->
+      socket
+  end
+
+  defp maybe_load_workspace(socket, _params), do: socket
 end

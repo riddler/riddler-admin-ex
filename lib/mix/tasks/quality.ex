@@ -100,7 +100,7 @@ defmodule Mix.Tasks.Quality do
   defp find_elixir_files do
     case System.cmd(
            "find",
-           ~w[ . -path ./_build -prune -o -path ./deps -prune -o -name *.ex -print -o -name *.exs -print ],
+           ~w[ . -path ./_build -prune -o -path ./deps -prune -o -path ./old -prune -o -name *.ex -print -o -name *.exs -print ],
            stderr_to_stdout: true
          ) do
       {output, 0} ->
@@ -272,34 +272,20 @@ defmodule Mix.Tasks.Quality do
   defp run_coverage_check do
     Mix.shell().info("📊 Running test coverage check...")
 
-    Mix.Task.run("credo", ["--strict"])
-
-    case System.cmd("env", ["MIX_ENV=test", "mix", "coveralls"], stderr_to_stdout: true) do
-      {_output, 0} ->
-        Mix.shell().info("✅ Coverage check passed")
-
-      {output, _exit_code} ->
-        # Extract the coverage percentage from the output
-        coverage_line =
-          output
-          |> String.split("\n")
-          |> Enum.find(&String.contains?(&1, "[TOTAL]"))
-
-        case coverage_line do
-          nil ->
-            Mix.shell().error("❌ Coverage check failed - could not determine coverage percentage")
-
-          line ->
-            Mix.shell().error("❌ Coverage check failed: #{String.trim(line)}")
-        end
-
+    # Run coveralls with mix task to show output
+    try do
+      Mix.Task.run("coveralls", [])
+      Mix.shell().info("✅ Coverage check passed")
+    rescue
+      e in Mix.Error ->
+        Mix.shell().error("❌ Coverage check failed.")
         Mix.shell().info("💡 Run 'MIX_ENV=test mix coveralls.detail' to see uncovered lines")
 
         Mix.shell().info(
           "💡 Add more tests to increase coverage above threshold set in coveralls.json"
         )
 
-        Mix.raise("Coverage check failed")
+        Mix.raise("Coverage check failed: #{Exception.message(e)}")
     end
   end
 

@@ -4,8 +4,9 @@ defmodule RiddlerAdmin.Accounts do
   """
 
   import Ecto.Query, warn: false
-  alias RiddlerAdmin.Repo
 
+  alias Ecto.Changeset
+  alias RiddlerAdmin.Repo
   alias RiddlerAdmin.Accounts.{User, UserNotifier, UserToken}
 
   ## Database getters
@@ -301,6 +302,48 @@ defmodule RiddlerAdmin.Accounts do
   def delete_user_session_token(token) do
     Repo.delete_all(from(UserToken, where: [token: ^token, context: "session"]))
     :ok
+  end
+
+  ## Sysadmin functions
+
+  @doc """
+  Checks if a user is a sysadmin.
+  """
+  @spec sysadmin?(User.t()) :: boolean()
+  def sysadmin?(%User{sysadmin: sysadmin}), do: sysadmin
+
+  @doc """
+  Guard to check if a user is a sysadmin.
+  """
+  defguard is_sysadmin(user) when is_struct(user, User) and user.sysadmin == true
+
+  @doc """
+  Promotes a user to sysadmin.
+  """
+  @spec promote_to_sysadmin(User.t()) :: {:ok, User.t()} | {:error, Ecto.Changeset.t()}
+  def promote_to_sysadmin(%User{} = user) do
+    user
+    |> Changeset.change(sysadmin: true)
+    |> Repo.update()
+  end
+
+  @doc """
+  Demotes a user from sysadmin.
+  """
+  @spec demote_from_sysadmin(User.t()) :: {:ok, User.t()} | {:error, Ecto.Changeset.t()}
+  def demote_from_sysadmin(%User{} = user) do
+    user
+    |> Changeset.change(sysadmin: false)
+    |> Repo.update()
+  end
+
+  @doc """
+  Returns all sysadmin users.
+  """
+  @spec list_sysadmins() :: [User.t()]
+  def list_sysadmins do
+    from(u in User, where: u.sysadmin == true)
+    |> Repo.all()
   end
 
   ## Token helper
