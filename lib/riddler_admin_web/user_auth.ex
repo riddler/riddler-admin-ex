@@ -238,12 +238,15 @@ defmodule RiddlerAdminWeb.UserAuth do
             case RiddlerAdmin.Workspaces.get_workspace_by_slug(workspace_slug) do
               %RiddlerAdmin.Workspaces.Workspace{} = workspace ->
                 updated_scope = %{socket.assigns.current_scope | workspace: workspace}
+
                 socket
                 |> Phoenix.Component.assign(:current_scope, updated_scope)
                 |> Phoenix.Component.assign(:workspace, workspace)
+
               nil ->
                 socket
             end
+
           _ ->
             socket
         end
@@ -258,7 +261,6 @@ defmodule RiddlerAdminWeb.UserAuth do
       {:halt, socket}
     end
   end
-
 
   @spec on_mount(:require_sudo_mode, map(), map(), Phoenix.LiveView.Socket.t()) ::
           {:cont | :halt, Phoenix.LiveView.Socket.t()}

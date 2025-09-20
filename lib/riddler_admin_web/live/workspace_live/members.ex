@@ -252,7 +252,6 @@ defmodule RiddlerAdminWeb.WorkspaceLive.Members do
                   </tr>
                 </tbody>
               </table>
-
             </div>
           </div>
         </div>
