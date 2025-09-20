@@ -4,6 +4,8 @@ defmodule RiddlerAdminWeb.WorkspaceLive.NewTest do
   import Phoenix.LiveViewTest
   import RiddlerAdmin.Factory
 
+  alias RiddlerAdmin.Workspaces
+
   describe "New workspace" do
     test "renders create workspace form", %{conn: conn} do
       user = insert(:confirmed_user)
@@ -41,12 +43,12 @@ defmodule RiddlerAdminWeb.WorkspaceLive.NewTest do
       assert render_submit(form)
 
       # Verify workspace was actually created
-      workspace = RiddlerAdmin.Workspaces.get_workspace_by_slug("test-workspace")
+      workspace = Workspaces.get_workspace_by_slug("test-workspace")
       assert workspace.name == "Test Workspace"
       assert workspace.slug == "test-workspace"
 
       # Verify user became admin of the workspace
-      membership = RiddlerAdmin.Workspaces.get_membership(user, workspace)
+      membership = Workspaces.get_membership(user, workspace)
       assert membership.role == :admin
     end
 

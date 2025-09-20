@@ -11,6 +11,7 @@ defmodule RiddlerAdminWeb.UserAuth do
   alias Phoenix.LiveView
   alias RiddlerAdmin.Accounts
   alias RiddlerAdmin.Accounts.Scope
+  alias RiddlerAdmin.Workspaces
   alias RiddlerAdminWeb.Endpoint
 
   # Make the remember me cookie valid for 14 days. This should match
@@ -231,32 +232,13 @@ defmodule RiddlerAdminWeb.UserAuth do
     socket = mount_current_scope(socket, session)
 
     if socket.assigns.current_scope && socket.assigns.current_scope.user do
-      # If this is a workspace route, load the workspace into current_scope
-      socket =
-        case params do
-          %{"workspace_slug" => workspace_slug} ->
-            case RiddlerAdmin.Workspaces.get_workspace_by_slug(workspace_slug) do
-              %RiddlerAdmin.Workspaces.Workspace{} = workspace ->
-                updated_scope = %{socket.assigns.current_scope | workspace: workspace}
-
-                socket
-                |> Phoenix.Component.assign(:current_scope, updated_scope)
-                |> Phoenix.Component.assign(:workspace, workspace)
-
-              nil ->
-                socket
-            end
-
-          _ ->
-            socket
-        end
-
+      socket = maybe_load_workspace(socket, params)
       {:cont, socket}
     else
       socket =
         socket
-        |> Phoenix.LiveView.put_flash(:error, "You must log in to access this page.")
-        |> Phoenix.LiveView.redirect(to: ~p"/users/log-in")
+        |> LiveView.put_flash(:error, "You must log in to access this page.")
+        |> LiveView.redirect(to: ~p"/users/log-in")
 
       {:halt, socket}
     end
@@ -321,4 +303,20 @@ defmodule RiddlerAdminWeb.UserAuth do
   end
 
   defp maybe_store_return_to(conn), do: conn
+
+  defp maybe_load_workspace(socket, %{"workspace_slug" => workspace_slug}) do
+    case Workspaces.get_workspace_by_slug(workspace_slug) do
+      %Workspaces.Workspace{} = workspace ->
+        updated_scope = %{socket.assigns.current_scope | workspace: workspace}
+
+        socket
+        |> Component.assign(:current_scope, updated_scope)
+        |> Component.assign(:workspace, workspace)
+
+      nil ->
+        socket
+    end
+  end
+
+  defp maybe_load_workspace(socket, _params), do: socket
 end

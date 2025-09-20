@@ -26,34 +26,41 @@ defmodule RiddlerAdminWeb.Plugs.LoadWorkspace do
   def call(conn, _opts) do
     case conn.path_params do
       %{"workspace_slug" => workspace_slug} when is_binary(workspace_slug) ->
-        case Workspaces.get_workspace_by_slug(workspace_slug) do
-          %Workspaces.Workspace{} = workspace ->
-            # Update current_scope with workspace
-            updated_scope =
-              case conn.assigns[:current_scope] do
-                %Scope{} = scope ->
-                  %{scope | workspace: workspace}
-
-                nil ->
-                  %Scope{workspace: workspace}
-              end
-
-            conn
-            |> assign(:workspace, workspace)
-            |> assign(:workspace_slug, workspace_slug)
-            |> assign(:current_scope, updated_scope)
-
-          nil ->
-            conn
-            |> put_status(:not_found)
-            |> Controller.put_view(ErrorHTML)
-            |> Controller.render(:"404")
-            |> halt()
-        end
+        handle_workspace_slug(conn, workspace_slug)
 
       _other ->
         # No workspace_slug in path, continue without workspace
         conn
     end
+  end
+
+  defp handle_workspace_slug(conn, workspace_slug) do
+    case Workspaces.get_workspace_by_slug(workspace_slug) do
+      %Workspaces.Workspace{} = workspace ->
+        load_workspace_into_conn(conn, workspace, workspace_slug)
+
+      nil ->
+        conn
+        |> put_status(:not_found)
+        |> Controller.put_view(ErrorHTML)
+        |> Controller.render(:"404")
+        |> halt()
+    end
+  end
+
+  defp load_workspace_into_conn(conn, workspace, workspace_slug) do
+    updated_scope =
+      case conn.assigns[:current_scope] do
+        %Scope{} = scope ->
+          %{scope | workspace: workspace}
+
+        nil ->
+          %Scope{workspace: workspace}
+      end
+
+    conn
+    |> assign(:workspace, workspace)
+    |> assign(:workspace_slug, workspace_slug)
+    |> assign(:current_scope, updated_scope)
   end
 end

@@ -93,13 +93,13 @@ defmodule RiddlerAdminWeb.WorkspaceLive.Members do
     case Enum.find(memberships, &(&1.id == membership_id)) do
       membership when not is_nil(membership) ->
         case Workspaces.delete_membership(current_scope, membership) do
-          {:ok, _} ->
+          {:ok, _deleted_membership} ->
             {:noreply,
              socket
              |> put_flash(:info, "Member removed successfully.")
              |> refresh_memberships()}
 
-          {:error, _} ->
+          {:error, _changeset} ->
             {:noreply,
              socket
              |> put_flash(:error, "Unable to remove member.")

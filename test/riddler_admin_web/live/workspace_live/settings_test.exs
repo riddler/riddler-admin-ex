@@ -4,6 +4,8 @@ defmodule RiddlerAdminWeb.WorkspaceLive.SettingsTest do
   import Phoenix.LiveViewTest
   import RiddlerAdmin.Factory
 
+  alias RiddlerAdmin.Workspaces
+
   describe "Workspace settings" do
     setup do
       user = insert(:confirmed_user)
@@ -47,7 +49,7 @@ defmodule RiddlerAdminWeb.WorkspaceLive.SettingsTest do
       assert result =~ "Updated Workspace"
 
       # Verify workspace was actually updated
-      updated_workspace = RiddlerAdmin.Workspaces.get_workspace!(workspace.id)
+      updated_workspace = Workspaces.get_workspace!(workspace.id)
       assert updated_workspace.name == "Updated Workspace"
       assert updated_workspace.slug == "updated-workspace"
     end
@@ -111,7 +113,7 @@ defmodule RiddlerAdminWeb.WorkspaceLive.SettingsTest do
 
       # Verify workspace was deleted
       assert_raise Ecto.NoResultsError, fn ->
-        RiddlerAdmin.Workspaces.get_workspace!(workspace.id)
+        Workspaces.get_workspace!(workspace.id)
       end
     end
 

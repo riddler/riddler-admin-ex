@@ -3,6 +3,8 @@ defmodule RiddlerAdminWeb.WorkspaceLive.MembersTest do
 
   import Phoenix.LiveViewTest
 
+  alias RiddlerAdmin.Workspaces
+
   describe "Workspace members index" do
     setup do
       admin_user = insert(:confirmed_user, email: "admin@example.com")
@@ -143,7 +145,7 @@ defmodule RiddlerAdminWeb.WorkspaceLive.MembersTest do
 
       # Verify the membership was updated
       updated_membership =
-        RiddlerAdmin.Workspaces.get_membership(member_membership.user, workspace)
+        Workspaces.get_membership(member_membership.user, workspace)
 
       assert updated_membership.role == :admin
     end
@@ -219,7 +221,7 @@ defmodule RiddlerAdminWeb.WorkspaceLive.MembersTest do
       assert result =~ "Member removed successfully"
 
       # Verify the membership was actually deleted
-      assert RiddlerAdmin.Workspaces.get_membership(member_membership.user, workspace) == nil
+      assert Workspaces.get_membership(member_membership.user, workspace) == nil
     end
 
     test "handles remove member when member not found", %{

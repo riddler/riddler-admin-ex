@@ -18,11 +18,12 @@ defmodule RiddlerAdminWeb.Plugs.RequireSysadminTest do
     test "denies access when user is not sysadmin", %{conn: conn} do
       user = insert(:user, sysadmin: false)
 
-      # This would normally halt and render an error, but we'll just test the logic path
-      conn = assign(conn, :current_user, user)
+      conn =
+        conn
+        |> assign(:current_user, user)
+        |> RequireSysadmin.call([])
 
-      # Test that the authorization check works
-      refute RiddlerAdmin.Authorization.sysadmin?(user)
+      assert conn.halted
     end
   end
 end
