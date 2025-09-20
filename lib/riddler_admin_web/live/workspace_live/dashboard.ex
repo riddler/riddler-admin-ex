@@ -40,55 +40,6 @@ defmodule RiddlerAdminWeb.WorkspaceLive.Dashboard do
           </div>
         </div>
 
-        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <!-- Member Count Card -->
-          <div class="stats shadow">
-            <div class="stat">
-              <div class="stat-figure text-primary">
-                <.icon name="hero-users" class="w-8 h-8" />
-              </div>
-              <div class="stat-title">Total Members</div>
-              <div class="stat-value text-primary">{@member_count}</div>
-              <div class="stat-actions">
-                <.link
-                  navigate={~p"/workspaces/#{@workspace.slug}/settings/members"}
-                  class="btn btn-sm btn-primary"
-                >
-                  Manage members
-                </.link>
-              </div>
-            </div>
-          </div>
-
-    <!-- Quick Actions Card -->
-          <div class="card bg-base-100 shadow-xl">
-            <div class="card-body">
-              <h2 class="card-title">
-                <.icon name="hero-bolt" class="w-5 h-5" /> Quick Actions
-              </h2>
-              <p class="text-sm">Workspace management</p>
-              <div class="card-actions justify-end">
-                <.link
-                  navigate={~p"/workspaces/#{@workspace.slug}/settings/members/invite"}
-                  class="btn btn-sm btn-success"
-                >
-                  Invite members
-                </.link>
-              </div>
-            </div>
-          </div>
-
-    <!-- Recent Activity Card -->
-          <div class="card bg-base-100 shadow-xl">
-            <div class="card-body">
-              <h2 class="card-title">
-                <.icon name="hero-clock" class="w-5 h-5" /> Recent Activity
-              </h2>
-              <p class="text-sm text-base-content/70">Coming soon</p>
-            </div>
-          </div>
-        </div>
-
     <!-- Members Preview -->
         <div class="space-y-4">
           <div class="flex justify-between items-center">

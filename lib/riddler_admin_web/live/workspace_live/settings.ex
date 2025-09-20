@@ -140,23 +140,6 @@ defmodule RiddlerAdminWeb.WorkspaceLive.Settings do
               </div>
             </div>
           </div>
-
-          <div class="card bg-base-100 shadow-xl">
-            <div class="card-body">
-              <h2 class="card-title">
-                <.icon name="hero-user-plus" class="w-5 h-5" /> Invite Members
-              </h2>
-              <p class="text-sm">Invite new team members to join this workspace.</p>
-              <div class="card-actions justify-end">
-                <.link
-                  navigate={~p"/workspaces/#{@workspace.slug}/settings/members/invite"}
-                  class="btn btn-success"
-                >
-                  Send Invites
-                </.link>
-              </div>
-            </div>
-          </div>
         </div>
 
     <!-- Danger Zone -->

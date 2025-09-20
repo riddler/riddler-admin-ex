@@ -15,8 +15,7 @@ defmodule RiddlerAdminWeb.WorkspaceLive.Members do
      socket
      |> assign(:page_title, "#{workspace.name} Members")
      |> assign(:workspace, workspace)
-     |> assign(:memberships, memberships)
-     |> assign(:invite_form, to_form(%{}, as: :invite))}
+     |> assign(:memberships, memberships)}
   end
 
   @impl Phoenix.LiveView
@@ -27,11 +26,6 @@ defmodule RiddlerAdminWeb.WorkspaceLive.Members do
   defp apply_action(socket, :index, _params) do
     socket
     |> assign(:page_title, "#{socket.assigns.current_scope.workspace.name} Members")
-  end
-
-  defp apply_action(socket, :invite, _params) do
-    socket
-    |> assign(:page_title, "Invite Members")
   end
 
   defp apply_action(socket, :edit_member, %{"id" => membership_id}) do
@@ -58,20 +52,6 @@ defmodule RiddlerAdminWeb.WorkspaceLive.Members do
   end
 
   @impl Phoenix.LiveView
-  def handle_event("validate_invite", %{"invite" => invite_params}, socket) do
-    # Basic validation for email format
-    form = to_form(invite_params, as: :invite, errors: [])
-    {:noreply, assign(socket, :invite_form, form)}
-  end
-
-  def handle_event("send_invite", %{"invite" => _invite_params}, socket) do
-    # TODO: Implement invitation system
-    {:noreply,
-     socket
-     |> put_flash(:info, "Invitation feature coming soon!")
-     |> assign(:invite_form, to_form(%{}, as: :invite))}
-  end
-
   def handle_event("validate_member", %{"membership" => membership_params}, socket) do
     membership = socket.assigns.editing_membership
 
@@ -153,49 +133,6 @@ defmodule RiddlerAdminWeb.WorkspaceLive.Members do
             >
               <.icon name="hero-arrow-left" class="w-4 h-4 mr-2" /> Back to Settings
             </.link>
-            <.link
-              navigate={~p"/workspaces/#{@workspace.slug}/settings/members/invite"}
-              class="btn btn-primary"
-            >
-              <.icon name="hero-user-plus" class="w-4 h-4 mr-2" /> Invite Members
-            </.link>
-          </div>
-        </div>
-
-        <div :if={@live_action == :invite} class="card bg-base-100 shadow-xl">
-          <div class="card-body">
-            <h2 class="card-title">
-              <.icon name="hero-envelope" class="w-5 h-5" /> Invite New Members
-            </h2>
-
-            <.form
-              for={@invite_form}
-              id="invite-form"
-              phx-change="validate_invite"
-              phx-submit="send_invite"
-            >
-              <div class="space-y-4">
-                <.input
-                  field={@invite_form[:email]}
-                  type="email"
-                  label="Email Address"
-                  placeholder="colleague@company.com"
-                  required
-                />
-              </div>
-
-              <div class="card-actions justify-end mt-6">
-                <.link
-                  navigate={~p"/workspaces/#{@workspace.slug}/settings/members"}
-                  class="btn btn-outline"
-                >
-                  Cancel
-                </.link>
-                <.button type="submit" class="btn btn-primary" phx-disable-with="Sending...">
-                  <.icon name="hero-paper-airplane" class="w-4 h-4 mr-2" /> Send Invitation
-                </.button>
-              </div>
-            </.form>
           </div>
         </div>
 
@@ -316,19 +253,6 @@ defmodule RiddlerAdminWeb.WorkspaceLive.Members do
                 </tbody>
               </table>
 
-              <div :if={@memberships == []} class="text-center py-8">
-                <.icon name="hero-users" class="w-12 h-12 mx-auto text-base-content/50 mb-4" />
-                <h3 class="text-lg font-semibold">No members yet</h3>
-                <p class="text-sm text-base-content/70 mb-4">
-                  Invite team members to start collaborating.
-                </p>
-                <.link
-                  navigate={~p"/workspaces/#{@workspace.slug}/settings/members/invite"}
-                  class="btn btn-primary"
-                >
-                  Invite First Member
-                </.link>
-              </div>
             </div>
           </div>
         </div>

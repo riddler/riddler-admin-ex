@@ -62,7 +62,6 @@ defmodule RiddlerAdminWeb.Router do
       # Workspace settings
       live "/settings", WorkspaceLive.Settings, :edit
       live "/settings/members", WorkspaceLive.Members, :index
-      live "/settings/members/invite", WorkspaceLive.Members, :invite
 
       # Member management
       live "/members/:id/edit", WorkspaceLive.Members, :edit_member

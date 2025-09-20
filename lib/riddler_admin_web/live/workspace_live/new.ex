@@ -64,7 +64,7 @@ defmodule RiddlerAdminWeb.WorkspaceLive.New do
                   field={@form[:name]}
                   type="text"
                   label="Workspace Name"
-                  placeholder="Acme Inc"
+                  placeholder="Marketing"
                   required
                 />
 
@@ -72,7 +72,7 @@ defmodule RiddlerAdminWeb.WorkspaceLive.New do
                   field={@form[:slug]}
                   type="text"
                   label="Workspace Slug"
-                  placeholder="acme-inc"
+                  placeholder="marketing"
                   required
                 />
               </div>
